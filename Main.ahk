@@ -41,6 +41,7 @@ if (Settings.Settings.CheckforUpdates != 0) {
 			filemove, example.ahk, Main.ahk
 			filedelete, OldMain.ahk
 			run Main.ahk
+			exitapp
 		}
 	}
 }
