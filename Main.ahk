@@ -1,7 +1,7 @@
 ﻿#SingleInstance Force
 config = %A_WorkingDir%\Data\Settings.ini
 
-IniRead, The_VersionName, %config%, Main, VersionMain
+IniRead, The_VersionName, %config%, Main, Version
 IniRead, CheckforUpdates, %config%, Main, CheckforUpdates
 
 IfNotExist,  %A_WorkingDir%\Data
@@ -12,7 +12,7 @@ IfNotExist,  %A_WorkingDir%\Data
 if (The_VersionName == "ERROR" or The_VersionName == "")
 {
 	The_VersionName := 0
-	IniWrite, %The_VersionName%, %config%, Main, VersionMain
+	IniWrite, %The_VersionName%, %config%, Main, Version
 }
 if (CheckforUpdates == "ERROR" or CheckforUpdates == "")
 {
@@ -35,7 +35,7 @@ if (CheckforUpdates != 0) {
 			IfMsgBox Yes
 			{
 				filedelete, Main.ahk
-				IniWrite, %The_LatestVersion%, %config%, Main, VersionMain
+				IniWrite, %The_LatestVersion%, %config%, Main, Version
 				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Main.ahk, Main.ahk
 				Sleep, 1000
 				if(ErrorLevel || !FileExist("Main.ahk") ) 

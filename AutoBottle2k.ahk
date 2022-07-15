@@ -1,7 +1,7 @@
 #SingleInstance Force
 config = %A_WorkingDir%\Data\Settings.ini
 
-IniRead, The_VersionName, %config%, AutoBottle 2k, VersionAutoBottle 2k
+IniRead, The_VersionName, %config%, AutoBottle 2k, Version
 IniRead, CheckforUpdates, %config%, AutoBottle 2k, CheckforUpdates
 
 IfNotExist,  %A_WorkingDir%\Data
@@ -12,7 +12,7 @@ IfNotExist,  %A_WorkingDir%\Data
 if (The_VersionName == "ERROR" or The_VersionName == "")
 {
 	The_VersionName := 0
-	IniWrite, %The_VersionName%, %config%, AutoBottle 2k, VersionAutoBottle 2k
+	IniWrite, %The_VersionName%, %config%, AutoBottle 2k, Version
 }
 if (CheckforUpdates == "ERROR" or CheckforUpdates == "")
 {
@@ -35,7 +35,7 @@ if (CheckforUpdates != 0) {
 			IfMsgBox Yes
 			{
 				filedelete, AutoBottle 2k.ahk
-				IniWrite, %The_LatestVersion%, %config%, AutoBottle 2k, VersionAutoBottle 2k
+				IniWrite, %The_LatestVersion%, %config%, AutoBottle 2k, Version
 				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/AutoBottle2k.ahk, AutoBottle 2k.ahk
 				Sleep, 1000
 				if(ErrorLevel || !FileExist("AutoBottle 2k.ahk") ) 
