@@ -1,4 +1,4 @@
-﻿The_VersionName := 0.001
+﻿The_VersionName := 0.1
 
 if (Settings.Settings.CheckforUpdates != 0) {
 	;API call to check for latest version
