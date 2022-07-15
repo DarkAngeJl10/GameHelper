@@ -1,8 +1,8 @@
 ﻿#SingleInstance Force
 config = %A_WorkingDir%\Data\Settings.ini
 
-IniRead, The_VersionName, %config%, Settings, VersionCheckHP
-IniRead, CheckforUpdates, %config%, Settings, CheckforUpdates
+IniRead, The_VersionName, %config%, CheckHP, VersionCheckHP
+IniRead, CheckforUpdates, %config%, CheckHP, CheckforUpdates
 
 IfNotExist,  %A_WorkingDir%\Data
 {
@@ -12,17 +12,12 @@ IfNotExist,  %A_WorkingDir%\Data
 if (The_VersionName == "ERROR" or The_VersionName == "")
 {
 	The_VersionName := 0
-	IniWrite, %The_VersionName%, %config%, Settings, VersionCheckHP
+	IniWrite, %The_VersionName%, %config%, CheckHP, VersionCheckHP
 }
 if (CheckforUpdates == "ERROR" or CheckforUpdates == "")
 {
 	CheckforUpdates := 1
-	IniWrite, %CheckforUpdates%, %config%, Settings, CheckforUpdates
-}
-
-if !FileExist("Update.ahk")
-{
-	UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Update.ahk, Update.ahk
+	IniWrite, %CheckforUpdates%, %config%, CheckHP, CheckforUpdates
 }
 
 if (CheckforUpdates != 0) {
@@ -39,22 +34,17 @@ if (CheckforUpdates != 0) {
 			Msgbox, 4, Update, Found a new version: %The_LatestVersion%`n`nWant to update?
 			IfMsgBox Yes
 			{
-				IniWrite, %The_LatestVersion%, %config%, Settings, VersionCheckHP
-				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Main.ahk, example.ahk
+				filedelete, CheckHP.ahk
+				IniWrite, %The_LatestVersion%, %config%, CheckHP, VersionCheckHP
+				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/CheckHP.ahk, CheckHP.ahk
 				Sleep, 1000
-				if(ErrorLevel || !FileExist("example.ahk") ) 
+				if(ErrorLevel || !FileExist("CheckHP.ahk") ) 
 				{
-					msgbox, Download failed!
+					msgbox, CheckHP.ahk Download failed!
 					ExitApp
 				}
-				filemove, Main.ahk, OldMain.ahk
-				Sleep, 1000
-				filemove, example.ahk, Main.ahk
-				Sleep, 1000
-				filedelete, OldMain.ahk
-				sleep, 1000
 				Msgbox, Updating to latest version: %The_LatestVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
-				run Main.ahk
+				run CheckHP.ahk
 			}
 		}
 	}
