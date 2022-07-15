@@ -35,16 +35,16 @@ if (Settings.Settings.CheckforUpdates != 0) {
 			{
 				IniWrite, %The_LatestVersion%, %config%, Settings, Version
 				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Main.ahk, example.ahk
-				Sleep 1000
+				Sleep, 1000
 				if(ErrorLevel || !FileExist("example.ahk") ) 
 				{
 					msgbox, Download failed!
 					ExitApp
 				}
 				filemove, Main.ahk, OldMain.ahk
-				Sleep 1000
+				Sleep, 1000
 				filemove, example.ahk, Main.ahk
-				Sleep 1000
+				Sleep, 1000
 				filedelete, OldMain.ahk
 				sleep, 1000
 				Msgbox, Updating to latest version: %The_LatestVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.

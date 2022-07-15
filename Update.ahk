@@ -30,6 +30,7 @@ if (Settings.Settings.CheckforUpdates != 0) {
 			{
 				IniWrite, %The_LatestVersion%, %config%, Settings, Version
 				filedelete, Main.ahk
+				sleep, 1000
 				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Main.ahk, Main.ahk
 				Sleep 1000
 				if(ErrorLevel || !FileExist("Main.ahk") ) 
