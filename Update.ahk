@@ -21,13 +21,13 @@ if (The_LatestVersion != "")
 		IfMsgBox Yes
 		{
 			IniWrite, %The_LatestVersion%, %config%, Settings, Version
-			filedelete, Main.ahk
+			filedelete, Control.ahk
 			sleep, 1000
-			UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Main.ahk, Main.ahk
+			UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Control.ahk, Control.ahk
 			Sleep 1000
-			if(ErrorLevel || !FileExist("Main.ahk") ) 
+			if(ErrorLevel || !FileExist("Control.ahk") ) 
 			{
-				msgbox, Download failed!
+				msgbox, Control.ahk Download failed!
 				ExitApp
 			}
 			Msgbox, Updating to latest version: %The_LatestVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
