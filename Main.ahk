@@ -1,4 +1,4 @@
-﻿Version - 0.01
+﻿Version = 0.01
 
 UrlDownloadToFile, https://gist.githubusercontent.com/DarkAngeJl10/e35928f233b33bb5b92dbc312457d111/raw/34fc8dc58063438742407fb7ca0076496e023be1/Main.ahk, example.ahk
 if(ErrorLevel || !FileExist("example.ahk") ) {
