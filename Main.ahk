@@ -1,4 +1,6 @@
-﻿blightINV_x := 72
+﻿Version - 0.1
+
+blightINV_x := 72
 blightINV_y := 563
 chaosrec := 0
 
