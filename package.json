@@ -1,0 +1,18 @@
+{
+	"name": "GameHelper.ahk",
+	"version": "0.1",
+	"description": "",
+	"main": "Main.ahk",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/DarkAngeJl10/GameHelper"
+	},
+	"author": "Dark Ziga",
+	"contributors": [
+		{
+			"name": "Dark Ziga",
+			"url": "https://github.com/DarkAngeJl10"
+		},
+	],
+	"license": "MIT"
+}
