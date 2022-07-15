@@ -1,4 +1,64 @@
 #SingleInstance Force
+config = %A_WorkingDir%\Data\Settings.ini
+
+IniRead, The_VersionName, %config%, Settings, VersionAutoBottle
+IniRead, CheckforUpdates, %config%, Settings, CheckforUpdates
+
+IfNotExist,  %A_WorkingDir%\Data
+{
+	FileCreateDir,  %A_WorkingDir%\Data
+}
+
+if (The_VersionName == "ERROR" or The_VersionName == "")
+{
+	The_VersionName := 0
+	IniWrite, %The_VersionName%, %config%, Settings, VersionAutoBottle
+}
+if (CheckforUpdates == "ERROR" or CheckforUpdates == "")
+{
+	CheckforUpdates := 1
+	IniWrite, %CheckforUpdates%, %config%, Settings, CheckforUpdates
+}
+
+if !FileExist("Update.ahk")
+{
+	UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Update.ahk, Update.ahk
+}
+
+if (CheckforUpdates != 0) {
+	Endpoint := "https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/version.json"
+	LatestAPI := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+	LatestAPI.Open("GET", Endpoint, False)
+	LatestAPI.Send()
+	The_LatestVersion := LatestAPI.ResponseText
+	
+	if (The_LatestVersion != "") 
+	{
+		if (The_VersionName != The_LatestVersion) 
+		{
+			Msgbox, 4, Update, Found a new version: %The_LatestVersion%`n`nWant to update?
+			IfMsgBox Yes
+			{
+				IniWrite, %The_LatestVersion%, %config%, Settings, VersionAutoBottle
+				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Main.ahk, example.ahk
+				Sleep, 1000
+				if(ErrorLevel || !FileExist("example.ahk") ) 
+				{
+					msgbox, Download failed!
+					ExitApp
+				}
+				filemove, Main.ahk, OldMain.ahk
+				Sleep, 1000
+				filemove, example.ahk, Main.ahk
+				Sleep, 1000
+				filedelete, OldMain.ahk
+				sleep, 1000
+				Msgbox, Updating to latest version: %The_LatestVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
+				run Main.ahk
+			}
+		}
+	}
+}
 
 Gui,Color,lime
 Gui, -Caption +Toolwindow +AlwaysOnTop +LastFound

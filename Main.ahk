@@ -1,7 +1,7 @@
 ﻿#SingleInstance Force
 config = %A_WorkingDir%\Data\Settings.ini
 
-IniRead, The_VersionName, %config%, Settings, Version
+IniRead, The_VersionName, %config%, Settings, VersionMain
 IniRead, CheckforUpdates, %config%, Settings, CheckforUpdates
 
 IfNotExist,  %A_WorkingDir%\Data
@@ -12,7 +12,7 @@ IfNotExist,  %A_WorkingDir%\Data
 if (The_VersionName == "ERROR" or The_VersionName == "")
 {
 	The_VersionName := 0
-	IniWrite, %The_VersionName%, %config%, Settings, Version
+	IniWrite, %The_VersionName%, %config%, Settings, VersionMain
 }
 if (CheckforUpdates == "ERROR" or CheckforUpdates == "")
 {
@@ -39,7 +39,7 @@ if (CheckforUpdates != 0) {
 			Msgbox, 4, Update, Found a new version: %The_LatestVersion%`n`nWant to update?
 			IfMsgBox Yes
 			{
-				IniWrite, %The_LatestVersion%, %config%, Settings, Version
+				IniWrite, %The_LatestVersion%, %config%, Settings, VersionMain
 				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Main.ahk, example.ahk
 				Sleep, 1000
 				if(ErrorLevel || !FileExist("example.ahk") ) 
