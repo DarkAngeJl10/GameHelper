@@ -1,11 +1,11 @@
 {
 	"Core": {
 		"Main": {
-		"filename": "Main.ahk"
+		"FileName": "Main.ahk"
 		"Version": "0.3",
 		},
 		"AutoBottle": {
-		"filename": "AutoBottle.ahk"
+		"FileName": "AutoBottle.ahk"
 		"Version": "0.2",
 		}
 	}
