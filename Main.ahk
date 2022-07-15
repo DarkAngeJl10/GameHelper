@@ -1,4 +1,6 @@
-﻿config = %A_WorkingDir%\Data\Settings.ini
+﻿;		test for moving
+
+config = %A_WorkingDir%\Data\Settings.ini
 
 IniRead, The_VersionName, %config%, Settings, Version
 
