@@ -1,4 +1,17 @@
-﻿The_VersionName := 0.1
+﻿config = %A_WorkingDir%\Data\Settings.ini
+
+IniRead, The_VersionName, %config%, Settings, Version
+
+IfNotExist,  %A_WorkingDir%\Data
+{
+	FileCreateDir,  %A_WorkingDir%\Data
+}
+
+if (The_VersionName == "ERROR" or The_VersionName == "")
+{
+	The_VersionName := 0
+	IniWrite, %The_VersionName%, %config%, Settings, Version
+}
 
 if (Settings.Settings.CheckforUpdates != 0) {
 	;API call to check for latest version
@@ -9,21 +22,20 @@ if (Settings.Settings.CheckforUpdates != 0) {
 	LatestAPI.Send()
 	The_LatestVersion := LatestAPI.ResponseText
 	
-
-
-	;;Try to update if there is a new version detected. This will involve moving the executable
 	if (The_LatestVersion != "") 
 	{
 		if (The_VersionName != The_LatestVersion) 
 		{
+			IniWrite, %The_LatestVersion%, %config%, Settings, Version
 			Msgbox, Updating to latest version: %The_LatestVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
-			UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Main.ahk, Main.ahk
+			UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Main.ahk, example.ahk
 			Sleep 1000
-			if(ErrorLevel || !FileExist("Main.ahk") ) 
+			if(ErrorLevel || !FileExist("example.ahk") ) 
 			{
 				msgbox, Download failed!
 				ExitApp
 			}
+			filemove, example.ahk, main1.ahk
 		}
 	}
 }
