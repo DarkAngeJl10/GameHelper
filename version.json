@@ -1,10 +1,11 @@
 {
-	"Name": "Main",
-	"Version": "0.3",
-
-},
-{
-	"Name": "AutoBottle",
-	"Version": "0.2",
-
-},
+	"Core": {
+		"Main": {
+		"jsVersion": "0.3",
+		"npmName": "Main.ahk"
+		},
+		"AutoBottle": "0.2",
+		"npmName": "AutoBottle.ahk"
+		}
+	}
+}
