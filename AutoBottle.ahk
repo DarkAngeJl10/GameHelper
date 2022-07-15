@@ -1,4 +1,5 @@
 #SingleInstance Force
+#Include WebIniParse.ahk
 config = %A_WorkingDir%\Data\Settings.ini
 
 IniRead, The_VersionName, %config%, AutoBottle, Version
@@ -21,12 +22,12 @@ if (CheckforUpdates == "ERROR" or CheckforUpdates == "")
 }
 
 if (CheckforUpdates != 0) {
-	Endpoint := "https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/version.json"
+	Endpoint := "https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/version.ini"
 	LatestAPI := ComObjCreate("WinHttp.WinHttpRequest.5.1")
 	LatestAPI.Open("GET", Endpoint, False)
 	LatestAPI.Send()
-	The_LatestVersion := LatestAPI.ResponseText
-	
+	The_LatestVersion := WebIniParse(LatestAPI.ResponseText, "AutoBottle")
+
 	if (The_LatestVersion != "") 
 	{
 		if (The_VersionName != The_LatestVersion) 
