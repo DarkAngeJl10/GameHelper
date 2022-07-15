@@ -37,7 +37,7 @@ if (Settings.Settings.CheckforUpdates != 0) {
 				msgbox, Download failed!
 				ExitApp
 			}
-			filemove, example.ahk, main1.ahk
+			filemove, example.ahk, Main.ahk
 		}
 	}
 }
