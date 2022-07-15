@@ -14,6 +14,11 @@ if (The_VersionName == "ERROR" or The_VersionName == "")
 	IniWrite, %The_VersionName%, %config%, Settings, Version
 }
 
+if !FileExist("Update.ahk")
+{
+	UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Update.ahk, Update.ahk
+}
+
 if (Settings.Settings.CheckforUpdates != 0) {
 	Endpoint := "https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/version.json"
 	LatestAPI := ComObjCreate("WinHttp.WinHttpRequest.5.1")
