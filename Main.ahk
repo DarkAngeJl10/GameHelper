@@ -1,5 +1,4 @@
-﻿;		test for moving
-
+﻿#SingleInstance Force
 config = %A_WorkingDir%\Data\Settings.ini
 
 IniRead, The_VersionName, %config%, Settings, Version
@@ -38,10 +37,9 @@ if (Settings.Settings.CheckforUpdates != 0) {
 				ExitApp
 			}
 			filemove, Main.ahk, OldMain.ahk
-			filemove, example.ahk, Main.ahk
 			filedelete, OldMain.ahk
+			filemove, example.ahk, Main.ahk
 			run Main.ahk
-			exitapp
 		}
 	}
 }
