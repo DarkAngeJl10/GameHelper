@@ -15,8 +15,6 @@ if (The_VersionName == "ERROR" or The_VersionName == "")
 }
 
 if (Settings.Settings.CheckforUpdates != 0) {
-	;API call to check for latest version
-
 	Endpoint := "https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/version.json"
 	LatestAPI := ComObjCreate("WinHttp.WinHttpRequest.5.1")
 	LatestAPI.Open("GET", Endpoint, False)
