@@ -1,11 +1,12 @@
 {
 	"Core": {
 		"Main": {
-		"jsVersion": "0.3",
-		"npmName": "Main.ahk"
+		"filename": "Main.ahk"
+		"Version": "0.3",
 		},
-		"AutoBottle": "0.2",
-		"npmName": "AutoBottle.ahk"
+		"AutoBottle": {
+		"filename": "AutoBottle.ahk"
+		"Version": "0.2",
 		}
 	}
 }
