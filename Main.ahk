@@ -37,8 +37,10 @@ if (Settings.Settings.CheckforUpdates != 0) {
 					ExitApp
 				}
 				filemove, Main.ahk, OldMain.ahk
-				filedelete, OldMain.ahk
+				Sleep 1000
 				filemove, example.ahk, Main.ahk
+				Sleep 1000
+				filedelete, OldMain.ahk
 				sleep, 1000
 				Msgbox, Updating to latest version: %The_LatestVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
 				run Main.ahk
