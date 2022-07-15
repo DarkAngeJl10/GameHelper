@@ -2,6 +2,7 @@
 config = %A_WorkingDir%\Data\Settings.ini
 
 IniRead, The_VersionName, %config%, Settings, Version
+IniRead, CheckforUpdates, %config%, Settings, CheckforUpdates
 
 IfNotExist,  %A_WorkingDir%\Data
 {
@@ -13,13 +14,18 @@ if (The_VersionName == "ERROR" or The_VersionName == "")
 	The_VersionName := 0
 	IniWrite, %The_VersionName%, %config%, Settings, Version
 }
+if (CheckforUpdates == "ERROR" or CheckforUpdates == "")
+{
+	CheckforUpdates := 1
+	IniWrite, %CheckforUpdates%, %config%, Settings, CheckforUpdates
+}
 
 if !FileExist("Update.ahk")
 {
 	UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Update.ahk, Update.ahk
 }
 
-if (Settings.Settings.CheckforUpdates != 0) {
+if (CheckforUpdates != 0) {
 	Endpoint := "https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/version.json"
 	LatestAPI := ComObjCreate("WinHttp.WinHttpRequest.5.1")
 	LatestAPI.Open("GET", Endpoint, False)
