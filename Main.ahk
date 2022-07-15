@@ -37,7 +37,10 @@ if (Settings.Settings.CheckforUpdates != 0) {
 				msgbox, Download failed!
 				ExitApp
 			}
+			filemove, Main.ahk, OldMain.ahk
 			filemove, example.ahk, Main.ahk
+			filedelete, OldMain.ahk
+			run Main.ahk
 		}
 	}
 }
