@@ -1,21 +1,32 @@
-﻿Version = 0.01
+﻿The_VersionName := 0.001
 
-UrlDownloadToFile, https://gist.githubusercontent.com/DarkAngeJl10/e35928f233b33bb5b92dbc312457d111/raw/34fc8dc58063438742407fb7ca0076496e023be1/Main.ahk, example.ahk
-if(ErrorLevel || !FileExist("example.ahk") ) {
-    msgbox, Download failed!
-    ExitApp
+if (Settings.Settings.CheckforUpdates != 0) {
+	;API call to check for latest version
+
+	Endpoint := "https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/version.json"
+	LatestAPI := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+	LatestAPI.Open("GET", Endpoint, False)
+	LatestAPI.Send()
+	The_LatestVersion := LatestAPI.ResponseText
+	
+
+
+	;;Try to update if there is a new version detected. This will involve moving the executable
+	if (The_LatestVersion != "") 
+	{
+		if (The_VersionName != The_LatestVersion) 
+		{
+			Msgbox, Updating to latest version: %The_LatestVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
+			UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Main.ahk, Main.ahk
+			Sleep 1000
+			if(ErrorLevel || !FileExist("Main.ahk") ) 
+			{
+				msgbox, Download failed!
+				ExitApp
+			}
+		}
+	}
 }
-if (Version != NewVersion)
-	{
-	Version = NewVersion
-	FileMove, %A_WorkingDir%\example.ahk, %A_WorkingDir%\Main.ahk
-	msgbox, Есть обновление
-	}
-else
-	{
-	FileDelete, %A_WorkingDir%\example.ahk
-	msgbox, Нету обновление
-	}
 
 blightINV_x := 72
 blightINV_y := 563
