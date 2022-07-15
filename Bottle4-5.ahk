@@ -1,4 +1,5 @@
-﻿
+﻿#SingleInstance Force
+
 Suspend On
 GroupAdd POE, % "Path of Exile"
 WinNotActive()
