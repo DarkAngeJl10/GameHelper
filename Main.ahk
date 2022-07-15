@@ -25,7 +25,7 @@ if (Settings.Settings.CheckforUpdates != 0) {
 	{
 		if (The_VersionName != The_LatestVersion) 
 		{
-			Msgbox, 4, Found a new version: %The_LatestVersion%, want to update?
+			Msgbox, 4, Found a new version: %The_LatestVersion%`n`nwant to update?
 			IfMsgBox Yes
 			{
 				IniWrite, %The_LatestVersion%, %config%, Settings, Version
