@@ -29,7 +29,6 @@ if (Settings.Settings.CheckforUpdates != 0) {
 			IfMsgBox Yes
 			{
 				IniWrite, %The_LatestVersion%, %config%, Settings, Version
-				Msgbox, Updating to latest version: %The_LatestVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
 				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Main.ahk, example.ahk
 				Sleep 1000
 				if(ErrorLevel || !FileExist("example.ahk") ) 
@@ -40,6 +39,8 @@ if (Settings.Settings.CheckforUpdates != 0) {
 				filemove, Main.ahk, OldMain.ahk
 				filedelete, OldMain.ahk
 				filemove, example.ahk, Main.ahk
+				sleep, 1000
+				Msgbox, Updating to latest version: %The_LatestVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
 				run Main.ahk
 			}
 		}
