@@ -1,5 +1,5 @@
 #SingleInstance Force
-#Include WebIniParse.ahk
+#Include lib\WebIniParse.ahk
 config = %A_WorkingDir%\Data\Settings.ini
 
 IniRead, The_VersionName, %config%, AutoBottle, Version

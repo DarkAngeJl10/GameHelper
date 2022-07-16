@@ -1,32 +1,65 @@
 ﻿#SingleInstance Force
 DetectHiddenWindows, On
 SetTitleMatchMode, 2
+#Include lib\WebIniParse.ahk
+global AutoBottle := 0
+global CheckHP := 0
+global Main := 0
 
 config = %A_WorkingDir%\Data\Settings.ini
+
+IniRead, The_VersionName, %config%, Control, Version
+IniRead, CheckforUpdates, %config%, Control, CheckforUpdates
 
 IfNotExist,  %A_WorkingDir%\Data
 {
 	FileCreateDir,  %A_WorkingDir%\Data
 }
 
-CheckVersion()
+if (The_VersionName == "ERROR" or The_VersionName == "")
 {
-	Endpoint := "https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/version.json"
+	The_VersionName := 0
+	IniWrite, %The_VersionName%, %config%, Control, Version
+}
+if (CheckforUpdates == "ERROR" or CheckforUpdates == "")
+{
+	CheckforUpdates := 1
+	IniWrite, %CheckforUpdates%, %config%, Control, CheckforUpdates
+}
+
+CheckVersion(Name)
+{
+	Endpoint := "https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/version.ini"
 	LatestAPI := ComObjCreate("WinHttp.WinHttpRequest.5.1")
 	LatestAPI.Open("GET", Endpoint, False)
 	LatestAPI.Send()
-	The_LatestVersion := LatestAPI.ResponseText
+	The_LatestVersion := WebIniParse(LatestAPI.ResponseText, Name)
 	return The_LatestVersion
 }
 
-MW = %A_ScreenWidth%
-MH = %A_ScreenHeight%
+ControlVersion := CheckVersion("Control")
+if (ControlVersion != "") 
+{
+	if (The_VersionName != ControlVersion) 
+	{
+		Msgbox, 4, Update, Found a new version: %ControlVersion%`n`nWant to update?
+		IfMsgBox Yes
+		{
+			filedelete, Control.ahk
+			IniWrite, %ControlVersion%, %config%, Control, Version
+			UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Control.ahk, Control.ahk
+			Sleep, 1000
+			if(ErrorLevel || !FileExist("Control.ahk") ) 
+			{
+				msgbox, Control.ahk Download failed!
+				ExitApp
+			}
+			Msgbox, Updating to latest version: %ControlVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
+			run Control.ahk
+		}
+	}
+}
 
-
-
-global AutoBottle := 0
-global CheckHP := 0
-global Main := 0
 
 if !FileExist("Update.ahk")
 {
@@ -37,6 +70,9 @@ if !FileExist("Update.ahk")
 		return
 	}
 }
+
+MW = %A_ScreenWidth%
+MH = %A_ScreenHeight%
 
 	Gui, Control: New,, Control
 if (MW = 1920 and MH = 1080)
@@ -52,7 +88,7 @@ if (MW = 2560 and MH = 1440)
 	
 	Gui, Add, DropDownList, x10 y70 	gListOfBottle vChoice,  Disable|Bottle 1-5|Bottle 2-5|Bottle 3-5|Bottle 4-5
 
-	Gui, Add, Button, 	x170 y300 	w150 h30 	gExitMacros Center, 	Выключить все макросы
+	Gui, Add, Button, 		x170 y300 	w150 h30 	gExitMacros Center, 	Выключить все макросы
 	Gui, show
 return
 
@@ -73,7 +109,7 @@ if (Choice = "Bottle 1-5")
 {
 	if !FileExist("Bottle 1-5.ahk")
 	{
-		Version := CheckVersion()
+		Version := CheckVersion("Bottle 1-5")
 		IniWrite, %Version%, %config%, Bottle 1-5, Version
 		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Bottle1-5.ahk, Bottle 1-5.ahk
 		if(ErrorLevel || !FileExist("Bottle 1-5.ahk") ) 
@@ -96,7 +132,7 @@ if (Choice = "Bottle 2-5")
 {
 	if !FileExist("Bottle 2-5.ahk")
 	{
-		Version := CheckVersion()
+		Version := CheckVersion("Bottle 2-5")
 		IniWrite, %Version%, %config%, Bottle 2-5, Version
 		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Bottle2-5.ahk, Bottle 2-5.ahk
 		if(ErrorLevel || !FileExist("Bottle 2-5.ahk") ) 
@@ -119,7 +155,7 @@ if (Choice = "Bottle 3-5")
 {
 	if !FileExist("Bottle 3-5.ahk")
 	{
-		Version := CheckVersion()
+		Version := CheckVersion("Bottle 3-5")
 		IniWrite, %Version%, %config%, Bottle 3-5, Version
 		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Bottle3-5.ahk, Bottle 3-5.ahk
 		if(ErrorLevel || !FileExist("Bottle 3-5.ahk") ) 
@@ -142,7 +178,7 @@ if (Choice = "Bottle 4-5")
 {
 	if !FileExist("Bottle 4-5.ahk")
 	{
-		Version := CheckVersion()
+		Version := CheckVersion("Bottle 4-5")
 		IniWrite, %Version%, %config%, Bottle 4-5, Version
 		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Bottle4-5.ahk, Bottle 4-5.ahk
 		if(ErrorLevel || !FileExist("Bottle 4-5.ahk") ) 
@@ -169,7 +205,7 @@ if (AutoBottle != 0)
 {
 	if !FileExist("AutoBottle.ahk")
 	{
-		Version := CheckVersion()
+		Version := CheckVersion("AutoBottle")
 		IniWrite, %Version%, %config%, AutoBottle, Version
 		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/AutoBottle.ahk, AutoBottle.ahk
 		if(ErrorLevel || !FileExist("AutoBottle.ahk") ) 
@@ -196,7 +232,7 @@ if (AutoBottle2k != 0)
 {
 	if !FileExist("AutoBottle2k.ahk")
 	{
-		Version := CheckVersion()
+		Version := CheckVersion("AutoBottle 2k")
 		IniWrite, %Version%, %config%, AutoBottle 2k, Version
 		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/AutoBottle2k.ahk, AutoBottle 2k.ahk
 		if(ErrorLevel || !FileExist("AutoBottle 2k.ahk") ) 
@@ -223,7 +259,7 @@ if (CheckHP != 0)
 {
 	if !FileExist("CheckHP.ahk")
 	{
-		Version := CheckVersion()
+		Version := CheckVersion("CheckHP")
 		IniWrite, %Version%, %config%, CheckHP, Version
 		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/CheckHP.ahk, CheckHP.ahk
 		if(ErrorLevel || !FileExist("CheckHP.ahk") ) 
@@ -250,7 +286,7 @@ if (Main != 0)
 {
 	if !FileExist("Main.ahk")
 	{
-		Version := CheckVersion()
+		Version := CheckVersion("Main")
 		IniWrite, %Version%, %config%, Main, Version
 		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Main.ahk, Main.ahk
 		if(ErrorLevel || !FileExist("Main.ahk") ) 
