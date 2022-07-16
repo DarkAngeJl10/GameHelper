@@ -15,6 +15,10 @@ IfNotExist,  %A_WorkingDir%\Data
 {
 	FileCreateDir,  %A_WorkingDir%\Data
 }
+IfNotExist,  %A_WorkingDir%\Macros
+{
+	FileCreateDir,  %A_WorkingDir%\Macros
+}
 
 if (The_VersionName == "ERROR" or The_VersionName == "")
 {
@@ -107,12 +111,12 @@ if (Choice = "Disable")
 }
 if (Choice = "Bottle 1-5")
 {
-	if !FileExist("Bottle 1-5.ahk")
+	if !FileExist("Macros\Bottle 1-5.ahk")
 	{
 		Version := CheckVersion("Bottle 1-5")
 		IniWrite, %Version%, %config%, Bottle 1-5, Version
-		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Bottle1-5.ahk, Bottle 1-5.ahk
-		if(ErrorLevel || !FileExist("Bottle 1-5.ahk") ) 
+		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Bottle1-5.ahk, Macros\Bottle 1-5.ahk
+		if(ErrorLevel || !FileExist("Macros\Bottle 1-5.ahk") ) 
 		{
 			msgbox, Bottle 1-5.ahk Download failed!
 			return
@@ -120,8 +124,8 @@ if (Choice = "Bottle 1-5")
 	}
 	if WinExist(ahk_group Bottle15)
 	{
-		Run, Bottle 1-5.ahk
-		GroupAdd, Bottle15, Bottle 1-5.ahk
+		Run, Macros\Bottle 1-5.ahk
+		GroupAdd, Bottle15, Macros\Bottle 1-5.ahk
 	}
 }
 else
@@ -130,12 +134,12 @@ else
 }
 if (Choice = "Bottle 2-5")
 {
-	if !FileExist("Bottle 2-5.ahk")
+	if !FileExist("Macros\Bottle 2-5.ahk")
 	{
 		Version := CheckVersion("Bottle 2-5")
 		IniWrite, %Version%, %config%, Bottle 2-5, Version
-		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Bottle2-5.ahk, Bottle 2-5.ahk
-		if(ErrorLevel || !FileExist("Bottle 2-5.ahk") ) 
+		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Bottle2-5.ahk, Macros\Bottle 2-5.ahk
+		if(ErrorLevel || !FileExist("Macros\Bottle 2-5.ahk") ) 
 		{
 			msgbox, Bottle 2-5.ahk Download failed!
 			return
@@ -143,8 +147,8 @@ if (Choice = "Bottle 2-5")
 	}
 	if WinExist(ahk_group Bottle25)
 	{
-		Run, Bottle 2-5.ahk
-		GroupAdd, Bottle25, Bottle 2-5.ahk
+		Run, Macros\Bottle 2-5.ahk
+		GroupAdd, Bottle25, Macros\Bottle 2-5.ahk
 	}
 }
 else
@@ -153,12 +157,12 @@ else
 }
 if (Choice = "Bottle 3-5")
 {
-	if !FileExist("Bottle 3-5.ahk")
+	if !FileExist("Macros\Bottle 3-5.ahk")
 	{
 		Version := CheckVersion("Bottle 3-5")
 		IniWrite, %Version%, %config%, Bottle 3-5, Version
-		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Bottle3-5.ahk, Bottle 3-5.ahk
-		if(ErrorLevel || !FileExist("Bottle 3-5.ahk") ) 
+		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Bottle3-5.ahk, Macros\Bottle 3-5.ahk
+		if(ErrorLevel || !FileExist("Macros\Bottle 3-5.ahk") ) 
 		{
 			msgbox, Bottle 3-5.ahk Download failed!
 			return
@@ -166,8 +170,8 @@ if (Choice = "Bottle 3-5")
 	}
 	if WinExist(ahk_group Bottle35)
 	{
-		Run, Bottle 3-5.ahk
-		GroupAdd, Bottle35, Bottle 3-5.ahk
+		Run, Macros\Bottle 3-5.ahk
+		GroupAdd, Bottle35, Macros\Bottle 3-5.ahk
 	}
 }
 else
@@ -176,12 +180,12 @@ else
 }
 if (Choice = "Bottle 4-5")
 {
-	if !FileExist("Bottle 4-5.ahk")
+	if !FileExist("Macros\Bottle 4-5.ahk")
 	{
 		Version := CheckVersion("Bottle 4-5")
 		IniWrite, %Version%, %config%, Bottle 4-5, Version
-		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Bottle4-5.ahk, Bottle 4-5.ahk
-		if(ErrorLevel || !FileExist("Bottle 4-5.ahk") ) 
+		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Bottle4-5.ahk, Macros\Bottle 4-5.ahk
+		if(ErrorLevel || !FileExist("Macros\Bottle 4-5.ahk") ) 
 		{
 			msgbox, Bottle 4-5.ahk Download failed!
 			return
@@ -189,8 +193,8 @@ if (Choice = "Bottle 4-5")
 	}
 	if WinExist(ahk_group Bottle45)
 	{
-		Run, Bottle 4-5.ahk
-		GroupAdd, Bottle45, Bottle 4-5.ahk
+		Run, Macros\Bottle 4-5.ahk
+		GroupAdd, Bottle45, Macros\Bottle 4-5.ahk
 	}
 }
 else
@@ -203,12 +207,12 @@ AutoBottle:
 ControlGet, AutoBottle, Checked , , Button1, Control
 if (AutoBottle != 0)
 {
-	if !FileExist("AutoBottle.ahk")
+	if !FileExist("Macros\AutoBottle.ahk")
 	{
 		Version := CheckVersion("AutoBottle")
 		IniWrite, %Version%, %config%, AutoBottle, Version
-		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/AutoBottle.ahk, AutoBottle.ahk
-		if(ErrorLevel || !FileExist("AutoBottle.ahk") ) 
+		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/AutoBottle.ahk, Macros\AutoBottle.ahk
+		if(ErrorLevel || !FileExist("Macros\AutoBottle.ahk") ) 
 		{
 			msgbox, AutoBottle.ahk Download failed!
 			return
@@ -216,8 +220,8 @@ if (AutoBottle != 0)
 	}
 	if WinExist(ahk_group AutoBottle)
 	{
-		Run, AutoBottle.ahk
-		GroupAdd, AutoBottle, AutoBottle.ahk
+		Run, Macros\AutoBottle.ahk
+		GroupAdd, AutoBottle, Macros\AutoBottle.ahk
 	}
 }
 else
@@ -230,12 +234,12 @@ AutoBottle2k:
 ControlGet, AutoBottle2k, Checked , , Button1, Control
 if (AutoBottle2k != 0)
 {
-	if !FileExist("AutoBottle2k.ahk")
+	if !FileExist("Macros\AutoBottle2k.ahk")
 	{
 		Version := CheckVersion("AutoBottle 2k")
 		IniWrite, %Version%, %config%, AutoBottle 2k, Version
-		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/AutoBottle2k.ahk, AutoBottle 2k.ahk
-		if(ErrorLevel || !FileExist("AutoBottle 2k.ahk") ) 
+		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/AutoBottle2k.ahk, Macros\AutoBottle 2k.ahk
+		if(ErrorLevel || !FileExist("Macros\AutoBottle 2k.ahk") ) 
 		{
 			msgbox, AutoBottle 2k.ahk Download failed!
 			return
@@ -243,8 +247,8 @@ if (AutoBottle2k != 0)
 	}
 	if WinExist(ahk_group AutoBottle2k)
 	{
-		Run, AutoBottle 2k.ahk
-		GroupAdd, AutoBottle2k, AutoBottle 2k.ahk
+		Run, Macros\AutoBottle 2k.ahk
+		GroupAdd, AutoBottle2k, Macros\AutoBottle 2k.ahk
 	}
 }
 else
@@ -257,12 +261,12 @@ CheckHP:
 ControlGet, CheckHP, Checked , , Button2, Control
 if (CheckHP != 0)
 {
-	if !FileExist("CheckHP.ahk")
+	if !FileExist("Macros\CheckHP.ahk")
 	{
 		Version := CheckVersion("CheckHP")
 		IniWrite, %Version%, %config%, CheckHP, Version
-		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/CheckHP.ahk, CheckHP.ahk
-		if(ErrorLevel || !FileExist("CheckHP.ahk") ) 
+		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/CheckHP.ahk, Macros\CheckHP.ahk
+		if(ErrorLevel || !FileExist("Macros\CheckHP.ahk") ) 
 		{
 			msgbox, CheckHP.ahk Download failed!
 			return
@@ -270,8 +274,8 @@ if (CheckHP != 0)
 	}
 	if WinExist(ahk_group CheckHP)
 	{
-		Run, CheckHP.ahk
-		GroupAdd, CheckHP, CheckHP.ahk
+		Run, Macros\CheckHP.ahk
+		GroupAdd, CheckHP, Macros\CheckHP.ahk
 	}
 }
 else
@@ -284,12 +288,12 @@ Main:
 ControlGet, Main, Checked , , Button3, Control
 if (Main != 0)
 {
-	if !FileExist("Main.ahk")
+	if !FileExist("Macros\Main.ahk")
 	{
 		Version := CheckVersion("Main")
 		IniWrite, %Version%, %config%, Main, Version
-		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Main.ahk, Main.ahk
-		if(ErrorLevel || !FileExist("Main.ahk") ) 
+		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Main.ahk, Macros\Main.ahk
+		if(ErrorLevel || !FileExist("Macros\Main.ahk") ) 
 		{
 			msgbox, Main.ahk Download failed!
 			return
@@ -297,8 +301,8 @@ if (Main != 0)
 	}
 	if WinExist(ahk_group Main)
 	{
-		Run, Main.ahk
-		GroupAdd, Main, Main.ahk
+		Run, Macros\Main.ahk
+		GroupAdd, Main, Macros\Main.ahk
 	}
 }
 else
