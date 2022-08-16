@@ -33,7 +33,7 @@ if (CheckforUpdates != 0)
 				{
 				filedelete, Main.ahk
 				IniWrite, %MainVersion%, %config%, Main, Version
-				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/Main.ahk, Main.ahk
+				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/Main.ahk, Macros\Main.ahk
 				Sleep, 1000
 				if(ErrorLevel || !FileExist("Main.ahk") ) 
 					{
@@ -56,7 +56,7 @@ send, {LCtrl up}
 
 Suspend On
 GroupAdd POE, % "Path of Exile"
-WinNotActive()
+WinActive()
 return
 
 WinActive() {
@@ -254,6 +254,7 @@ return
 		}
 return
 
+if (SmokeMine = 1)
 $q::
 	IniRead, SmokeMine, %config%, Main, SmokeMine
 	if (SmokeMine = 1)
@@ -273,6 +274,7 @@ $q::
 	}
 return
 
+if (DefaultMine = 1)
 $r::
 	IniRead, DefaultMine, %config%, Main, DefaultMine
 	if (DefaultMine = 1)
