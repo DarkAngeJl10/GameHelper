@@ -14,6 +14,8 @@ if !FileExist("lib\WebIniParse.ahk")
 		}
 	WebIniParseSucc := 1
 	}
+if FileExist("lib\WebIniParse.ahk")
+	WebIniParseSucc := 1
 
 if !FileExist("Control.ahk")
 	{
@@ -24,6 +26,8 @@ if !FileExist("Control.ahk")
 		}
 	ControlSucc := 1
 	}
+if FileExist("Control.ahk")
+	ControlSucc := 1
 
 if !FileExist("Update.ahk")
 	{
@@ -34,10 +38,12 @@ if !FileExist("Update.ahk")
 		}
 	UpdateSucc := 1
 	}
+if FileExist("Update.ahk")
+	UpdateSucc := 1
 
 
 if (ControlSucc = 1 and UpdateSucc = 1 and WebIniParseSucc = 1)
 	{
-	FileDelete, Install.ahk
+	FileDelete, %A_ScriptFullPath%
 	Exitapp
 	}
