@@ -195,7 +195,7 @@ if (Choice = "Bottle")
 	{
 		Version := CheckVersion("Bottle")
 		IniWrite, %Version%, %config%, Bottle, Version
-		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Bottle.ahk, Macros\Bottle.ahk
+		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/Bottle.ahk, Macros\Bottle.ahk
 		if(ErrorLevel || !FileExist("Macros\Bottle.ahk") ) 
 		{
 			msgbox, Bottle.ahk Download failed!
@@ -235,7 +235,7 @@ if (AutoBottle != 0)
 	{
 		Version := CheckVersion("AutoBottle")
 		IniWrite, %Version%, %config%, AutoBottle, Version
-		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/AutoBottle.ahk, Macros\AutoBottle.ahk
+		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/AutoBottle.ahk, Macros\AutoBottle.ahk
 		if(ErrorLevel || !FileExist("Macros\AutoBottle.ahk") ) 
 		{
 			msgbox, AutoBottle.ahk Download failed!
@@ -279,7 +279,7 @@ if (AutoBottle2k != 0)
 	{
 		Version := CheckVersion("AutoBottle 2k")
 		IniWrite, %Version%, %config%, AutoBottle 2k, Version
-		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/AutoBottle2k.ahk, Macros\AutoBottle 2k.ahk
+		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/AutoBottle2k.ahk, Macros\AutoBottle 2k.ahk
 		if(ErrorLevel || !FileExist("Macros\AutoBottle 2k.ahk") ) 
 		{
 			msgbox, AutoBottle 2k.ahk Download failed!
@@ -313,7 +313,7 @@ if (CheckHP != 0)
 	{
 		Version := CheckVersion("CheckHP")
 		IniWrite, %Version%, %config%, CheckHP, Version
-		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/CheckHP.ahk, Macros\CheckHP.ahk
+		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/CheckHP.ahk, Macros\CheckHP.ahk
 		if(ErrorLevel || !FileExist("Macros\CheckHP.ahk") ) 
 		{
 			msgbox, CheckHP.ahk Download failed!
@@ -347,7 +347,7 @@ if (Main != 0)
 	{
 		Version := CheckVersion("Main")
 		IniWrite, %Version%, %config%, Main, Version
-		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Main.ahk, Macros\Main.ahk
+		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/Main.ahk, Macros\Main.ahk
 		if(ErrorLevel || !FileExist("Macros\Main.ahk") ) 
 		{
 			msgbox, Main.ahk Download failed!

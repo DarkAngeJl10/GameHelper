@@ -37,7 +37,7 @@ if (CheckHPVersion != "")
 		{
 			filedelete, CheckHP.ahk
 			IniWrite, %CheckHPVersion%, %config%, CheckHP, Version
-			UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/CheckHP.ahk, CheckHP.ahk
+			UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/CheckHP.ahk, CheckHP.ahk
 			Sleep, 1000
 			if(ErrorLevel || !FileExist("CheckHP.ahk") ) 
 			{

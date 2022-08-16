@@ -35,7 +35,7 @@ if (CheckforUpdates != 0)
 			{
 				filedelete, Bottle.ahk
 				IniWrite, %BottleVersion%, %config%, Bottle, Version
-				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Bottle.ahk, Bottle.ahk
+				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/Bottle.ahk, Bottle.ahk
 				Sleep, 1000
 				if(ErrorLevel || !FileExist("Bottle.ahk") ) 
 				{
