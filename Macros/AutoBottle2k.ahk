@@ -86,6 +86,11 @@ WinNotActive() {
 numpad2::
 Loop,
 {
+	IniRead, Bottle1, %config%, SelectAutoBootle, Bottle1
+	IniRead, Bottle2, %config%, SelectAutoBootle, Bottle2
+	IniRead, Bottle3, %config%, SelectAutoBootle, Bottle3
+	IniRead, Bottle4, %config%, SelectAutoBootle, Bottle4
+	IniRead, Bottle5, %config%, SelectAutoBootle, Bottle5
 	{
 	ifWinActive ahk_group POE
 		{
