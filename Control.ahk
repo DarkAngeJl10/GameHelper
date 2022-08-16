@@ -205,7 +205,7 @@ if (Choice = "Bottle")
 	if !WinExist("ahk_group Bottle")
 	{
 		Run, Macros\Bottle.ahk
-		GroupAdd, Bottle, Macros\Bottle.ahk
+		GroupAdd, Bottle, Bottle.ahk
 		CABottle := 1
 	}
 }
@@ -219,6 +219,7 @@ if (CABottle = 1)
 	{
 	SetTimer, ListOfBottle, 1000
 	}
+return
 
 AutoBottle:
 ControlGet, AutoBottle, Checked , , Button1,
@@ -245,7 +246,7 @@ if (AutoBottle != 0)
 	if !WinExist("ahk_group AutoBottle")
 	{
 		Run, Macros\AutoBottle.ahk
-		GroupAdd, AutoBottle, Macros\AutoBottle.ahk
+		GroupAdd, AutoBottle, AutoBottle.ahk
 		CAAutoBottle := 1
 	}
 }
@@ -267,7 +268,7 @@ ControlGet, AutoBottle2k, Checked , , Button1,
 
 if (Bottle1 = 0 and Bottle2 = 0 and Bottle3 = 0 and Bottle4 = 0 and Bottle5 = 0)
 {
-	GuiControl,,AutoBottle,0
+	GuiControl,,AutoBottle2k,0
 	Gui, 1:hide
 	msgbox, Вы не выбрали активные бутылки
 	goto, SettingsAutoBottle
@@ -289,7 +290,7 @@ if (AutoBottle2k != 0)
 	if !WinExist("ahk_group AutoBottle2k")
 	{
 		Run, Macros\AutoBottle 2k.ahk
-		GroupAdd, AutoBottle2k, Macros\AutoBottle 2k.ahk
+		GroupAdd, AutoBottle2k, AutoBottle 2k.ahk
 		CAAutoBottle2k := 1
 	}
 }
@@ -323,7 +324,7 @@ if (CheckHP != 0)
 	if !WinExist("ahk_group CheckHP")
 	{
 		Run, Macros\CheckHP.ahk
-		GroupAdd, CheckHP, Macros\CheckHP.ahk
+		GroupAdd, CheckHP, CheckHP.ahk
 		CACheckHP := 1
 	}
 }
@@ -357,7 +358,7 @@ if (Main != 0)
 	if !WinExist("ahk_group Main")
 	{
 		Run, Macros\Main.ahk
-		GroupAdd, Main, Macros\Main.ahk
+		GroupAdd, Main, Main.ahk
 		CAMain := 1
 	}
 }
@@ -375,21 +376,27 @@ return
 
 
 ExitMacros:
-	GroupAdd, ExitMacros, AutoBottle.ahk
-	Control, Uncheck ,, Button1,
+	GroupAdd, CloseMacros, AutoBottle.ahk
+	SetTimer, AutoBottle, off
+	GuiControl,,AutoBottle,0
 	
-	GroupAdd, ExitMacros, AutoBottle 2k.ahk
-	Control, Uncheck ,, Button1,
+	GroupAdd, CloseMacros, AutoBottle 2k.ahk
+	SetTimer, AutoBottle2k, off
+	GuiControl,,AutoBottle2k,0
 	
-	GroupAdd, ExitMacros, CheckHP.ahk
-	Control, Uncheck ,, Button2,
+	GroupAdd, CloseMacros, CheckHP.ahk
+	SetTimer, CheckHP, off
+	GuiControl,,CheckHP,0
 	
-	GroupAdd, ExitMacros, Main.ahk
-	Control, Uncheck ,, Button3,
+	GroupAdd, CloseMacros, Main.ahk
+	SetTimer, Main, off
+	GuiControl,,Main,0
 	
-	GroupAdd, ExitMacros, Bottle.ahk
+	GroupAdd, CloseMacros, Bottle.ahk
+	SetTimer, ListOfBottle, off
+	GuiControl, Choose, Choice, 1
 	
-	WinClose, ahk_group ExitMacros
+	WinClose, ahk_group CloseMacros
 return
 
 AutoBottle1:

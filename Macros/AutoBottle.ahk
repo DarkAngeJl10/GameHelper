@@ -60,10 +60,7 @@ Return
 WinActive() {
 	Suspend Off
 	Gui,Show, X302 Y962 W235 H12 NA
-	WinGetTitle, winTitle, A
-	WinGet, winProcessName, ProcessName, A
 	sleep, 35
-	
 	WinWaitNotActive ahk_group POE
 	{
 		WinNotActive()
@@ -114,6 +111,7 @@ VaalBootleAndSkills:
 	return
 
 numpad2::
+XButton2::
 Loop,
 {
 	IniRead, Bottle1, %config%, SelectAutoBootle, Bottle1
@@ -230,5 +228,6 @@ return
 
 
 numpad5::
+XButton1::
 	;SetTimer, VaalBootleAndSkills, 	Off
 	Reload
