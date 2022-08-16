@@ -2,37 +2,83 @@
 #Include lib\WebIniParse.ahk
 config = %A_WorkingDir%\Data\Settings.ini
 
-IniRead, The_VersionName, %config%, Control, Version
+IniRead, The_VersionName, %config%, Update, Version
+IniRead, CheckforUpdates, %config%, Update, CheckforUpdates
+IniRead, The_VersionControl, %config%, Control, Version
+IniRead, CheckforUpdatesControl, %config%, Control, CheckforUpdates
 
 IfNotExist,  %A_WorkingDir%\Data
 {
 	FileCreateDir,  %A_WorkingDir%\Data
 }
 
-Endpoint := "https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/version.ini"
-LatestAPI := ComObjCreate("WinHttp.WinHttpRequest.5.1")
-LatestAPI.Open("GET", Endpoint, False)
-LatestAPI.Send()
-The_LatestVersion := WebIniParse(LatestAPI.ResponseText, "Control")
-if (The_LatestVersion != "") 
+if (The_VersionName == "ERROR" or The_VersionName == "")
 {
-	if (The_VersionName != The_LatestVersion) 
+	IniWrite, 0, %config%, Update, Version
+}
+if (CheckforUpdates == "ERROR" or CheckforUpdates == "")
+{
+	IniWrite, 1, %config%, Update, CheckforUpdates
+}
+
+if (The_VersionControl == "ERROR" or The_VersionControl == "")
+{
+	IniWrite, 0, %config%, Control, Version
+}
+
+if (CheckforUpdatesControl == "ERROR" or CheckforUpdatesControl == "")
+{
+	IniWrite, 1, %config%, Control, CheckforUpdates
+}
+
+if (CheckforUpdates != 0)
 	{
-		Msgbox, 4, Update, Found a new version: %The_LatestVersion%`n`nWant to update?
-		IfMsgBox Yes
+	UpdateVersion := CheckVersion("Update")
+	if (UpdateVersion != "") 
 		{
-			IniWrite, %The_LatestVersion%, %config%, Control, Version
-			filedelete, Control.ahk
-			sleep, 1000
-			UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Control.ahk, Control.ahk
-			Sleep 1000
-			if(ErrorLevel || !FileExist("Control.ahk") ) 
+		if (The_VersionName != UpdateVersion) 
 			{
-				msgbox, Control.ahk Download failed!
-				ExitApp
+			Msgbox, 4, Update, Found a new version: %UpdateVersion%`n`nWant to update?
+			IfMsgBox Yes
+				{
+				filedelete, Update.ahk
+				IniWrite, %UpdateVersion%, %config%, Update, Version
+				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Update.ahk, Update.ahk
+				Sleep, 1000
+				if(ErrorLevel || !FileExist("Update.ahk") ) 
+					{
+					msgbox, Updaste.ahk Download failed!
+					ExitApp
+					}
+				Msgbox, Updating to latest version: %UpdateVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
+				run Update.ahk
+				}
 			}
-			Msgbox, Updating to latest version: %The_LatestVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
-			ExitApp
 		}
 	}
-}
+
+
+if (CheckforUpdatesControl != 0)
+	{
+	ControlVersion := CheckVersion("Control")
+	if (ControlVersion != "") 
+		{
+		if (The_VersionControl != ControlVersion) 
+			{
+			Msgbox, 4, Update, Found a new version: %ControlVersion%`n`nWant to update?
+			IfMsgBox Yes
+				{
+				filedelete, Control.ahk
+				IniWrite, %ControlVersion%, %config%, Control, Version
+				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Control.ahk, Control.ahk
+				Sleep, 1000
+				if(ErrorLevel || !FileExist("Control.ahk") ) 
+					{
+					msgbox, Control.ahk Download failed!
+					ExitApp
+					}
+				Msgbox, Updating to latest version: %ControlVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
+				}
+			}
+		}
+	}

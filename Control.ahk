@@ -8,6 +8,15 @@ global Main := 0
 
 config = %A_WorkingDir%\Data\Settings.ini
 
+IniRead, AutoBottle1, %config%, SelectAutoBootle, Bottle1
+IniRead, AutoBottle2, %config%, SelectAutoBootle, Bottle2
+IniRead, AutoBottle3, %config%, SelectAutoBootle, Bottle3
+IniRead, AutoBottle4, %config%, SelectAutoBootle, Bottle4
+IniRead, AutoBottle5, %config%, SelectAutoBootle, Bottle5
+IniRead, Bottle15, %config%, SelectBootle, Bottle1-5
+IniRead, Bottle25, %config%, SelectBootle, Bottle2-5
+IniRead, Bottle35, %config%, SelectBootle, Bottle3-5
+IniRead, Bottle45, %config%, SelectBootle, Bottle4-5
 IniRead, The_VersionName, %config%, Control, Version
 IniRead, CheckforUpdates, %config%, Control, CheckforUpdates
 
@@ -20,191 +29,206 @@ IfNotExist,  %A_WorkingDir%\Macros
 	FileCreateDir,  %A_WorkingDir%\Macros
 }
 
+if (AutoBottle1 == "ERROR" or AutoBottle1 == "")
+{
+	IniWrite, 0, %config%, SelectAutoBootle, Bottle1
+}
+if (AutoBottle2 == "ERROR" or AutoBottle2 == "")
+{
+	IniWrite, 0, %config%, SelectAutoBootle, Bottle2
+}
+if (AutoBottle4 == "ERROR" or AutoBottle3 == "")
+{
+	IniWrite, 0, %config%, SelectAutoBootle, Bottle3
+}
+if (AutoBottle4 == "ERROR" or AutoBottle4 == "")
+{
+	IniWrite, 0, %config%, SelectAutoBootle, Bottle4
+}
+if (AutoBottle5 == "ERROR" or AutoBottle5 == "")
+{
+	IniWrite, 0, %config%, SelectAutoBootle, Bottle5
+}
+
+if (Bottle15 == "ERROR" or Bottle15 == "")
+{
+	IniWrite, 0, %config%, SelectBootle, Bottle1-5
+}
+if (Bottle25 == "ERROR" or Bottle25 == "")
+{
+	IniWrite, 0, %config%, SelectBootle, Bottle2-5
+}
+if (Bottle35 == "ERROR" or Bottle35 == "")
+{
+	IniWrite, 0, %config%, SelectBootle, Bottle3-5
+}
+if (Bottle45 == "ERROR" or Bottle45 == "")
+{
+	IniWrite, 0, %config%, SelectBootle, Bottle4-5
+}
+
 if (The_VersionName == "ERROR" or The_VersionName == "")
 {
-	The_VersionName := 0
-	IniWrite, %The_VersionName%, %config%, Control, Version
+	IniWrite, 0, %config%, Control, Version
 }
+
 if (CheckforUpdates == "ERROR" or CheckforUpdates == "")
 {
-	CheckforUpdates := 1
-	IniWrite, %CheckforUpdates%, %config%, Control, CheckforUpdates
+	IniWrite, 1, %config%, Control, CheckforUpdates
 }
 
-CheckVersion(Name)
-{
-	Endpoint := "https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/version.ini"
-	LatestAPI := ComObjCreate("WinHttp.WinHttpRequest.5.1")
-	LatestAPI.Open("GET", Endpoint, False)
-	LatestAPI.Send()
-	The_LatestVersion := WebIniParse(LatestAPI.ResponseText, Name)
-	return The_LatestVersion
-}
-
-ControlVersion := CheckVersion("Control")
-if (ControlVersion != "") 
-{
-	if (The_VersionName != ControlVersion) 
+if (CheckforUpdates != 0)
 	{
-		Msgbox, 4, Update, Found a new version: %ControlVersion%`n`nWant to update?
-		IfMsgBox Yes
+	ControlVersion := CheckVersion("Control")
+	if (ControlVersion != "") 
 		{
-			filedelete, Control.ahk
-			IniWrite, %ControlVersion%, %config%, Control, Version
-			UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Control.ahk, Control.ahk
-			Sleep, 1000
-			if(ErrorLevel || !FileExist("Control.ahk") ) 
+		if (The_VersionName != ControlVersion) 
 			{
-				msgbox, Control.ahk Download failed!
-				ExitApp
+			Msgbox, 4, Update, Found a new version: %ControlVersion%`n`nWant to update?
+			IfMsgBox Yes
+				{
+				filedelete, Control.ahk
+				IniWrite, %ControlVersion%, %config%, Control, Version
+				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Control.ahk, Control.ahk
+				Sleep, 1000
+				if(ErrorLevel || !FileExist("Control.ahk") ) 
+					{
+					msgbox, Control.ahk Download failed!
+					ExitApp
+					}
+				Msgbox, Updating to latest version: %ControlVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
+				run Control.ahk
+				}
 			}
-			Msgbox, Updating to latest version: %ControlVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
-			run Control.ahk
 		}
 	}
-}
-
-
-if !FileExist("Update.ahk")
-{
-	UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Update.ahk, Update.ahk
-	if(ErrorLevel || !FileExist("Update.ahk") ) 
-	{
-		msgbox, Update.ahk Download failed!
-		return
-	}
-}
 
 MW = %A_ScreenWidth%
 MH = %A_ScreenHeight%
 
-	Gui, Control: New,, Control
 if (MW = 1920 and MH = 1080)
 	{
-	Gui, Add, Checkbox,		x10 y10 	gAutoBottle, 	Auto Bottle
+	Gui, 1:Add, Checkbox,		x10 y10 	gAutoBottle vAutoBottle, 		Auto Bottle
 	}
 if (MW = 2560 and MH = 1440)
 	{
-	Gui, Add, Checkbox,		x10 y10 	gAutoBottle2k, 	Auto Bottle
+	Gui, 1:Add, Checkbox,		x10 y10 	gAutoBottle2k vAutoBottle2k, 	Auto Bottle
 	}
-	Gui, Add, Checkbox,		x150 y10 	gCheckHP,  		Check HP
-	Gui, Add, Checkbox, 	x10 y40 	gMain, 	 		Main
+	Gui, 1:Add, Checkbox,		x140 y10 	gCheckHP vCheckHP,  			Check HP
+	Gui, 1:Add, Checkbox, 		x10 y40 	gMain vMain, 	 				Main
 	
-	Gui, Add, DropDownList, x10 y70 	gListOfBottle vChoice,  Disable|Bottle 1-5|Bottle 2-5|Bottle 3-5|Bottle 4-5
+	Gui, 1:Add, Text,			x270 y10, 	Бутылки по кнопке
+	Gui, 1:Add, DropDownList,	x270 y30 	gListOfBottle vChoice Choose1,  Disable|Bottle
 
-	Gui, Add, Button, 		x170 y300 	w150 h30 	gExitMacros Center, 	Выключить все макросы
-	Gui, show
+	Gui, 1:Add, Button, 		x10 y360 	w150 h30 	gSettings Center, 		Настройки
+	Gui, 1:Add, Button, 		x240 y360 	w150 h30 	gExitMacros Center, 	Выключить все макросы
+	Gui, 1:show, w400 h400
+return
+
+Settings:
+	Gui, 1:hide
+	Gui, 2:Add, Text,			x10 y10, 	Выберите что хотите настроить
+	Gui, 2:Add, Button,			x10 y30 	gSettingsAutoBottle, 	Авто бутылки
+	Gui, 2:Add, Button,			x140 y30 	gSettingsBottle, 		Бутылки по кнопке
+	Gui, 2:Show, w400 h400,
+return
+
+SettingsAutoBottle:
+	IniRead, AutoBottle1, %config%, SelectAutoBootle, Bottle1
+	IniRead, AutoBottle2, %config%, SelectAutoBootle, Bottle2
+	IniRead, AutoBottle3, %config%, SelectAutoBootle, Bottle3
+	IniRead, AutoBottle4, %config%, SelectAutoBootle, Bottle4
+	IniRead, AutoBottle5, %config%, SelectAutoBootle, Bottle5
+	Gui, 2:hide
+	Gui, 3:Add, Text,			x10 y10, 	Выберите какие бутылки будут активны
+	
+	Gui, 3:Add, Checkbox,		x10 y40 	gAutoBottle1 Checked%AutoBottle1%, 	1 Бутылка
+	Gui, 3:Add, Checkbox,		x10 y70 	gAutoBottle2 Checked%AutoBottle2%, 	2 Бутылка
+	Gui, 3:Add, Checkbox,		x10 y100 	gAutoBottle3 Checked%AutoBottle3%, 	3 Бутылка
+	Gui, 3:Add, Checkbox,		x10 y130 	gAutoBottle4 Checked%AutoBottle4%, 	4 Бутылка
+	Gui, 3:Add, Checkbox,		x10 y160 	gAutoBottle5 Checked%AutoBottle5%, 	5 Бутылка
+	
+	Gui, 3:Add, Button, 		x240 y360 	w150 h30 	gAccept Center, 	Применить
+	Gui, 3:Show, w400 h400,
+return
+
+SettingsBottle:
+	IniRead, Bottle15, %config%, SelectBootle, Bottle1-5
+	IniRead, Bottle25, %config%, SelectBootle, Bottle2-5
+	IniRead, Bottle35, %config%, SelectBootle, Bottle3-5
+	IniRead, Bottle45, %config%, SelectBootle, Bottle4-5
+	Gui, 2:hide
+	Gui, 4:Add, Text,			x10 y10, 	Выберите какие бутылки будут активны
+	
+	Gui, 4:Add, radio,			x10 y40 	gBottle15 Checked%Bottle15%, 	1-5 Бутылки
+	Gui, 4:Add, radio,			x10 y70 	gBottle25 Checked%Bottle25%, 	2-5 Бутылки
+	Gui, 4:Add, radio,			x10 y100 	gBottle35 Checked%Bottle35%, 	3-5 Бутылки
+	Gui, 4:Add, radio,			x10 y130 	gBottle45 Checked%Bottle45%, 	4-5 Бутылки
+	
+	Gui, 4:Add, Button, 		x240 y360 	w150 h30 	gAccept Center, 	Применить
+	Gui, 4:Show, w400 h400,
+return
+
+Accept:
+	Gui, 3:hide
+	Gui, 4:hide
+	Gui, 1:show
 return
 
 ListOfBottle:
 GuiControlGet, Choice,
 if (Choice = "Disable")
 {
-	GroupAdd, Bottle15, Bottle 1-5.ahk
-	WinClose, ahk_group Bottle15
-	GroupAdd, Bottle25, Bottle 2-5.ahk
-	WinClose, ahk_group Bottle25
-	GroupAdd, Bottle35, Bottle 3-5.ahk
-	WinClose, ahk_group Bottle35
-	GroupAdd, Bottle45, Bottle 4-5.ahk
-	WinClose, ahk_group Bottle45
+	GroupAdd, Bottle, Bottle.ahk
+	WinClose, ahk_group Bottle
 }
-if (Choice = "Bottle 1-5")
+if (Choice = "Bottle")
 {
-	if !FileExist("Macros\Bottle 1-5.ahk")
+	if (Bottle15 = 0 and Bottle25 = 0 and Bottle35 = 0 and Bottle45 = 0)
 	{
-		Version := CheckVersion("Bottle 1-5")
-		IniWrite, %Version%, %config%, Bottle 1-5, Version
-		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Bottle1-5.ahk, Macros\Bottle 1-5.ahk
-		if(ErrorLevel || !FileExist("Macros\Bottle 1-5.ahk") ) 
+		Gui, 1:Cancel
+		GuiControl, Choose, Choice, 1
+		msgbox, Вы не выбрали бутылки
+		goto, SettingsBottle
+	}
+	if !FileExist("Macros\Bottle.ahk")
+	{
+		Version := CheckVersion("Bottle")
+		IniWrite, %Version%, %config%, Bottle, Version
+		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Bottle.ahk, Macros\Bottle.ahk
+		if(ErrorLevel || !FileExist("Macros\Bottle.ahk") ) 
 		{
-			msgbox, Bottle 1-5.ahk Download failed!
+			msgbox, Bottle.ahk Download failed!
 			return
 		}
 	}
-	if WinExist(ahk_group Bottle15)
+	if !WinExist("ahk_group Bottle")
 	{
-		Run, Macros\Bottle 1-5.ahk
-		GroupAdd, Bottle15, Macros\Bottle 1-5.ahk
+		Run, Macros\Bottle.ahk
+		GroupAdd, Bottle, Macros\Bottle.ahk
+		CABottle := 1
 	}
 }
 else
 {
-	WinClose, ahk_group Bottle15
+	CABottle := 0
+	SetTimer, ListOfBottle, off
+	WinClose, ahk_group Bottle
 }
-if (Choice = "Bottle 2-5")
-{
-	if !FileExist("Macros\Bottle 2-5.ahk")
+if (CABottle = 1)
 	{
-		Version := CheckVersion("Bottle 2-5")
-		IniWrite, %Version%, %config%, Bottle 2-5, Version
-		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Bottle2-5.ahk, Macros\Bottle 2-5.ahk
-		if(ErrorLevel || !FileExist("Macros\Bottle 2-5.ahk") ) 
-		{
-			msgbox, Bottle 2-5.ahk Download failed!
-			return
-		}
+	SetTimer, ListOfBottle, 1000
 	}
-	if WinExist(ahk_group Bottle25)
-	{
-		Run, Macros\Bottle 2-5.ahk
-		GroupAdd, Bottle25, Macros\Bottle 2-5.ahk
-	}
-}
-else
-{
-	WinClose, ahk_group Bottle25
-}
-if (Choice = "Bottle 3-5")
-{
-	if !FileExist("Macros\Bottle 3-5.ahk")
-	{
-		Version := CheckVersion("Bottle 3-5")
-		IniWrite, %Version%, %config%, Bottle 3-5, Version
-		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Bottle3-5.ahk, Macros\Bottle 3-5.ahk
-		if(ErrorLevel || !FileExist("Macros\Bottle 3-5.ahk") ) 
-		{
-			msgbox, Bottle 3-5.ahk Download failed!
-			return
-		}
-	}
-	if WinExist(ahk_group Bottle35)
-	{
-		Run, Macros\Bottle 3-5.ahk
-		GroupAdd, Bottle35, Macros\Bottle 3-5.ahk
-	}
-}
-else
-{
-	WinClose, ahk_group Bottle35
-}
-if (Choice = "Bottle 4-5")
-{
-	if !FileExist("Macros\Bottle 4-5.ahk")
-	{
-		Version := CheckVersion("Bottle 4-5")
-		IniWrite, %Version%, %config%, Bottle 4-5, Version
-		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Bottle4-5.ahk, Macros\Bottle 4-5.ahk
-		if(ErrorLevel || !FileExist("Macros\Bottle 4-5.ahk") ) 
-		{
-			msgbox, Bottle 4-5.ahk Download failed!
-			return
-		}
-	}
-	if WinExist(ahk_group Bottle45)
-	{
-		Run, Macros\Bottle 4-5.ahk
-		GroupAdd, Bottle45, Macros\Bottle 4-5.ahk
-	}
-}
-else
-{
-	WinClose, ahk_group Bottle45
-}
-return
 
 AutoBottle:
-ControlGet, AutoBottle, Checked , , Button1, Control
+ControlGet, AutoBottle, Checked , , Button1,
+if (AutoBottle1 = 0 and AutoBottle2 = 0 and AutoBottle3 = 0 and AutoBottle4 = 0 and AutoBottle5 = 0)
+{
+	GuiControl,,AutoBottle,0
+	Gui, 1:hide
+	msgbox, Вы не выбрали активные бутылки
+	goto, SettingsAutoBottle
+}
 if (AutoBottle != 0)
 {
 	if !FileExist("Macros\AutoBottle.ahk")
@@ -218,20 +242,37 @@ if (AutoBottle != 0)
 			return
 		}
 	}
-	if WinExist(ahk_group AutoBottle)
+	if !WinExist("ahk_group AutoBottle")
 	{
 		Run, Macros\AutoBottle.ahk
 		GroupAdd, AutoBottle, Macros\AutoBottle.ahk
+		CAAutoBottle := 1
 	}
 }
 else
 {
+	CAAutoBottle := 0
+	SetTimer, AutoBottle, off
 	WinClose, ahk_group AutoBottle
 }
+
+if (CAAutoBottle = 1)
+	{
+	SetTimer, AutoBottle, 1000
+	}
 return
 
 AutoBottle2k:
-ControlGet, AutoBottle2k, Checked , , Button1, Control
+ControlGet, AutoBottle2k, Checked , , Button1,
+
+if (Bottle1 = 0 and Bottle2 = 0 and Bottle3 = 0 and Bottle4 = 0 and Bottle5 = 0)
+{
+	GuiControl,,AutoBottle,0
+	Gui, 1:hide
+	msgbox, Вы не выбрали активные бутылки
+	goto, SettingsAutoBottle
+}
+
 if (AutoBottle2k != 0)
 {
 	if !FileExist("Macros\AutoBottle2k.ahk")
@@ -245,20 +286,27 @@ if (AutoBottle2k != 0)
 			return
 		}
 	}
-	if WinExist(ahk_group AutoBottle2k)
+	if !WinExist("ahk_group AutoBottle2k")
 	{
 		Run, Macros\AutoBottle 2k.ahk
 		GroupAdd, AutoBottle2k, Macros\AutoBottle 2k.ahk
+		CAAutoBottle2k := 1
 	}
 }
 else
 {
+	CAAutoBottle2k := 0
+	SetTimer, AutoBottle2k, off
 	WinClose, ahk_group AutoBottle2k
 }
+if (CAAutoBottle2k = 1)
+	{
+	SetTimer, AutoBottle2k, 1000
+	}
 return
 
 CheckHP:
-ControlGet, CheckHP, Checked , , Button2, Control
+ControlGet, CheckHP, Checked , , Button2,
 if (CheckHP != 0)
 {
 	if !FileExist("Macros\CheckHP.ahk")
@@ -272,20 +320,27 @@ if (CheckHP != 0)
 			return
 		}
 	}
-	if WinExist(ahk_group CheckHP)
+	if !WinExist("ahk_group CheckHP")
 	{
 		Run, Macros\CheckHP.ahk
 		GroupAdd, CheckHP, Macros\CheckHP.ahk
+		CACheckHP := 1
 	}
 }
 else
 {
+	CACheckHP := 0
+	SetTimer, CheckHP, off
 	WinClose, ahk_group CheckHP
 }
+if (CACheckHP = 1)
+	{
+	SetTimer, CheckHP, 1000
+	}
 return
 
 Main:
-ControlGet, Main, Checked , , Button3, Control
+ControlGet, Main, Checked , , Button3,
 if (Main != 0)
 {
 	if !FileExist("Macros\Main.ahk")
@@ -299,41 +354,182 @@ if (Main != 0)
 			return
 		}
 	}
-	if WinExist(ahk_group Main)
+	if !WinExist("ahk_group Main")
 	{
 		Run, Macros\Main.ahk
 		GroupAdd, Main, Macros\Main.ahk
+		CAMain := 1
 	}
 }
 else
 {
+	CAMain := 0
+	SetTimer, Main, off
 	WinClose, ahk_group Main
 }
+if (CAMain = 1)
+	{
+	SetTimer, Main, 1000
+	}
 return
+
 
 ExitMacros:
-		GroupAdd, ExitMacros, AutoBottle.ahk
-		Control, Uncheck ,, Button1,
-		
-		GroupAdd, ExitMacros, AutoBottle 2k.ahk
-		Control, Uncheck ,, Button1,
-		
-		GroupAdd, ExitMacros, CheckHP.ahk
-		Control, Uncheck ,, Button2,
-		
-		GroupAdd, ExitMacros, Main.ahk
-		Control, Uncheck ,, Button3,
-		
-		GroupAdd, ExitMacros, Bottle 1-5.ahk
-		GroupAdd, ExitMacros, Bottle 2-5.ahk
-		GroupAdd, ExitMacros, Bottle 3-5.ahk
-		GroupAdd, ExitMacros, Bottle 4-5.ahk
-		
-		WinClose, ahk_group ExitMacros
-
+	GroupAdd, ExitMacros, AutoBottle.ahk
+	Control, Uncheck ,, Button1,
+	
+	GroupAdd, ExitMacros, AutoBottle 2k.ahk
+	Control, Uncheck ,, Button1,
+	
+	GroupAdd, ExitMacros, CheckHP.ahk
+	Control, Uncheck ,, Button2,
+	
+	GroupAdd, ExitMacros, Main.ahk
+	Control, Uncheck ,, Button3,
+	
+	GroupAdd, ExitMacros, Bottle.ahk
+	
+	WinClose, ahk_group ExitMacros
 return
 
-MainGuiClose:
+AutoBottle1:
+ControlGet, AutoBottle1, Checked , , Button1,
+if (AutoBottle1 != 0)
+	{
+	IniWrite, 1, %config%, SelectAutoBootle, Bottle1
+	}
+else
+	{
+	IniWrite, 0, %config%, SelectAutoBootle, Bottle1
+	}
+return
+
+AutoBottle2:
+ControlGet, AutoBottle2, Checked , , Button2,
+if (AutoBottle2 != 0)
+	{
+	IniWrite, 1, %config%, SelectAutoBootle, Bottle2
+	}
+else
+	{
+	IniWrite, 0, %config%, SelectAutoBootle, Bottle2
+	}
+return
+
+AutoBottle3:
+ControlGet, AutoBottle3, Checked , , Button3,
+if (AutoBottle3 != 0)
+	{
+	IniWrite, 1, %config%, SelectAutoBootle, Bottle3
+	}
+else
+	{
+	IniWrite, 0, %config%, SelectAutoBootle, Bottle3
+	}
+return
+
+AutoBottle4:
+ControlGet, AutoBottle4, Checked , , Button4,
+if (AutoBottle4 != 0)
+	{
+	IniWrite, 1, %config%, SelectAutoBootle, Bottle4
+	}
+else
+	{
+	IniWrite, 0, %config%, SelectAutoBootle, Bottle4
+	}
+return
+
+AutoBottle5:
+ControlGet, AutoBottle5, Checked , , Button5,
+if (AutoBottle5 != 0)
+	{
+	IniWrite, 1, %config%, SelectAutoBootle, Bottle5
+	}
+else
+	{
+	IniWrite, 0, %config%, SelectAutoBootle, Bottle5
+	}
+return
+
+Bottle15:
+ControlGet, Bottle15, Checked , , Button1,
+if (Bottle15 != 0)
+	{
+	IniWrite, 1, %config%, SelectBootle, Bottle1-5
+	IniWrite, 0, %config%, SelectBootle, Bottle2-5
+	IniWrite, 0, %config%, SelectBootle, Bottle3-5
+	IniWrite, 0, %config%, SelectBootle, Bottle4-5
+	}
+else
+	{
+	IniWrite, 0, %config%, SelectBootle, Bottle1-5
+	}
+return
+
+Bottle25:
+ControlGet, Bottle25, Checked , , Button2,
+if (Bottle25 != 0)
+	{
+	IniWrite, 0, %config%, SelectBootle, Bottle1-5
+	IniWrite, 1, %config%, SelectBootle, Bottle2-5
+	IniWrite, 0, %config%, SelectBootle, Bottle3-5
+	IniWrite, 0, %config%, SelectBootle, Bottle4-5
+	}
+else
+	{
+	IniWrite, 0, %config%, SelectBootle, Bottle2-5
+	}
+return
+
+Bottle35:
+ControlGet, Bottle35, Checked , , Button3,
+if (Bottle35 != 0)
+	{
+	IniWrite, 0, %config%, SelectBootle, Bottle1-5
+	IniWrite, 0, %config%, SelectBootle, Bottle2-5
+	IniWrite, 1, %config%, SelectBootle, Bottle3-5
+	IniWrite, 0, %config%, SelectBootle, Bottle4-5
+	}
+else
+	{
+	IniWrite, 0, %config%, SelectBootle, Bottle3-5
+	}
+return
+
+Bottle45:
+ControlGet, Bottle45, Checked , , Button4,
+if (Bottle45 != 0)
+	{
+	IniWrite, 0, %config%, SelectBootle, Bottle1-5
+	IniWrite, 0, %config%, SelectBootle, Bottle2-5
+	IniWrite, 0, %config%, SelectBootle, Bottle3-5
+	IniWrite, 1, %config%, SelectBootle, Bottle4-5
+	}
+else
+	{
+	IniWrite, 0, %config%, SelectBootle, Bottle4-5
+	}
+return
+
+
+2GuiClose:
+Gui 2:hide
+Gui 1:show
+return
+
+3GuiClose:
+Gui 3:hide
+Gui 2:show
+return
+
+4GuiClose:
+Gui 4:hide
+Gui 2:show
+return
+
+GuiClose:
+gosub, ExitMacros
 ExitApp
 
 F4::
