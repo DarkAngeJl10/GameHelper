@@ -27,27 +27,27 @@ if (CheckforUpdates != 0)
 	{
 	BottleVersion := CheckVersion("Bottle")
 	if (BottleVersion != "") 
-	{
-		if (The_VersionName != BottleVersion) 
 		{
+		if (The_VersionName != BottleVersion) 
+			{
 			Msgbox, 4, Update, Found a new version: %BottleVersion%`n`nWant to update?
 			IfMsgBox Yes
-			{
+				{
 				filedelete, Bottle.ahk
 				IniWrite, %BottleVersion%, %config%, Bottle, Version
 				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/Bottle.ahk, Bottle.ahk
 				Sleep, 1000
 				if(ErrorLevel || !FileExist("Bottle.ahk") ) 
-				{
+					{
 					msgbox, Bottle.ahk Download failed!
 					ExitApp
-				}
+					}
 				Msgbox, Updating to latest version: %BottleVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
 				run Bottle.ahk
+				}
 			}
 		}
 	}
-}
 
 Suspend On
 GroupAdd POE, % "Path of Exile"
