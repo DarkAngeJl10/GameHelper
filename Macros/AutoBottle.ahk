@@ -2,41 +2,36 @@
 #Include lib\WebIniParse.ahk
 config = %A_WorkingDir%\Data\Settings.ini
 
+IniRead, Bottle1, %config%, SelectAutoBootle, Bottle1
+IniRead, Bottle2, %config%, SelectAutoBootle, Bottle2
+IniRead, Bottle3, %config%, SelectAutoBootle, Bottle3
+IniRead, Bottle4, %config%, SelectAutoBootle, Bottle4
+IniRead, Bottle5, %config%, SelectAutoBootle, Bottle5
 IniRead, The_VersionName, %config%, AutoBottle, Version
 IniRead, CheckforUpdates, %config%, AutoBottle, CheckforUpdates
 
-IfNotExist,  %A_WorkingDir%\Data
-{
-	FileCreateDir,  %A_WorkingDir%\Data
-}
 
 if (The_VersionName == "ERROR" or The_VersionName == "")
 {
-	The_VersionName := 0
-	IniWrite, %The_VersionName%, %config%, AutoBottle, Version
+	IniWrite, 0, %config%, AutoBottle, Version
 }
 if (CheckforUpdates == "ERROR" or CheckforUpdates == "")
 {
-	CheckforUpdates := 1
-	IniWrite, %CheckforUpdates%, %config%, AutoBottle, CheckforUpdates
+	IniWrite, 1, %config%, AutoBottle, CheckforUpdates
 }
 
-if (CheckforUpdates != 0) {
-	Endpoint := "https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/version.ini"
-	LatestAPI := ComObjCreate("WinHttp.WinHttpRequest.5.1")
-	LatestAPI.Open("GET", Endpoint, False)
-	LatestAPI.Send()
-	The_LatestVersion := WebIniParse(LatestAPI.ResponseText, "AutoBottle")
-
-	if (The_LatestVersion != "") 
+if (CheckforUpdates != 0)
 	{
-		if (The_VersionName != The_LatestVersion) 
+	AutoBottleVersion := CheckVersion("AutoBottle")
+	if (AutoBottleVersion != "") 
+	{
+		if (The_VersionName != AutoBottleVersion) 
 		{
-			Msgbox, 4, Update, Found a new version: %The_LatestVersion%`n`nWant to update?
+			Msgbox, 4, Update, Found a new version: %AutoBottleVersion%`n`nWant to update?
 			IfMsgBox Yes
 			{
 				filedelete, AutoBottle.ahk
-				IniWrite, %The_LatestVersion%, %config%, AutoBottle, Version
+				IniWrite, %AutoBottleVersion%, %config%, AutoBottle, Version
 				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/AutoBottle.ahk, AutoBottle.ahk
 				Sleep, 1000
 				if(ErrorLevel || !FileExist("AutoBottle.ahk") ) 
@@ -44,7 +39,7 @@ if (CheckforUpdates != 0) {
 					msgbox, AutoBottle.ahk Download failed!
 					ExitApp
 				}
-				Msgbox, Updating to latest version: %The_LatestVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
+				Msgbox, Updating to latest version: %AutoBottleVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
 				run AutoBottle.ahk
 			}
 		}
@@ -77,19 +72,15 @@ WinActive() {
 
 WinNotActive() {
 	Gui, Hide
-	SetTimer, VaalBootleAndSkills, 	Off
+	;SetTimer, VaalBootleAndSkills, 	Off
 	Suspend on
 	WinWaitActive ahk_group POE
 	{
 		WinActive()
 	}
 }
-XButton2::
-	;send,{numpad1}
-	send,{numpad2}
-	return
 
-numpad1::
+;numpad1::
 VaalBootleAndSkills:
 	{
 	ifWinNotActive ahk_group POE
@@ -110,7 +101,7 @@ VaalBootleAndSkills:
 	}
 	return
 	
-$capslock::
+;$capslock::
 	ifWinNotActive ahk_group POE
 		{
 		Return
@@ -123,24 +114,24 @@ $capslock::
 	return
 
 numpad2::
-	Loop,
+Loop,
+{
+	{
+	ifWinActive ahk_group POE
 		{
-			{
-			ifWinActive ahk_group POE
-				{
-				Gui, Hide
-				Sleep, 100
-				}
-			Else
-			ifWinNotActive ahk_group POE
-				{
-				Gui,Color,Lime
-				}
-			}
-			
-		sleep, 100
-		
-		PixelSearch, Px1, Py1, 314, 1065, 344, 1075, 0x99D7F9, 0, Fast
+		Gui, Hide
+		Sleep, 100
+		}
+	ifWinNotActive ahk_group POE
+		{
+		Gui,Color,Lime
+		Break
+		}
+	}
+	sleep, 100
+	
+	if (Bottle1 = 1)
+		{
 		PixelSearch, Px1, Py1, 314, 1065, 344, 1075, 0x99D7F9, 0, Fast
 		PixelGetColor, color1, %Px1%, %Py1%
 		if not (color1 = 0x99D7F9)
@@ -153,6 +144,10 @@ numpad2::
 			sleep, 50
 			Send {1}
 			}
+		}
+	
+	if (Bottle2 = 1)
+		{
 		PixelSearch, Px2, Py2, 355, 1065, 395, 1075, 0x99D7F9, 0, Fast
 		PixelGetColor, color2, %Px2%, %Py2%
 		if not (color2 = 0x99D7F9)
@@ -165,6 +160,10 @@ numpad2::
 			sleep, 50
 			Send {2}
 			}
+		}
+		
+	if (Bottle3 = 1)
+		{
 		PixelSearch, Px3, Py3, 403, 1065, 440, 1075, 0x99D7F9, 0, Fast
 		PixelGetColor, color3, %Px3%, %Py3%
 		if not (color3 = 0x99D7F9)
@@ -177,6 +176,10 @@ numpad2::
 			sleep, 50
 			Send {3}
 			}
+		}
+		
+	if (Bottle4 = 1)
+		{
 		PixelSearch, Px4, Py4, 452, 1065, 490, 1075, 0x99D7F9, 0, Fast
 		PixelGetColor, color4, %Px4%, %Py4%
 		if not (color4 = 0x99D7F9)
@@ -189,6 +192,10 @@ numpad2::
 			sleep, 50
 			Send {4}
 			}
+		}
+		
+	if (Bottle5 = 1)
+		{
 		PixelSearch, Px5, Py5, 500, 1065, 540, 1075, 0x99D7F9, 0, Fast
 		PixelGetColor, color5, %Px5%, %Py5%
 		if not (color5 = 0x99D7F9)
@@ -202,7 +209,8 @@ numpad2::
 			Send {5}
 			}
 		}
-		return
+	}
+return
 		
 ;F8::
 		X = 309
@@ -215,7 +223,7 @@ numpad2::
 	;	msgbox %color% , %MouseX%, %MouseY%
 	return
 
+
 numpad5::
-XButton1::
-	SetTimer, VaalBootleAndSkills, 	Off
+	;SetTimer, VaalBootleAndSkills, 	Off
 	Reload

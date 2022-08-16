@@ -2,6 +2,7 @@
 #Include lib\WebIniParse.ahk
 config = %A_WorkingDir%\Data\Settings.ini
 
+IniRead, Debug, %config%, CheckHP, Debug
 IniRead, The_VersionName, %config%, CheckHP, Version
 IniRead, CheckforUpdates, %config%, CheckHP, CheckforUpdates
 
@@ -10,43 +11,41 @@ IfNotExist,  %A_WorkingDir%\Data
 	FileCreateDir,  %A_WorkingDir%\Data
 }
 
+if (Debug == "ERROR" or Debug == "")
+{
+	Debug := 0
+	IniWrite, %Debug%, %config%, CheckHP, Debug
+}
 if (The_VersionName == "ERROR" or The_VersionName == "")
 {
-	The_VersionName := 0
-	IniWrite, %The_VersionName%, %config%, CheckHP, Version
+	IniWrite, 0, %config%, CheckHP, Version
 }
 if (CheckforUpdates == "ERROR" or CheckforUpdates == "")
 {
-	CheckforUpdates := 1
-	IniWrite, %CheckforUpdates%, %config%, CheckHP, CheckforUpdates
+	IniWrite, 1, %config%, CheckHP, CheckforUpdates
 }
 
-if (CheckforUpdates != 0) {
-	Endpoint := "https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/version.ini"
-	LatestAPI := ComObjCreate("WinHttp.WinHttpRequest.5.1")
-	LatestAPI.Open("GET", Endpoint, False)
-	LatestAPI.Send()
-	The_LatestVersion := WebIniParse(LatestAPI.ResponseText, "CheckHP")
-	
-	if (The_LatestVersion != "") 
+if (CheckforUpdates != 0)
 	{
-		if (The_VersionName != The_LatestVersion) 
+	CheckHPVersion := CheckVersion("CheckHP")
+if (CheckHPVersion != "") 
+{
+	if (The_VersionName != CheckHPVersion) 
+	{
+		Msgbox, 4, Update, Found a new version: %CheckHPVersion%`n`nWant to update?
+		IfMsgBox Yes
 		{
-			Msgbox, 4, Update, Found a new version: %The_LatestVersion%`n`nWant to update?
-			IfMsgBox Yes
+			filedelete, CheckHP.ahk
+			IniWrite, %CheckHPVersion%, %config%, CheckHP, Version
+			UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/CheckHP.ahk, CheckHP.ahk
+			Sleep, 1000
+			if(ErrorLevel || !FileExist("CheckHP.ahk") ) 
 			{
-				filedelete, CheckHP.ahk
-				IniWrite, %The_LatestVersion%, %config%, CheckHP, Version
-				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/CheckHP.ahk, CheckHP.ahk
-				Sleep, 1000
-				if(ErrorLevel || !FileExist("CheckHP.ahk") ) 
-				{
-					msgbox, CheckHP.ahk Download failed!
-					ExitApp
-				}
-				Msgbox, Updating to latest version: %The_LatestVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
-				run CheckHP.ahk
+				msgbox, CheckHP.ahk Download failed!
+				ExitApp
 			}
+			Msgbox, Updating to latest version: %CheckHPVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
+			run CheckHP.ahk
 		}
 	}
 }
@@ -82,17 +81,6 @@ WinNotActive() {
 	}
 }
 
-t := 0
-
-;\::
-	t += 1
-	if (t > 1)
-		{
-		t := 0
-		}
-	return
-
-
 numpad1::
 end::
 	X = 115
@@ -100,7 +88,7 @@ end::
 	PixelGetColor, color1, %X%, %Y%
 	Loop,
 		{
-		
+		IniRead, Debug, %config%, CheckHP, Debug
 			{
 			ifWinActive ahk_group POE
 				{
@@ -116,33 +104,24 @@ end::
 			}
 			
 		PixelGetColor, color, %X%, %Y%
-			if (t = 1)
+			if (Debug = 1)
 			{
-			if not (color = color1)
+				if (color != color1)
 				{
 				ifWinNotActive ahk_group POE
 					{
 					Gui,Color,Lime
 					Break
 					}
-				FileAppend, %color% `n, CheckHPDebug.txt
+				FileAppend, %color% `n, CheckHPDebug.ini
 				sleep, 300
 				}
 			}
-		
-			else if (color = 0x020102)
-			{}
-			
-			else if (color = 0x020100)
-			{}
-			
-			else if (color = 0x000000)
-			{}
-			
-			else if (color = 0x060606)
-			{}
-			
-			else if not (color = color1)
+			if (color = 0x020102 or color = 0x020100 or color = 0x000000 or color = 0x060606)
+			{
+				
+			}
+			if (color != color1)
 			{
 			ifWinNotActive ahk_group POE
 				{
