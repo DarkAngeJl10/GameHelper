@@ -6,8 +6,8 @@ IniRead, Bottle15, %config%, SelectBootle, Bottle1-5
 IniRead, Bottle25, %config%, SelectBootle, Bottle2-5
 IniRead, Bottle35, %config%, SelectBootle, Bottle3-5
 IniRead, Bottle45, %config%, SelectBootle, Bottle4-5
-IniRead, The_VersionName, %config%, Bottle 1-5, Version
-IniRead, CheckforUpdates, %config%, Bottle 1-5, CheckforUpdates
+IniRead, The_VersionName, %config%, Bottle, Version
+IniRead, CheckforUpdates, %config%, Bottle, CheckforUpdates
 
 IfNotExist,  %A_WorkingDir%\Data
 {
@@ -16,11 +16,11 @@ IfNotExist,  %A_WorkingDir%\Data
 
 if (The_VersionName == "ERROR" or The_VersionName == "")
 {
-	IniWrite, 0, %config%, Bottle 1-5, Version
+	IniWrite, 0, %config%, Bottle, Version
 }
 if (CheckforUpdates == "ERROR" or CheckforUpdates == "")
 {
-	IniWrite, 1, %config%, Bottle 1-5, CheckforUpdates
+	IniWrite, 1, %config%, Bottle, CheckforUpdates
 }
 
 if (CheckforUpdates != 0)
@@ -39,7 +39,7 @@ if (CheckforUpdates != 0)
 				Sleep, 1000
 				if(ErrorLevel || !FileExist("Bottle.ahk") ) 
 				{
-					msgbox, Bottle 1-5.ahk Download failed!
+					msgbox, Bottle.ahk Download failed!
 					ExitApp
 				}
 				Msgbox, Updating to latest version: %BottleVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
@@ -71,11 +71,11 @@ WinNotActive() {
 }
 
 XButton1::
-IniRead, Bottle15, %config%, SelectBootle, Bottle1-5
-IniRead, Bottle25, %config%, SelectBootle, Bottle2-5
-IniRead, Bottle35, %config%, SelectBootle, Bottle3-5
-IniRead, Bottle45, %config%, SelectBootle, Bottle4-5
 	{
+	IniRead, Bottle15, %config%, SelectBootle, Bottle1-5
+	IniRead, Bottle25, %config%, SelectBootle, Bottle2-5
+	IniRead, Bottle35, %config%, SelectBootle, Bottle3-5
+	IniRead, Bottle45, %config%, SelectBootle, Bottle4-5
 	if (Bottle15 = 1)
 		{
 		ifWinNotActive ahk_group POE
@@ -92,6 +92,7 @@ IniRead, Bottle45, %config%, SelectBootle, Bottle4-5
 		sleep, 20
 		SendInput, {5}
 		}
+		
 	if (Bottle25 = 1)
 		{
 		ifWinNotActive ahk_group POE
@@ -106,6 +107,7 @@ IniRead, Bottle45, %config%, SelectBootle, Bottle4-5
 		sleep, 20
 		SendInput, {5}
 		}
+		
 	if (Bottle35 = 1)
 		{
 		ifWinNotActive ahk_group POE
@@ -118,6 +120,7 @@ IniRead, Bottle45, %config%, SelectBootle, Bottle4-5
 		sleep, 20
 		SendInput, {5}
 		}
+		
 	if (Bottle45 = 1)
 		{
 		ifWinNotActive ahk_group POE
