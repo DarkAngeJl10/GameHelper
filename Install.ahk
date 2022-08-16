@@ -12,9 +12,6 @@ if !FileExist("lib\WebIniParse.ahk")
 		{
 		msgbox, WebIniParse.ahk Download failed!
 		}
-	}	
-else
-	{
 	WebIniParseSucc := 1
 	}
 
@@ -25,9 +22,6 @@ if !FileExist("Control.ahk")
 		{
 		msgbox, Control.ahk Download failed!
 		}
-	}	
-else
-	{
 	ControlSucc := 1
 	}
 
@@ -38,15 +32,12 @@ if !FileExist("Update.ahk")
 		{
 		msgbox, Update.ahk Download failed!
 		}
-	}
-else
-	{
 	UpdateSucc := 1
 	}
-	
+
+
 if (ControlSucc = 1 and UpdateSucc = 1 and WebIniParseSucc = 1)
 	{
 	FileDelete, Install.ahk
 	Exitapp
 	}
-
