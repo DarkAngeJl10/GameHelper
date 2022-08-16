@@ -1,10 +1,14 @@
 ﻿#SingleInstance Force
 
+IfNotExist,  %A_WorkingDir%\lib
+{
+	FileCreateDir,  %A_WorkingDir%\lib
+}
 
-if !FileExist("lib\WebIniParse")
+if !FileExist("lib\WebIniParse.ahk")
 	{
 	UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/lib/WebIniParse.ahk, lib\WebIniParse.ahk
-	if(ErrorLevel || !FileExist("WebIniParse.ahk") ) 
+	if(ErrorLevel || !FileExist("lib\WebIniParse.ahk") ) 
 		{
 		msgbox, WebIniParse.ahk Download failed!
 		}
