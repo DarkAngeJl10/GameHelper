@@ -17,6 +17,11 @@ IniRead, Bottle15, %config%, SelectBootle, Bottle1-5
 IniRead, Bottle25, %config%, SelectBootle, Bottle2-5
 IniRead, Bottle35, %config%, SelectBootle, Bottle3-5
 IniRead, Bottle45, %config%, SelectBootle, Bottle4-5
+IniRead, CheckHP70, %config%, SelectCheckHP, CheckHP70
+IniRead, CheckHP48, %config%, SelectCheckHP, CheckHP48
+IniRead, CheckHP30, %config%, SelectCheckHP, CheckHP30
+IniRead, SmokeMine, %config%, Main, SmokeMine
+IniRead, DefaultMine, %config%, Main, DefaultMine
 IniRead, The_VersionName, %config%, Control, Version
 IniRead, CheckforUpdates, %config%, Control, CheckforUpdates
 
@@ -65,6 +70,28 @@ if (Bottle35 == "ERROR" or Bottle35 == "")
 if (Bottle45 == "ERROR" or Bottle45 == "")
 {
 	IniWrite, 0, %config%, SelectBootle, Bottle4-5
+}
+
+if (CheckHP70 == "ERROR" or CheckHP70 == "")
+{
+	IniWrite, 0, %config%, SelectCheckHP, CheckHP70
+}
+if (CheckHP48 == "ERROR" or CheckHP48 == "")
+{
+	IniWrite, 0, %config%, SelectCheckHP, CheckHP48
+}
+if (CheckHP30 == "ERROR" or CheckHP30 == "")
+{
+	IniWrite, 0, %config%, SelectCheckHP, CheckHP30
+}
+
+if (SmokeMine == "ERROR" or SmokeMine == "")
+{
+	IniWrite, 0, %config%, Main, SmokeMine
+}
+if (DefaultMine == "ERROR" or DefaultMine == "")
+{
+	IniWrite, 0, %config%, Main, DefaultMine
 }
 
 if (The_VersionName == "ERROR" or The_VersionName == "")
@@ -130,6 +157,10 @@ Settings:
 	Gui, 2:Add, Text,			x10 y10, 	Выберите что хотите настроить
 	Gui, 2:Add, Button,			x10 y30 	gSettingsAutoBottle, 	Авто бутылки
 	Gui, 2:Add, Button,			x140 y30 	gSettingsBottle, 		Бутылки по кнопке
+	Gui, 2:Add, Button,			x10 y70 	gSettingsCheckHP, 		Авто ХП
+	Gui, 2:Add, Text,			x10 y320, 	Mines
+	Gui, 2:Add, Checkbox,		x10 y340 	gSmokeMine 		Checked%SmokeMine%, 	Smoke Mine Setup on Q
+	Gui, 2:Add, Checkbox,		x10 y360	gDefaultMine	Checked%DefaultMine%, 	Any Mines on R
 	Gui, 2:Show, w400 h400,
 return
 
@@ -169,9 +200,25 @@ SettingsBottle:
 	Gui, 4:Show, w400 h400,
 return
 
+SettingsCheckHP:
+	IniRead, CheckHP70, %config%, SelectCheckHP, CheckHP70
+	IniRead, CheckHP48, %config%, SelectCheckHP, CheckHP48
+	IniRead, CheckHP30, %config%, SelectCheckHP, CheckHP30
+	Gui, 2:hide
+	Gui, 5:Add, Text,			x10 y10, 	Выберите какие бутылки будут активны
+	
+	Gui, 5:Add, radio,			x10 y40 	gCheckHP70 Checked%CheckHP70%, 	70 Процентов ХП
+	Gui, 5:Add, radio,			x10 y70 	gCheckHP48 Checked%CheckHP48%, 	48 Процентов ХП
+	Gui, 5:Add, radio,			x10 y100 	gCheckHP30 Checked%CheckHP30%, 	30 Процентов ХП
+	
+	Gui, 5:Add, Button, 		x240 y360 	w150 h30 	gAccept Center, 	Применить
+	Gui, 5:Show, w400 h400,
+return
+
 Accept:
 	Gui, 3:hide
 	Gui, 4:hide
+	Gui, 5:hide
 	Gui, 1:show
 return
 
@@ -308,6 +355,13 @@ return
 
 CheckHP:
 ControlGet, CheckHP, Checked , , Button2,
+if (CheckHP70 = 0 and CheckHP48 = 0 and CheckHP30 = 0)
+{
+	GuiControl,,CheckHP,0
+	Gui, 1:hide
+	msgbox, Вы не выбрали процент для Авто ХП
+	goto, SettingsCheckHP
+}
 if (CheckHP != 0)
 {
 	if !FileExist("Macros\CheckHP.ahk")
@@ -459,6 +513,8 @@ else
 	}
 return
 
+;---------------------------------------- BOTTLE ----------------------------------------
+
 Bottle15:
 ControlGet, Bottle15, Checked , , Button1,
 if (Bottle15 != 0)
@@ -519,6 +575,75 @@ else
 	}
 return
 
+;---------------------------------------- CHECK HP ----------------------------------------
+
+CheckHP70:
+ControlGet, CheckHP70, Checked , , Button1,
+if (CheckHP70 != 0)
+	{
+	IniWrite, 1, %config%, SelectCheckHP, CheckHP70
+	IniWrite, 0, %config%, SelectCheckHP, CheckHP48
+	IniWrite, 0, %config%, SelectCheckHP, CheckHP30
+	}
+else
+	{
+	IniWrite, 0, %config%, SelectCheckHP, CheckHP70
+	}
+return
+
+CheckHP48:
+ControlGet, CheckHP48, Checked , , Button2,
+if (CheckHP48 != 0)
+	{
+	IniWrite, 0, %config%, SelectCheckHP, CheckHP70
+	IniWrite, 1, %config%, SelectCheckHP, CheckHP48
+	IniWrite, 0, %config%, SelectCheckHP, CheckHP30
+	}
+else
+	{
+	IniWrite, 0, %config%, SelectCheckHP, CheckHP48
+	}
+return
+
+CheckHP30:
+ControlGet, CheckHP30, Checked , , Button3,
+if (CheckHP30 != 0)
+	{
+	IniWrite, 0, %config%, SelectCheckHP, CheckHP70
+	IniWrite, 0, %config%, SelectCheckHP, CheckHP48
+	IniWrite, 1, %config%, SelectCheckHP, CheckHP30
+	}
+else
+	{
+	IniWrite, 0, %config%, SelectCheckHP, CheckHP30
+	}
+return
+
+;
+
+SmokeMine:
+ControlGet, SmokeMine, Checked , , Button4,
+if (SmokeMine != 0)
+	{
+	IniWrite, 1, %config%, Main, SmokeMine
+	}
+else
+	{
+	IniWrite, 0, %config%, Main, SmokeMine
+	}
+return
+
+DefaultMine:
+ControlGet, DefaultMine, Checked , , Button5,
+if (DefaultMine != 0)
+	{
+	IniWrite, 1, %config%, Main, DefaultMine
+	}
+else
+	{
+	IniWrite, 0, %config%, Main, DefaultMine
+	}
+return
 
 2GuiClose:
 Gui 2:hide
@@ -532,6 +657,11 @@ return
 
 4GuiClose:
 Gui 4:hide
+Gui 2:show
+return
+
+5GuiClose:
+Gui 5:hide
 Gui 2:show
 return
 

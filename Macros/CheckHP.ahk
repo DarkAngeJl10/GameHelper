@@ -3,6 +3,9 @@
 config = %A_WorkingDir%\Data\Settings.ini
 
 IniRead, Debug, %config%, CheckHP, Debug
+IniRead, CheckHP70, %config%, SelectCheckHP, CheckHP70
+IniRead, CheckHP48, %config%, SelectCheckHP, CheckHP48
+IniRead, CheckHP30, %config%, SelectCheckHP, CheckHP30
 IniRead, The_VersionName, %config%, CheckHP, Version
 IniRead, CheckforUpdates, %config%, CheckHP, CheckforUpdates
 
@@ -58,14 +61,12 @@ WinSet, Region, 0-0 W70 H70 E
 
 Suspend On
 GroupAdd POE, % "Path of Exile"
-WinActive()
+WinNotActive()
 Return
 
 WinActive() {
 	Suspend Off
-	Gui,Show, X87 Y980 W70 H70 NA
-	WinGetTitle, winTitle, A
-	WinGet, winProcessName, ProcessName, A
+	Gui,Show, X90 Y1000 W70 H70 NA
 	sleep, 10
 	WinWaitNotActive ahk_group POE
 	{
@@ -84,11 +85,30 @@ WinNotActive() {
 
 numpad1::
 end::
-	X = 115
-	Y = 940
+	IniRead, CheckHP70, %config%, SelectCheckHP, CheckHP70
+	IniRead, CheckHP48, %config%, SelectCheckHP, CheckHP48
+	IniRead, CheckHP30, %config%, SelectCheckHP, CheckHP30
+	
+	if (CheckHP70 = 1)
+		{
+		X := 109
+		Y := 924
+		}
+	
+	if (CheckHP48 = 1)
+		{
+		X := 118
+		Y := 980
+		}	
+	
+	if (CheckHP30 = 1)
+		{
+		X := 118
+		Y := 1013
+		}
 	PixelGetColor, color1, %X%, %Y%
 	Loop,
-		{
+	{
 		IniRead, Debug, %config%, CheckHP, Debug
 			{
 			ifWinActive ahk_group POE
@@ -103,7 +123,7 @@ end::
 				Break
 				}
 			}
-			
+		sleep, 100
 		PixelGetColor, color, %X%, %Y%
 			if (Debug = 1)
 			{
@@ -134,16 +154,38 @@ end::
 		}
 		return
 		
-;F9::
-		X = 115
-		Y = 940
-	;	Mousemove, %X%, %Y%
-	;	MouseGetPos, MouseX, MouseY
-		PixelGetColor, color, %X%, %Y%
-		clipboard := color
-	;	msgbox %color% , %X%, %Y%
+;PgUp::							;Отладка всего макроса (по дефолту выключено)
+	SwithDebug += 1
+	if (SwithDebug = 3)
+		{
+		SwithDebug -= 2
+		}
+	if (SwithDebug = 1)
+		{
+		tooltip, Режим работы Дебаг Координаты, 1825, 1010
+		}
+	if (SwithDebug = 2)
+		{
+		tooltip, Режим работы Дебаг Цвет, 1825, 1010
+		}
+	SetTimer, RemoveToolTip, -10000
 	return
- 
+	RemoveToolTip:
+	tooltip
+	return
+	
+;PgDn::							;Отладка всего макроса (по дефолту выключено)
+	MouseGetPos, MouseX, MouseY
+	PixelGetColor, color, %MouseX%, %MouseY%
+	if (SwithDebug = 1)
+		{
+		clipboard = %MouseX%, %MouseY% 
+		}
+	if (SwithDebug = 2)
+		{
+		clipboard := color
+		}
+	return	
  
  
 

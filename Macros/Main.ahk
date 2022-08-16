@@ -2,6 +2,8 @@
 #Include lib\WebIniParse.ahk
 config = %A_WorkingDir%\Data\Settings.ini
 
+IniRead, SmokeMine, %config%, Main, SmokeMine
+IniRead, DefaultMine, %config%, Main, DefaultMine
 IniRead, The_VersionName, %config%, Main, Version
 IniRead, CheckforUpdates, %config%, Main, CheckforUpdates
 
@@ -54,7 +56,7 @@ send, {LCtrl up}
 
 Suspend On
 GroupAdd POE, % "Path of Exile"
-WinActive()
+WinNotActive()
 return
 
 WinActive() {
@@ -252,19 +254,44 @@ return
 		}
 return
 
-;$e::
-	ifWinNotActive ahk_group POE
-;	Send, {1}
-;	Send, {1}
-;	sleep, 50
-	Send, {e}
-	Send, {e}
-	sleep, 50
-	Send, {r}
-	sleep, 50
-	Send, {t}
-	sleep, 50
-	return
+$q::
+	IniRead, SmokeMine, %config%, Main, SmokeMine
+	if (SmokeMine = 1)
+	{
+		ifWinNotActive ahk_group POE
+			{
+			return
+			}
+		Send, {q}
+		Send, {q}
+		sleep, 250
+		Send, {d}
+	}
+	else
+	{
+	send {q}
+	}
+return
+
+$r::
+	IniRead, DefaultMine, %config%, Main, DefaultMine
+	if (DefaultMine = 1)
+	{
+		ifWinNotActive ahk_group POE
+			{
+			return
+			}
+		Send, {r}
+		Send, {r}
+		sleep, 50
+		Send, {d}
+		sleep, 50
+	}
+	else
+	{
+	send {r}
+	}
+return
 	
 	
 
