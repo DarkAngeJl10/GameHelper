@@ -20,8 +20,6 @@ if (CheckforUpdates == "ERROR" or CheckforUpdates == "")
 	IniWrite, 1, %config%, AutoBottle, CheckforUpdates
 }
 
-msgbox, %A_WorkingDir%
-
 if (CheckforUpdates != 0)
 	{
 	AutoBottleVersion := CheckVersion("AutoBottle")
