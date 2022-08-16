@@ -28,27 +28,28 @@ if (CheckforUpdates == "ERROR" or CheckforUpdates == "")
 if (CheckforUpdates != 0)
 	{
 	CheckHPVersion := CheckVersion("CheckHP")
-if (CheckHPVersion != "") 
-{
-	if (The_VersionName != CheckHPVersion) 
-	{
-		Msgbox, 4, Update, Found a new version: %CheckHPVersion%`n`nWant to update?
-		IfMsgBox Yes
+	if (CheckHPVersion != "") 
 		{
-			filedelete, CheckHP.ahk
-			IniWrite, %CheckHPVersion%, %config%, CheckHP, Version
-			UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/CheckHP.ahk, CheckHP.ahk
-			Sleep, 1000
-			if(ErrorLevel || !FileExist("CheckHP.ahk") ) 
+		if (The_VersionName != CheckHPVersion) 
 			{
-				msgbox, CheckHP.ahk Download failed!
-				ExitApp
+			Msgbox, 4, Update, Found a new version: %CheckHPVersion%`n`nWant to update?
+			IfMsgBox Yes
+				{
+				filedelete, CheckHP.ahk
+				IniWrite, %CheckHPVersion%, %config%, CheckHP, Version
+				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/CheckHP.ahk, CheckHP.ahk
+				Sleep, 1000
+				if(ErrorLevel || !FileExist("CheckHP.ahk") ) 
+					{
+					msgbox, CheckHP.ahk Download failed!
+					ExitApp
+					}
+				Msgbox, Updating to latest version: %CheckHPVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
+				run CheckHP.ahk
+				}
 			}
-			Msgbox, Updating to latest version: %CheckHPVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
-			run CheckHP.ahk
 		}
 	}
-}
 
 Gui,Color,Lime
 Gui, -Caption +Toolwindow +AlwaysOnTop +LastFound
