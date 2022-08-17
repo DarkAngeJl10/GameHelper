@@ -37,7 +37,6 @@ if (CheckforUpdates != 0)
 			IfMsgBox Yes
 			{
 				filedelete, Macros\AutoBottle.ahk
-				IniWrite, %AutoBottleVersion%, %config%, AutoBottle, Version
 				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/AutoBottle.ahk, Macros\AutoBottle.ahk
 				Sleep, 1000
 				if(ErrorLevel || !FileExist("Macros\AutoBottle.ahk") ) 
@@ -45,6 +44,7 @@ if (CheckforUpdates != 0)
 					msgbox, AutoBottle.ahk Download failed!
 					ExitApp
 				}
+				IniWrite, %AutoBottleVersion%, %config%, AutoBottle, Version
 				Msgbox, Updating to latest version: %AutoBottleVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
 				run Macros\AutoBottle.ahk
 			}

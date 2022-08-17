@@ -27,7 +27,6 @@ if (CheckforUpdates != 0)
 			IfMsgBox Yes
 			{
 				filedelete, Macros\Main.ahk
-				IniWrite, %MainVersion%, %config%, Main, Version
 				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/Main.ahk, Macros\Main.ahk
 				Sleep, 1000
 				if(ErrorLevel || !FileExist("Macros\Main.ahk") ) 
@@ -35,6 +34,7 @@ if (CheckforUpdates != 0)
 					msgbox, Main.ahk Download failed!
 					ExitApp
 				}
+				IniWrite, %MainVersion%, %config%, Main, Version
 				Msgbox, Updating to latest version: %MainVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
 				run Macros\Main.ahk
 			}

@@ -127,43 +127,43 @@ if (CheckforUpdates == "ERROR" or CheckforUpdates == "")
 }
 
 if (CheckforUpdates != 0)
-	{
+{
 	ControlVersion := CheckVersion("Control")
 	if (ControlVersion != "") 
-		{
+	{
 		if (The_VersionName != ControlVersion) 
-			{
+		{
 			Msgbox, 4, Update, Found a new version: %ControlVersion%`n`nWant to update?
 			IfMsgBox Yes
-				{
+			{
 				filedelete, Control.ahk
-				IniWrite, %ControlVersion%, %config%, Control, Version
 				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Control.ahk, Control.ahk
 				Sleep, 1000
 				if(ErrorLevel || !FileExist("Control.ahk") ) 
-					{
+				{
 					msgbox, Control.ahk Download failed!
 					ExitApp
-					}
+				}
+				IniWrite, %ControlVersion%, %config%, Control, Version
 				Msgbox, Updating to latest version: %ControlVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
 				run Control.ahk
-				}
 			}
 		}
 	}
+}
 
 MW = %A_ScreenWidth%
 MH = %A_ScreenHeight%
 
 Start:
 if (MW = 1920 and MH = 1080)
-	{
+{
 	Gui, 1:Add, Checkbox,		x10 y10 	gAutoBottle vAutoBottle Checked%CloseGuiAutoBottle%, 		Auto Bottle
-	}
+}
 if (MW = 2560 and MH = 1440)
-	{
+{
 	Gui, 1:Add, Checkbox,		x10 y10 	gAutoBottle2k vAutoBottle2k Checked%CloseGuiAutoBottle2k%, 	Auto Bottle
-	}
+}
 	Gui, 1:Add, Checkbox,		x140 y10 	gCheckHP vCheckHP Checked%CloseGuiCheckHP%,  			Check HP
 	Gui, 1:Add, Checkbox, 		x10 y40 	gMain vMain Checked%CloseGuiMain%, 	 				Main
 	
@@ -231,21 +231,21 @@ MouseBindAutoBottle:
 	Gui, BindAutoBottle:Show, w200 h100
 	MouseKeyArray := ["MButton", "XButton1", "XButton2"]
 	Loop
-		{
+	{
 		for i, MouseKey in MouseKeyArray
-			{
+		{
 			GetKeyState, state, %MouseKey%
 			if (state == "D")
-				{
+			{
 				GuiControl, BindAutoBottle: Text, AutoBottleMouseBind, %MouseKey%
 				IniWrite, %MouseKey%, %config%, AutoBottle, Key
-				}
-			}
-		if (BreakLoopAutoBottle = 1)
-			{
-			Break
 			}
 		}
+		if (BreakLoopAutoBottle = 1)
+		{
+			Break
+		}
+	}
 return
 
 AutoBottleBind:
@@ -301,21 +301,21 @@ MouseBindBottle:
 	Gui, BindBottle:Show, w200 h100
 	MouseKeyArray := ["MButton", "XButton1", "XButton2"]
 	Loop
-		{
+	{
 		for i, MouseKey in MouseKeyArray
-			{
+		{
 			GetKeyState, state, %MouseKey%
 			if (state == "D")
-				{
+			{
 				GuiControl, BindBottle: Text, BottleMouseBind, %MouseKey%
 				IniWrite, %MouseKey%, %config%, Bottle, Key
-				}
-			}
-		if (BreakLoopBottle = 1)
-			{
-			Break
 			}
 		}
+		if (BreakLoopBottle = 1)
+		{
+			Break
+		}
+	}
 return
 	
 BottleBind:
@@ -369,21 +369,21 @@ MouseBindCheckHP:
 	Gui, BindCheckHP:Show, w200 h100
 	MouseKeyArray := ["MButton", "XButton1", "XButton2"]
 	Loop
-		{
+	{
 		for i, MouseKey in MouseKeyArray
-			{
+		{
 			GetKeyState, state, %MouseKey%
 			if (state == "D")
-				{
+			{
 				GuiControl, BindCheckHP: Text, CheckHPMouseBind, %MouseKey%
 				IniWrite, %MouseKey%, %config%, CheckHP, Key
-				}
-			}
-		if (BreakLoopCheckHP = 1)
-			{
-			Break
 			}
 		}
+		if (BreakLoopCheckHP = 1)
+		{
+			Break
+		}
+	}
 return
 
 CheckHPBind:
@@ -418,13 +418,13 @@ if (Choice = "Bottle")
 	if !FileExist("Macros\Bottle.ahk")
 	{
 		Version := CheckVersion("Bottle")
-		IniWrite, %Version%, %config%, Bottle, Version
 		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/Bottle.ahk, Macros\Bottle.ahk
 		if(ErrorLevel || !FileExist("Macros\Bottle.ahk") ) 
 		{
 			msgbox, Bottle.ahk Download failed!
 			return
 		}
+		IniWrite, %Version%, %config%, Bottle, Version
 	}
 	if !WinExist("ahk_group Bottle")
 	{
@@ -442,9 +442,9 @@ else
 	WinClose, ahk_group Bottle
 }
 if (CABottle = 1)
-	{
+{
 	SetTimer, ListOfBottle, 1000
-	}
+}
 return
 
 AutoBottle:
@@ -461,13 +461,13 @@ if (AutoBottle != 0)
 	if !FileExist("Macros\AutoBottle.ahk")
 	{
 		Version := CheckVersion("AutoBottle")
-		IniWrite, %Version%, %config%, AutoBottle, Version
 		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/AutoBottle.ahk, Macros\AutoBottle.ahk
 		if(ErrorLevel || !FileExist("Macros\AutoBottle.ahk") ) 
 		{
 			msgbox, AutoBottle.ahk Download failed!
 			return
 		}
+		IniWrite, %Version%, %config%, AutoBottle, Version
 	}
 	if !WinExist("ahk_group AutoBottle")
 	{
@@ -486,9 +486,9 @@ else
 }
 
 if (CAAutoBottle = 1)
-	{
+{
 	SetTimer, AutoBottle, 1000
-	}
+}
 return
 
 AutoBottle2k:
@@ -507,13 +507,13 @@ if (AutoBottle2k != 0)
 	if !FileExist("Macros\AutoBottle2k.ahk")
 	{
 		Version := CheckVersion("AutoBottle 2k")
-		IniWrite, %Version%, %config%, AutoBottle 2k, Version
 		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/AutoBottle2k.ahk, Macros\AutoBottle 2k.ahk
 		if(ErrorLevel || !FileExist("Macros\AutoBottle 2k.ahk") ) 
 		{
 			msgbox, AutoBottle 2k.ahk Download failed!
 			return
 		}
+		IniWrite, %Version%, %config%, AutoBottle 2k, Version
 	}
 	if !WinExist("ahk_group AutoBottle2k")
 	{
@@ -531,9 +531,9 @@ else
 	WinClose, ahk_group AutoBottle2k
 }
 if (CAAutoBottle2k = 1)
-	{
+{
 	SetTimer, AutoBottle2k, 1000
-	}
+}
 return
 
 CheckHP:
@@ -550,13 +550,13 @@ if (CheckHP != 0)
 	if !FileExist("Macros\CheckHP.ahk")
 	{
 		Version := CheckVersion("CheckHP")
-		IniWrite, %Version%, %config%, CheckHP, Version
 		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/CheckHP.ahk, Macros\CheckHP.ahk
 		if(ErrorLevel || !FileExist("Macros\CheckHP.ahk") ) 
 		{
 			msgbox, CheckHP.ahk Download failed!
 			return
 		}
+		IniWrite, %Version%, %config%, CheckHP, Version
 	}
 	if !WinExist("ahk_group CheckHP")
 	{
@@ -574,9 +574,9 @@ else
 	WinClose, ahk_group CheckHP
 }
 if (CACheckHP = 1)
-	{
+{
 	SetTimer, CheckHP, 1000
-	}
+}
 return
 
 Main:
@@ -586,13 +586,13 @@ if (Main != 0)
 	if !FileExist("Macros\Main.ahk")
 	{
 		Version := CheckVersion("Main")
-		IniWrite, %Version%, %config%, Main, Version
 		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/Main.ahk, Macros\Main.ahk
 		if(ErrorLevel || !FileExist("Macros\Main.ahk") ) 
 		{
 			msgbox, Main.ahk Download failed!
 			return
 		}
+		IniWrite, %Version%, %config%, Main, Version
 	}
 	if !WinExist("ahk_group Main")
 	{
@@ -610,9 +610,9 @@ else
 	WinClose, ahk_group Main
 }
 if (CAMain = 1)
-	{
+{
 	SetTimer, Main, 1000
-	}
+}
 return
 
 
@@ -643,61 +643,61 @@ return
 AutoBottle1:
 ControlGet, AutoBottle1, Checked , , Button1,
 if (AutoBottle1 != 0)
-	{
+{
 	IniWrite, 1, %config%, SelectAutoBootle, Bottle1
-	}
+}
 else
-	{
+{
 	IniWrite, 0, %config%, SelectAutoBootle, Bottle1
-	}
+}
 return
 
 AutoBottle2:
 ControlGet, AutoBottle2, Checked , , Button2,
 if (AutoBottle2 != 0)
-	{
+{
 	IniWrite, 1, %config%, SelectAutoBootle, Bottle2
-	}
+}
 else
-	{
+{
 	IniWrite, 0, %config%, SelectAutoBootle, Bottle2
-	}
+}
 return
 
 AutoBottle3:
 ControlGet, AutoBottle3, Checked , , Button3,
 if (AutoBottle3 != 0)
-	{
+{
 	IniWrite, 1, %config%, SelectAutoBootle, Bottle3
-	}
+}
 else
-	{
+{
 	IniWrite, 0, %config%, SelectAutoBootle, Bottle3
-	}
+}
 return
 
 AutoBottle4:
 ControlGet, AutoBottle4, Checked , , Button4,
 if (AutoBottle4 != 0)
-	{
+{
 	IniWrite, 1, %config%, SelectAutoBootle, Bottle4
-	}
+}
 else
-	{
+{
 	IniWrite, 0, %config%, SelectAutoBootle, Bottle4
-	}
+}
 return
 
 AutoBottle5:
 ControlGet, AutoBottle5, Checked , , Button5,
 if (AutoBottle5 != 0)
-	{
+{
 	IniWrite, 1, %config%, SelectAutoBootle, Bottle5
-	}
+}
 else
-	{
+{
 	IniWrite, 0, %config%, SelectAutoBootle, Bottle5
-	}
+}
 return
 
 ;---------------------------------------- BOTTLE ----------------------------------------
@@ -705,61 +705,61 @@ return
 Bottle15:
 ControlGet, Bottle15, Checked , , Button1,
 if (Bottle15 != 0)
-	{
+{
 	IniWrite, 1, %config%, SelectBootle, Bottle1-5
 	IniWrite, 0, %config%, SelectBootle, Bottle2-5
 	IniWrite, 0, %config%, SelectBootle, Bottle3-5
 	IniWrite, 0, %config%, SelectBootle, Bottle4-5
-	}
+}
 else
-	{
+{
 	IniWrite, 0, %config%, SelectBootle, Bottle1-5
-	}
+}
 return
 
 Bottle25:
 ControlGet, Bottle25, Checked , , Button2,
 if (Bottle25 != 0)
-	{
+{
 	IniWrite, 0, %config%, SelectBootle, Bottle1-5
 	IniWrite, 1, %config%, SelectBootle, Bottle2-5
 	IniWrite, 0, %config%, SelectBootle, Bottle3-5
 	IniWrite, 0, %config%, SelectBootle, Bottle4-5
-	}
+}
 else
-	{
+{
 	IniWrite, 0, %config%, SelectBootle, Bottle2-5
-	}
+}
 return
 
 Bottle35:
 ControlGet, Bottle35, Checked , , Button3,
 if (Bottle35 != 0)
-	{
+{
 	IniWrite, 0, %config%, SelectBootle, Bottle1-5
 	IniWrite, 0, %config%, SelectBootle, Bottle2-5
 	IniWrite, 1, %config%, SelectBootle, Bottle3-5
 	IniWrite, 0, %config%, SelectBootle, Bottle4-5
-	}
+}
 else
-	{
+{
 	IniWrite, 0, %config%, SelectBootle, Bottle3-5
-	}
+}
 return
 
 Bottle45:
 ControlGet, Bottle45, Checked , , Button4,
 if (Bottle45 != 0)
-	{
+{
 	IniWrite, 0, %config%, SelectBootle, Bottle1-5
 	IniWrite, 0, %config%, SelectBootle, Bottle2-5
 	IniWrite, 0, %config%, SelectBootle, Bottle3-5
 	IniWrite, 1, %config%, SelectBootle, Bottle4-5
-	}
+}
 else
-	{
+{
 	IniWrite, 0, %config%, SelectBootle, Bottle4-5
-	}
+}
 return
 
 ;---------------------------------------- CHECK HP ----------------------------------------
@@ -767,43 +767,43 @@ return
 CheckHP70:
 ControlGet, CheckHP70, Checked , , Button1,
 if (CheckHP70 != 0)
-	{
+{
 	IniWrite, 1, %config%, SelectCheckHP, CheckHP70
 	IniWrite, 0, %config%, SelectCheckHP, CheckHP48
 	IniWrite, 0, %config%, SelectCheckHP, CheckHP30
-	}
+}
 else
-	{
+{
 	IniWrite, 0, %config%, SelectCheckHP, CheckHP70
-	}
+}
 return
 
 CheckHP48:
 ControlGet, CheckHP48, Checked , , Button2,
 if (CheckHP48 != 0)
-	{
+{
 	IniWrite, 0, %config%, SelectCheckHP, CheckHP70
 	IniWrite, 1, %config%, SelectCheckHP, CheckHP48
 	IniWrite, 0, %config%, SelectCheckHP, CheckHP30
-	}
+}
 else
-	{
+{
 	IniWrite, 0, %config%, SelectCheckHP, CheckHP48
-	}
+}
 return
 
 CheckHP30:
 ControlGet, CheckHP30, Checked , , Button3,
 if (CheckHP30 != 0)
-	{
+{
 	IniWrite, 0, %config%, SelectCheckHP, CheckHP70
 	IniWrite, 0, %config%, SelectCheckHP, CheckHP48
 	IniWrite, 1, %config%, SelectCheckHP, CheckHP30
-	}
+}
 else
-	{
+{
 	IniWrite, 0, %config%, SelectCheckHP, CheckHP30
-	}
+}
 return
 
 ;
@@ -811,25 +811,25 @@ return
 SmokeMine:
 ControlGet, SmokeMine, Checked , , Button4,
 if (SmokeMine != 0)
-	{
+{
 	IniWrite, 1, %config%, Main, SmokeMine
-	}
+}
 else
-	{
+{
 	IniWrite, 0, %config%, Main, SmokeMine
-	}
+}
 return
 
 DefaultMine:
 ControlGet, DefaultMine, Checked , , Button5,
 if (DefaultMine != 0)
-	{
+{
 	IniWrite, 1, %config%, Main, DefaultMine
-	}
+}
 else
-	{
+{
 	IniWrite, 0, %config%, Main, DefaultMine
-	}
+}
 return
 
 2GuiClose:
@@ -855,6 +855,3 @@ return
 GuiClose:
 gosub, ExitMacros
 ExitApp
-
-F4::
-	reload

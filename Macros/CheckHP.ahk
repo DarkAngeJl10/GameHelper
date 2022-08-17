@@ -41,7 +41,6 @@ if (CheckforUpdates != 0)
 			IfMsgBox Yes
 			{
 				filedelete, Macros\CheckHP.ahk
-				IniWrite, %CheckHPVersion%, %config%, CheckHP, Version
 				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/CheckHP.ahk, Macros\CheckHP.ahk
 				Sleep, 1000
 				if(ErrorLevel || !FileExist("Macros\CheckHP.ahk") ) 
@@ -49,6 +48,7 @@ if (CheckforUpdates != 0)
 					msgbox, CheckHP.ahk Download failed!
 					ExitApp
 				}
+				IniWrite, %CheckHPVersion%, %config%, CheckHP, Version
 				Msgbox, Updating to latest version: %CheckHPVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
 				run Macros\CheckHP.ahk
 			}
