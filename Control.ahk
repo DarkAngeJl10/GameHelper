@@ -5,6 +5,11 @@ SetTitleMatchMode, 2
 global AutoBottle := 0
 global CheckHP := 0
 global Main := 0
+global CloseGuiAutoBottle := 0
+global CloseGuiAutoBottle2k := 0
+global CloseGuiBottle := 1
+global CloseGuiCheckHP := 0
+global CloseGuiMain := 0
 
 config = %A_WorkingDir%\Data\Settings.ini
 
@@ -22,6 +27,9 @@ IniRead, CheckHP48, %config%, SelectCheckHP, CheckHP48
 IniRead, CheckHP30, %config%, SelectCheckHP, CheckHP30
 IniRead, SmokeMine, %config%, Main, SmokeMine
 IniRead, DefaultMine, %config%, Main, DefaultMine
+IniRead, BottleKey, %config%, Bottle, Key
+IniRead, CheckHPKey, %config%, CheckHP, Key
+IniRead, AutoBottleKey, %config%, AutoBottle, Key
 IniRead, The_VersionName, %config%, Control, Version
 IniRead, CheckforUpdates, %config%, Control, CheckforUpdates
 
@@ -94,11 +102,25 @@ if (DefaultMine == "ERROR" or DefaultMine == "")
 	IniWrite, 0, %config%, Main, DefaultMine
 }
 
+if (BottleKey == "ERROR"  or BottleKey == "")
+{
+	IniWrite, % "", %config%, Bottle, Key
+}
+if (AutoBottleKey == "ERROR"  or AutoBottleKey == "")
+{
+	IniWrite, % "", %config%, AutoBottle, Key
+}
+if (CheckHPKey == "ERROR"  or CheckHPKey == "")
+{
+	IniWrite, % "", %config%, CheckHP, Key
+}
+
+
+
 if (The_VersionName == "ERROR" or The_VersionName == "")
 {
 	IniWrite, 0, %config%, Control, Version
 }
-
 if (CheckforUpdates == "ERROR" or CheckforUpdates == "")
 {
 	IniWrite, 1, %config%, Control, CheckforUpdates
@@ -133,19 +155,20 @@ if (CheckforUpdates != 0)
 MW = %A_ScreenWidth%
 MH = %A_ScreenHeight%
 
+Start:
 if (MW = 1920 and MH = 1080)
 	{
-	Gui, 1:Add, Checkbox,		x10 y10 	gAutoBottle vAutoBottle, 		Auto Bottle
+	Gui, 1:Add, Checkbox,		x10 y10 	gAutoBottle vAutoBottle Checked%CloseGuiAutoBottle%, 		Auto Bottle
 	}
 if (MW = 2560 and MH = 1440)
 	{
-	Gui, 1:Add, Checkbox,		x10 y10 	gAutoBottle2k vAutoBottle2k, 	Auto Bottle
+	Gui, 1:Add, Checkbox,		x10 y10 	gAutoBottle2k vAutoBottle2k Checked%CloseGuiAutoBottle2k%, 	Auto Bottle
 	}
-	Gui, 1:Add, Checkbox,		x140 y10 	gCheckHP vCheckHP,  			Check HP
-	Gui, 1:Add, Checkbox, 		x10 y40 	gMain vMain, 	 				Main
+	Gui, 1:Add, Checkbox,		x140 y10 	gCheckHP vCheckHP Checked%CloseGuiCheckHP%,  			Check HP
+	Gui, 1:Add, Checkbox, 		x10 y40 	gMain vMain Checked%CloseGuiMain%, 	 				Main
 	
 	Gui, 1:Add, Text,			x270 y10, 	Бутылки по кнопке
-	Gui, 1:Add, DropDownList,	x270 y30 	gListOfBottle vChoice Choose1,  Disable|Bottle
+	Gui, 1:Add, DropDownList,	x270 y30 	gListOfBottle vChoice Choose%CloseGuiBottle%,  Disable|Bottle
 
 	Gui, 1:Add, Button, 		x10 y360 	w150 h30 	gSettings Center, 		Настройки
 	Gui, 1:Add, Button, 		x240 y360 	w150 h30 	gExitMacros Center, 	Выключить все макросы
@@ -153,25 +176,30 @@ if (MW = 2560 and MH = 1440)
 return
 
 Settings:
-	Gui, 1:hide
-	Gui, 2:Add, Text,			x10 y10, 	Выберите что хотите настроить
-	Gui, 2:Add, Button,			x10 y30 	gSettingsAutoBottle, 	Авто бутылки
-	Gui, 2:Add, Button,			x140 y30 	gSettingsBottle, 		Бутылки по кнопке
-	Gui, 2:Add, Button,			x10 y70 	gSettingsCheckHP, 		Авто ХП
-	Gui, 2:Add, Text,			x10 y320, 	Mines
-	Gui, 2:Add, Checkbox,		x10 y340 	gSmokeMine 		Checked%SmokeMine%, 	Smoke Mine Setup on Q
-	Gui, 2:Add, Checkbox,		x10 y360	gDefaultMine	Checked%DefaultMine%, 	Any Mines on R
+	Gui, 1:Destroy
+	Gui, 2:Add, Text,			x10 y10, 		Выберите что хотите настроить
+	Gui, 2:Add, Button,			x10 y30  w100	gSettingsAutoBottle, 	Авто бутылки
+	Gui, 2:Add, Button,			x120 y30 w100	gSettingsCheckHP, 		Авто ХП
+	Gui, 2:Add, Button,			x230 y30 w120	gSettingsBottle, 		Бутылки по кнопке
+	Gui, 2:Add, Text,			x10 y320, 		Mines
+	Gui, 2:Add, Checkbox,		x10 y340 		gSmokeMine 		Checked%SmokeMine%, 	Smoke Mine Setup on Q
+	Gui, 2:Add, Checkbox,		x10 y360		gDefaultMine	Checked%DefaultMine%, 	Any Mines on R
 	Gui, 2:Show, w400 h400,
 return
 
+;--------------------------------------- AUTO BOTTLE ---------------------------------------
+
 SettingsAutoBottle:
+	BreakLoopAutoBottle := 0
 	IniRead, AutoBottle1, %config%, SelectAutoBootle, Bottle1
 	IniRead, AutoBottle2, %config%, SelectAutoBootle, Bottle2
 	IniRead, AutoBottle3, %config%, SelectAutoBootle, Bottle3
 	IniRead, AutoBottle4, %config%, SelectAutoBootle, Bottle4
 	IniRead, AutoBottle5, %config%, SelectAutoBootle, Bottle5
-	Gui, 2:hide
-	Gui, 3:Add, Text,			x10 y10, 	Выберите какие бутылки будут активны
+	IniRead, AutoBottleKey, %config%, AutoBottle, Key
+	Gui, 2:Destroy
+	Gui, 3:Add, Text,			x10 y10, 	Выберите какие бутылки
+	Gui, 3:Add, Text,			x10 y25, 	будут активны
 	
 	Gui, 3:Add, Checkbox,		x10 y40 	gAutoBottle1 Checked%AutoBottle1%, 	1 Бутылка
 	Gui, 3:Add, Checkbox,		x10 y70 	gAutoBottle2 Checked%AutoBottle2%, 	2 Бутылка
@@ -179,48 +207,197 @@ SettingsAutoBottle:
 	Gui, 3:Add, Checkbox,		x10 y130 	gAutoBottle4 Checked%AutoBottle4%, 	4 Бутылка
 	Gui, 3:Add, Checkbox,		x10 y160 	gAutoBottle5 Checked%AutoBottle5%, 	5 Бутылка
 	
-	Gui, 3:Add, Button, 		x240 y360 	w150 h30 	gAccept Center, 	Применить
+	Gui, 3:Add, Text,			x205 y10, 	Привязка к Клавиатура/Мышь
+	Gui, 3:Add, Button, 		x226 y30	w120    gKeyBindAutoBottle, 	Клавиатура
+	Gui, 3:Add, Button, 		x226 y60    w120	gMouseBindAutoBottle, 	Мышь
+	Gui, 3:Add, Text,			x200 y90, 	Макрос активируется на: %AutoBottleKey%
+	
+	;Gui, 3:Add, Button, 		x240 y360 	w150 h30 	gAccept Center, 	Применить
 	Gui, 3:Show, w400 h400,
 return
 
+KeyBindAutoBottle:
+	Gui, 3:Destroy
+	Gui, BindAutoBottle:Add, Text,		x08 y30         vKeyBindUnFocus, 	Клавиша: 
+	Gui, BindAutoBottle:Add, Hotkey, 		x63 y27 w120	gAutoBottleBind	vAutoBottleBind, %AutoBottleKey%
+	Gui, BindAutoBottle:Show, w200 h100
+	GuiControl, BindAutoBottle: Focus, KeyBindUnFocus
+return
+
+MouseBindAutoBottle:
+	Gui, 3:Destroy
+	Gui, BindAutoBottle:Add, Text,		x15 y30, 	Мышь: 
+	Gui, BindAutoBottle:Add, Edit, 		x60 y27 w120   vAutoBottleMouseBind Disabled, %AutoBottleKey%
+	Gui, BindAutoBottle:Show, w200 h100
+	MouseKeyArray := ["MButton", "XButton1", "XButton2"]
+	Loop
+		{
+		for i, MouseKey in MouseKeyArray
+			{
+			GetKeyState, state, %MouseKey%
+			if (state == "D")
+				{
+				GuiControl, BindAutoBottle: Text, AutoBottleMouseBind, %MouseKey%
+				IniWrite, %MouseKey%, %config%, AutoBottle, Key
+				}
+			}
+		if (BreakLoopAutoBottle = 1)
+			{
+			Break
+			}
+		}
+return
+
+AutoBottleBind:
+	GuiControl, BindAutoBottle: Focus, KeyBindUnFocus
+	IniWrite, %AutoBottleBind%, %config%, AutoBottle, Key
+return
+
+BindAutoBottleGuiClose:
+	BreakLoopAutoBottle := 1
+	Gui, BindAutoBottle:Destroy
+	Goto, SettingsAutoBottle
+return
+
+;--------------------------------------- BOTTLE ---------------------------------------
+
 SettingsBottle:
+	BreakLoopBottle := 0
 	IniRead, Bottle15, %config%, SelectBootle, Bottle1-5
 	IniRead, Bottle25, %config%, SelectBootle, Bottle2-5
 	IniRead, Bottle35, %config%, SelectBootle, Bottle3-5
 	IniRead, Bottle45, %config%, SelectBootle, Bottle4-5
-	Gui, 2:hide
-	Gui, 4:Add, Text,			x10 y10, 	Выберите какие бутылки будут активны
+	IniRead, BottleKey, %config%, Bottle, Key
+	Gui, 2:Destroy
+	Gui, 4:Add, Text,			x10 y10, 	Выберите какие бутылки
+	Gui, 4:Add, Text,			x10 y25, 	будут активны
 	
-	Gui, 4:Add, radio,			x10 y40 	gBottle15 Checked%Bottle15%, 	1-5 Бутылки
-	Gui, 4:Add, radio,			x10 y70 	gBottle25 Checked%Bottle25%, 	2-5 Бутылки
-	Gui, 4:Add, radio,			x10 y100 	gBottle35 Checked%Bottle35%, 	3-5 Бутылки
-	Gui, 4:Add, radio,			x10 y130 	gBottle45 Checked%Bottle45%, 	4-5 Бутылки
+	Gui, 4:Add, radio,			x10 y50 	gBottle15 Checked%Bottle15%, 	1-5 Бутылки
+	Gui, 4:Add, radio,			x10 y80 	gBottle25 Checked%Bottle25%, 	2-5 Бутылки
+	Gui, 4:Add, radio,			x10 y110 	gBottle35 Checked%Bottle35%, 	3-5 Бутылки
+	Gui, 4:Add, radio,			x10 y140 	gBottle45 Checked%Bottle45%, 	4-5 Бутылки
 	
-	Gui, 4:Add, Button, 		x240 y360 	w150 h30 	gAccept Center, 	Применить
-	Gui, 4:Show, w400 h400,
+	Gui, 4:Add, Text,			x205 y10, 	Привязка к Клавиатура/Мышь
+	Gui, 4:Add, Button, 		x226 y30	w120    gKeyBindBottle, 	Клавиатура
+	Gui, 4:Add, Button, 		x226 y60    w120	gMouseBindBottle, 	Мышь
+	Gui, 4:Add, Text,			x200 y90, 	Макрос активируется на: %BottleKey%
+
+	;Gui, 4:Add, Button, 		x240 y360 	w150 h30 	gAccept vAccept Center, 	Применить
+	Gui, 4:Show, 				w400 h400
 return
 
+KeyBindBottle:
+	Gui, 4:Destroy
+	Gui, BindBottle:Add, Text,		x08 y30         vKeyBindUnFocus, 	Клавиша: 
+	Gui, BindBottle:Add, Hotkey, 	x63 y27 w120	gBottleBind	vBottleBind, %BottleKey%
+	Gui, BindBottle:Show, w200 h100
+	GuiControl, BindBottle: Focus, KeyBindUnFocus
+return
+
+MouseBindBottle:
+	Gui, 4:Destroy
+	Gui, BindBottle:Add, Text,		x15 y30, 	Мышь: 
+	Gui, BindBottle:Add, Edit, 		x60 y27 w120   vBottleMouseBind Disabled, %BottleKey%
+	Gui, BindBottle:Show, w200 h100
+	MouseKeyArray := ["MButton", "XButton1", "XButton2"]
+	Loop
+		{
+		for i, MouseKey in MouseKeyArray
+			{
+			GetKeyState, state, %MouseKey%
+			if (state == "D")
+				{
+				GuiControl, BindBottle: Text, BottleMouseBind, %MouseKey%
+				IniWrite, %MouseKey%, %config%, Bottle, Key
+				}
+			}
+		if (BreakLoopBottle = 1)
+			{
+			Break
+			}
+		}
+return
+	
+BottleBind:
+	GuiControl, BindBottle: Focus, KeyBindUnFocus
+	IniWrite, %BottleBind%, %config%, Bottle, Key
+return
+
+BindBottleGuiClose:
+	BreakLoopBottle := 1
+	Gui, BindBottle:Destroy
+	Goto, SettingsBottle
+return
+
+;--------------------------------------- CHECK HP ---------------------------------------
+
 SettingsCheckHP:
+	BreakLoopCheckHP := 0
 	IniRead, CheckHP70, %config%, SelectCheckHP, CheckHP70
 	IniRead, CheckHP48, %config%, SelectCheckHP, CheckHP48
 	IniRead, CheckHP30, %config%, SelectCheckHP, CheckHP30
-	Gui, 2:hide
-	Gui, 5:Add, Text,			x10 y10, 	Выберите какие бутылки будут активны
+	IniRead, CheckHPKey, %config%, CheckHP, Key
+	Gui, 2:Destroy
+	Gui, 5:Add, Text,			x10 y10, 	Выберите какие бутылки
+	Gui, 5:Add, Text,			x10 y25, 	будут активны
 	
 	Gui, 5:Add, radio,			x10 y40 	gCheckHP70 Checked%CheckHP70%, 	70 Процентов ХП
 	Gui, 5:Add, radio,			x10 y70 	gCheckHP48 Checked%CheckHP48%, 	48 Процентов ХП
 	Gui, 5:Add, radio,			x10 y100 	gCheckHP30 Checked%CheckHP30%, 	30 Процентов ХП
 	
-	Gui, 5:Add, Button, 		x240 y360 	w150 h30 	gAccept Center, 	Применить
+	Gui, 5:Add, Text,			x205 y10, 	Привязка к Клавиатура/Мышь
+	Gui, 5:Add, Button, 		x226 y30	w120    gKeyBindCheckHP, 	Клавиатура
+	Gui, 5:Add, Button, 		x226 y60    w120	gMouseBindCheckHP, 	Мышь
+	Gui, 5:Add, Text,			x200 y90, 	Макрос активируется на: %CheckHPKey%
+	
+	;Gui, 5:Add, Button, 		x240 y360 	w150 h30 	gAccept Center, 	Применить
 	Gui, 5:Show, w400 h400,
 return
 
-Accept:
-	Gui, 3:hide
-	Gui, 4:hide
-	Gui, 5:hide
-	Gui, 1:show
+KeyBindCheckHP:
+	Gui, 5:Destroy
+	Gui, BindCheckHP:Add, Text,			x08 y30         vKeyBindUnFocus, 	Клавиша: 
+	Gui, BindCheckHP:Add, Hotkey, 		x63 y27 w120	gCheckHPBind	vCheckHPBind, %CheckHPKey%
+	Gui, BindCheckHP:Show, w200 h100
+	GuiControl, BindCheckHP: Focus, KeyBindUnFocus
 return
+
+MouseBindCheckHP:
+	Gui, 5:Destroy
+	Gui, BindCheckHP:Add, Text,		x15 y30, 		Мышь: 
+	Gui, BindCheckHP:Add, Edit, 	x60 y27 w120   vCheckHPMouseBind Disabled, %CheckHPKey%
+	Gui, BindCheckHP:Show, w200 h100
+	MouseKeyArray := ["MButton", "XButton1", "XButton2"]
+	Loop
+		{
+		for i, MouseKey in MouseKeyArray
+			{
+			GetKeyState, state, %MouseKey%
+			if (state == "D")
+				{
+				GuiControl, BindCheckHP: Text, CheckHPMouseBind, %MouseKey%
+				IniWrite, %MouseKey%, %config%, CheckHP, Key
+				}
+			}
+		if (BreakLoopCheckHP = 1)
+			{
+			Break
+			}
+		}
+return
+
+CheckHPBind:
+	GuiControl, BindCheckHP: Focus, KeyBindUnFocus
+	IniWrite, %CheckHPBind%, %config%, CheckHP, Key
+return
+
+BindCheckHPGuiClose:
+	BreakLoopCheckHP := 1
+	Gui, BindCheckHP:Destroy
+	Goto, SettingsCheckHP
+return
+
+;--------------------------------------- STARTUP MACROS ---------------------------------------
 
 ListOfBottle:
 GuiControlGet, Choice,
@@ -254,11 +431,13 @@ if (Choice = "Bottle")
 		Run, Macros\Bottle.ahk
 		GroupAdd, Bottle, Bottle.ahk
 		CABottle := 1
+		CloseGuiBottle := 2
 	}
 }
 else
 {
 	CABottle := 0
+	CloseGuiBottle := 1
 	SetTimer, ListOfBottle, off
 	WinClose, ahk_group Bottle
 }
@@ -295,11 +474,13 @@ if (AutoBottle != 0)
 		Run, Macros\AutoBottle.ahk
 		GroupAdd, AutoBottle, AutoBottle.ahk
 		CAAutoBottle := 1
+		CloseGuiAutoBottle := 1
 	}
 }
 else
 {
 	CAAutoBottle := 0
+	CloseGuiAutoBottle := 0
 	SetTimer, AutoBottle, off
 	WinClose, ahk_group AutoBottle
 }
@@ -339,11 +520,13 @@ if (AutoBottle2k != 0)
 		Run, Macros\AutoBottle 2k.ahk
 		GroupAdd, AutoBottle2k, AutoBottle 2k.ahk
 		CAAutoBottle2k := 1
+		CloseGuiAutoBottle2k := 1
 	}
 }
 else
 {
 	CAAutoBottle2k := 0
+	CloseGuiAutoBottle2k := 0
 	SetTimer, AutoBottle2k, off
 	WinClose, ahk_group AutoBottle2k
 }
@@ -380,11 +563,13 @@ if (CheckHP != 0)
 		Run, Macros\CheckHP.ahk
 		GroupAdd, CheckHP, CheckHP.ahk
 		CACheckHP := 1
+		CloseGuiCheckHP := 1
 	}
 }
 else
 {
 	CACheckHP := 0
+	CloseGuiCheckHP := 0
 	SetTimer, CheckHP, off
 	WinClose, ahk_group CheckHP
 }
@@ -414,11 +599,13 @@ if (Main != 0)
 		Run, Macros\Main.ahk
 		GroupAdd, Main, Main.ahk
 		CAMain := 1
+		CloseGuiMain := 1
 	}
 }
 else
 {
 	CAMain := 0
+	CloseGuiMain := 0
 	SetTimer, Main, off
 	WinClose, ahk_group Main
 }
@@ -646,23 +833,23 @@ else
 return
 
 2GuiClose:
-Gui 2:hide
-Gui 1:show
+Gui, 2:Destroy
+Goto, Start
 return
 
 3GuiClose:
-Gui 3:hide
-Gui 2:show
+Gui, 3:Destroy
+Goto, Settings
 return
 
 4GuiClose:
-Gui 4:hide
-Gui 2:show
+Gui, 4:Destroy
+Goto, Settings
 return
 
 5GuiClose:
-Gui 5:hide
-Gui 2:show
+Gui, 5:Destroy
+Goto, Settings
 return
 
 GuiClose:

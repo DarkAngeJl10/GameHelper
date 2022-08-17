@@ -7,11 +7,6 @@ IniRead, DefaultMine, %config%, Main, DefaultMine
 IniRead, The_VersionName, %config%, Main, Version
 IniRead, CheckforUpdates, %config%, Main, CheckforUpdates
 
-IfNotExist,  %A_WorkingDir%\Data
-{
-	FileCreateDir,  %A_WorkingDir%\Data
-}
-
 if (The_VersionName == "ERROR" or The_VersionName == "")
 {
 	IniWrite, 0, %config%, Main, Version
@@ -22,30 +17,30 @@ if (CheckforUpdates == "ERROR" or CheckforUpdates == "")
 }
 
 if (CheckforUpdates != 0)
-	{
+{
 	MainVersion := CheckVersion("Main")
 	if (MainVersion != "") 
-		{
+	{
 		if (The_VersionName != MainVersion) 
-			{
+		{
 			Msgbox, 4, Update, Found a new version: %MainVersion%`n`nWant to update?
 			IfMsgBox Yes
-				{
+			{
 				filedelete, Main.ahk
 				IniWrite, %MainVersion%, %config%, Main, Version
 				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/Main.ahk, Macros\Main.ahk
 				Sleep, 1000
 				if(ErrorLevel || !FileExist("Main.ahk") ) 
-					{
+				{
 					msgbox, Main.ahk Download failed!
 					ExitApp
-					}
+				}
 				Msgbox, Updating to latest version: %MainVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
 				run Main.ahk
-				}
 			}
 		}
 	}
+}
 
 blightINV_x := 72
 blightINV_y := 563
@@ -59,7 +54,8 @@ GroupAdd POE, % "Path of Exile"
 WinActive()
 return
 
-WinActive() {
+WinActive() 
+{
 	Suspend Off
 	WinWaitNotActive ahk_group POE
 	{
@@ -67,7 +63,8 @@ WinActive() {
 	}
 }
 
-WinNotActive() {
+WinNotActive() 
+{
 	;send, {numpad9}
 	Suspend on
 	WinWaitActive ahk_group POE
@@ -76,7 +73,8 @@ WinNotActive() {
 	}
 }
 
-Blight() {
+Blight() 
+{
 	mousemove, blightINV_x, blightINV_y, 0
 	sleep, 150
 	Click, {LButton}
@@ -89,7 +87,7 @@ Blight() {
 	sleep, 50
 	PixelGetColor, WindowWithMaps, 392, 415
 	if (WindowWithMaps = 0x0C0C0B)
-		{
+	{
 		send, {LCtrl down}
 		mousemove, 469, 220, 0							; Azure
 	;	mousemove, 399, 218, 0							; Teal
@@ -113,15 +111,15 @@ Blight() {
 		PixelSearch, PxBMA, PyBMA, 671, 461, 1248, 610, 0x0E1215, 0, Fast
 		PixelGetColor, ColorBlightMapAccept, %PxBMA%, %PyBMA%
 		if (ColorBlightMapAccept = 0x0E1215)
-			{
+		{
 			mousemove, 1132, 578, 0
 			sleep, 150
 			Click, {LButton}
 			sleep, 150
-			}
+		}
 		PixelGetColor, ColorBlightMapAnoint, 291, 513
 		if (ColorBlightMapAnoint = 0x171717)
-			{
+		{
 			mousemove, 299, 404, 0
 			sleep, 150
 			Click, {LButton}
@@ -130,78 +128,80 @@ Blight() {
 			sleep, 150
 			Click, {LButton}
 			sleep, 25
-			}
-		send, {LCtrl up}
 		}
+		send, {LCtrl up}
 	}
+}
 
-ChaosRecipes() {
-loop,
+ChaosRecipes() 
 {
-if (t >= 11)
+	loop,
 	{
-	return
-	}
+		if (t >= 11)
 		{
+			Return
+		}
 		ImageSearch, XChaosRecipes, YChaosRecipes, 12, 130, 650, 770, *165 %A_ScriptDir%\Icon\AutoPickUp.png
 		if ( ErrorLevel > 0 )
-			{
-			return
-			}
-		else	
-			{
+		{
+			Return
+		}
+		Else	
+		{
 			t += 1
 			mousemove XChaosRecipes, YChaosRecipes,
 			send <^{LButton}
-			}
-		sleep, 100
 		}
+		sleep, 100
 	}
 }
 
-SellingChaosRecipe() {
-loop,
+
+SellingChaosRecipe() 
 {
-if (t >= 1)
+	loop,
 	{
-	return
-	}
-	mousemove, 1321, 664
-	send <^{LButton}
-	mousemove, 1400, 665
-	send <^{LButton}
-	mousemove, 1454, 668
-	send <^{LButton}
-	mousemove, 1530, 640
-	send <^{LButton}
-	mousemove, 1528, 719
-	send <^{LButton}
-	mousemove, 1559, 772
-	send <^{LButton}
-	mousemove, 1506, 764
-	send <^{LButton}
-	mousemove, 1508, 829
-	send <^{LButton}
-	mousemove, 1431, 800
-	send <^{LButton}
-	mousemove, 1324, 795
-	send <^{LButton}
-	mousemove, 381, 821
-	t += 1	
+		if (t >= 1)
+		{
+			return
+		}
+		mousemove, 1321, 664
+		send <^{LButton}
+		mousemove, 1400, 665
+		send <^{LButton}
+		mousemove, 1454, 668
+		send <^{LButton}
+		mousemove, 1530, 640
+		send <^{LButton}
+		mousemove, 1528, 719
+		send <^{LButton}
+		mousemove, 1559, 772
+		send <^{LButton}
+		mousemove, 1506, 764
+		send <^{LButton}
+		mousemove, 1508, 829
+		send <^{LButton}
+		mousemove, 1431, 800
+		send <^{LButton}
+		mousemove, 1324, 795
+		send <^{LButton}
+		mousemove, 381, 821
+		t += 1	
 	}
 }
 
-UpdateFilter() {
-clipboardBuffer = %clipboard%
-clipboard = /itemfilter chaos
-send, ^{v}
-send, {Enter}
-clipboard = %clipboardBuffer%
+UpdateFilter() 
+{
+	clipboardBuffer = %clipboard%
+	clipboard = /itemfilter chaos
+	send, ^{v}
+	send, {Enter}
+	clipboard = %clipboardBuffer%
 }
 
 
 RemoveToolTip:
-ToolTip
+	ToolTip
 return
 
 
@@ -210,39 +210,39 @@ return
 	
 	PixelGetColor, Selling, 660, 125
 	if (Selling = 0x4D88BE)
-		{
+	{
 		PixelSearch, PxSelling, PySelling, 1266, 580, 1907, 852, 0x01012A, 0, Fast
 		if ( ErrorLevel > 0 )
-			{
+		{
 			ToolTip, Dont have items for sell
 			SetTimer, RemoveToolTip, -2000
 			mousemove, %XSaveMouse%, %YSaveMouse%, 0
 			sleep, 100
 			return
-			}
+		}
 		else
-			{
+		{
 			SellingChaosRecipe()
 			ToolTip, Selling 1 Chaos Recipes.
 			SetTimer, RemoveToolTip, -2000
 			sleep, 100
-			}
 		}
+	}
 
 	PixelGetColor, Stash, 376, 65
 	if (Stash = 0x417999)
-		{
+	{
 		ImageSearch, , , 261, 67, 650, 93, *100 %A_ScriptDir%\Icon\Edit.png
 		if ( ErrorLevel > 0 )
-			{
+		{
 			ToolTip, Chaos Recipes Out Stock.
 			SetTimer, RemoveToolTip, -2000
 			mousemove, %XSaveMouse%, %YSaveMouse%, 0
 			sleep, 100
-			return
-			}
+			Return
+		}
 		else
-			{
+		{
 			mousemove, 1296, 615
 			send <^{LButton}
 			ChaosRecipes()
@@ -250,9 +250,9 @@ return
 			SetTimer, RemoveToolTip, -2000
 			mousemove, %XSaveMouse%, %YSaveMouse%, 0
 			sleep, 100
-			}
 		}
-return
+	}
+Return
 
 if (SmokeMine = 1)
 $q::
@@ -260,9 +260,9 @@ $q::
 	if (SmokeMine = 1)
 	{
 		ifWinNotActive ahk_group POE
-			{
-			return
-			}
+		{
+			Return
+		}
 		Send, {q}
 		Send, {q}
 		sleep, 250
@@ -270,9 +270,9 @@ $q::
 	}
 	else
 	{
-	send {q}
+		send {q}
 	}
-return
+Return
 
 if (DefaultMine = 1)
 $r::
@@ -280,9 +280,9 @@ $r::
 	if (DefaultMine = 1)
 	{
 		ifWinNotActive ahk_group POE
-			{
+		{
 			return
-			}
+		}
 		Send, {r}
 		Send, {r}
 		sleep, 50
@@ -291,7 +291,7 @@ $r::
 	}
 	else
 	{
-	send {r}
+		send {r}
 	}
 return
 	
@@ -388,19 +388,19 @@ return
 ;F5::																						;#Reload Filter when chat
 	PixelGetColor, ColorChat, 399, 793
 	if (ColorChat = 0x000000)
-		{
+	{
 		UpdateFilter()
 		return
-		}
+	}
 	PixelGetColor, ColorChat, 1043, 792
 	if (ColorChat = 0x000000)
-		{
+	{
 		UpdateFilter()
 		return
-		}
+	}
 	send, {Enter}
 	UpdateFilter()
-	return
+return
 
 
 lWin::						;Спам CTRL+LMouseClick для быстрого перемещения валюты/вещей
@@ -408,42 +408,39 @@ lWin::						;Спам CTRL+LMouseClick для быстрого перемеще�
 	S := !S
 	send, {LCtrl down}
 LoopSpam: 
- 	{
+{
 	ifWinActive ahk_group POE
-		{
-		}
-	Else
+	{
+	}
 	ifWinNotActive ahk_group POE
-		{
+	{
 		send, {LCtrl up}
 		Return
-		}	
+	}	
 	Click, {LButton}
-	}
-    If !S
-		{
-		send, {LCtrl up}
-        Return
-		}
-    SetTimer, LoopSpam, -1
-    Return
+}
+If !S
+{
+	send, {LCtrl up}
+	Return
+}
+SetTimer, LoopSpam, -1
+Return
 
 ;NumpadSub:: 
-		loop, 5
-			{
-			loop, 12
-				{
-
-				mousemove, blightINV_x, blightINV_y, 0
-				sleep, 50
-				Blight()
-				blightINV_x += 47.4
-
-				}
-			blightINV_x := 72
-			blightINV_y += 47.4
-			}
-	return
+	loop, 5
+	{
+		loop, 12
+		{
+			mousemove, blightINV_x, blightINV_y, 0
+			sleep, 50
+			Blight()
+			blightINV_x += 47.4
+		}
+		blightINV_x := 72
+		blightINV_y += 47.4
+	}
+return
 
 	
 ;NumpadAdd::						;Спам CTRL+Numpad + для быстрого перемещения контрактов
@@ -454,18 +451,17 @@ LoopSpam:
 LoopContract: 
  	{
 	ifWinActive ahk_group POE
-		{
-		}
-	Else
+	{
+	}
 	ifWinNotActive ahk_group POE
-		{
+	{
 		send, {LCtrl up}
 		Return
-		}	
+	}	
 	PixelSearch, PxC, PyC, 14, 132, 649, 767, 0x77B4E7, 0, Fast
 	PixelGetColor, ColorContract, %PxC%, %PyC%
 	if (ColorContract = 0x77B4E7)
-		{
+	{
 	;	PxC += 15							;;Сдвиг мышки в центр
 	;	PyC += 15		
 		PxC += 5							;;Сдвиг мышки в центр
@@ -475,84 +471,85 @@ LoopContract:
 		Click, {LButton}
 		sleep, 10
 		contract := 0
-		}
+	}
 	else
-		{
+	{
 		contract += 1
 		if (contract = 11)					;;Отключение макроса в простое больше 1-2 секунды
-			{
+		{
 			send, {LCtrl up}
 			sleep, 10
 			tooltip
 			С := !С
 			Return
-			}
 		}
 	}
-    If !С
-		{
-		send, {LCtrl up}
-		sleep, 10
-		contract := 0
-		tooltip
-        Return
-		}
-    SetTimer, LoopContract, -1
-    Return
+}
+If !С
+{
+	send, {LCtrl up}
+	sleep, 10
+	contract := 0
+	tooltip
+       Return
+}
+SetTimer, LoopContract, -1
+Return
 	
 ;space::								;Ваал Бутылки 
 	B := !B
 VaalClarity:
 	ifWinNotActive ahk_group POE
-		{
+	{
 		Return
-		}	
-	If B
-		{
-		send, {w}
-		}
-    If !B
-		{
-		SetTimer, VaalClarity, 	Off
-		Return
-		}
-	SetTimer, VaalClarity, 22000
-    Return
+	}	
+If B
+{
+	send, {w}
+}
+
+If !B
+{
+	SetTimer, VaalClarity, 	Off
+	Return
+}
+SetTimer, VaalClarity, 22000
+Return
 	
 ;F7::							;Отладка всего макроса (по дефолту выключено)
 	SwithDebug += 1
 	if (SwithDebug = 3)
-		{
+	{
 		SwithDebug -= 2
-		}
+	}
 	if (SwithDebug = 1)
-		{
+	{
 		tooltip, Режим работы Дебаг Координаты, 1825, 1010
-		}
+	}
 	if (SwithDebug = 2)
-		{
+	{
 		tooltip, Режим работы Дебаг Цвет, 1825, 1010
-		}
-	SetTimer, RemoveToolTip, -10000
-	return
+	}
+SetTimer, RemoveToolTip, -10000
+return
 	
 ;F8::							;Отладка всего макроса (по дефолту выключено)
 	MouseGetPos, MouseX, MouseY
 	PixelGetColor, color, %MouseX%, %MouseY%
 	if (SwithDebug = 1)
-		{
+	{
 		clipboard = %MouseX%, %MouseY% 
-		}
+	}
 	if (SwithDebug = 2)
-		{
+	{
 		clipboard := color
-		}
-	return	
+	}
+return	
 	
 ;F9::
 	PixelGetColor, color, 403, 795
 	clipboard := color
-	return
+return
 	
 ;f10::
 mousemove, 634, 791
@@ -827,9 +824,3 @@ NumpadMult::					;Включение аур (ток для моего аураб
 	send, {LCtrl up}
 	Mousemove, %MouseX%, %MouseY%
 	return
-
-numpad6::
-<^numpad6::
-	send, {LCtrl up}
-	SetTimer, VaalClarity, 	Off
-	Reload
