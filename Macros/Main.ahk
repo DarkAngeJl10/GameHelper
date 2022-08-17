@@ -28,7 +28,7 @@ if (CheckforUpdates != 0)
 			{
 				filedelete, Main.ahk
 				IniWrite, %MainVersion%, %config%, Main, Version
-				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/Main.ahk, Macros\Main.ahk
+				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/Main.ahk, Main.ahk
 				Sleep, 1000
 				if(ErrorLevel || !FileExist("Main.ahk") ) 
 				{

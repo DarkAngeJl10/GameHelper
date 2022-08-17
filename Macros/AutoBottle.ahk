@@ -38,7 +38,7 @@ if (CheckforUpdates != 0)
 			{
 				filedelete, AutoBottle.ahk
 				IniWrite, %AutoBottleVersion%, %config%, AutoBottle, Version
-				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/AutoBottle.ahk, Macros\AutoBottle.ahk
+				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/AutoBottle.ahk, AutoBottle.ahk
 				Sleep, 1000
 				if(ErrorLevel || !FileExist("AutoBottle.ahk") ) 
 				{
