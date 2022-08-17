@@ -25,10 +25,14 @@ IniRead, Bottle45, %config%, SelectBootle, Bottle4-5
 IniRead, CheckHP70, %config%, SelectCheckHP, CheckHP70
 IniRead, CheckHP48, %config%, SelectCheckHP, CheckHP48
 IniRead, CheckHP30, %config%, SelectCheckHP, CheckHP30
+IniRead, CWDT70, %config%, SelectCheckHP, CWDT70
+IniRead, CWDT48, %config%, SelectCheckHP, CWDT48
+IniRead, CWDT30, %config%, SelectCheckHP, CWDT30
 IniRead, SmokeMine, %config%, Main, SmokeMine
 IniRead, DefaultMine, %config%, Main, DefaultMine
 IniRead, BottleKey, %config%, Bottle, Key
 IniRead, CheckHPKey, %config%, CheckHP, Key
+IniRead, CWDTKey, %config%, CheckHP, CWDTKey
 IniRead, AutoBottleKey, %config%, AutoBottle, Key
 IniRead, The_VersionName, %config%, Control, Version
 IniRead, CheckforUpdates, %config%, Control, CheckforUpdates
@@ -92,6 +96,18 @@ if (CheckHP30 == "ERROR" or CheckHP30 == "")
 {
 	IniWrite, 0, %config%, SelectCheckHP, CheckHP30
 }
+if (CWDT70 == "ERROR" or CWDT70 == "")
+{
+	IniWrite, 0, %config%, SelectCheckHP, CWDT70
+}
+if (CWDT48 == "ERROR" or CWDT48 == "")
+{
+	IniWrite, 0, %config%, SelectCheckHP, CWDT48
+}
+if (CWDT30 == "ERROR" or CWDT30 == "")
+{
+	IniWrite, 0, %config%, SelectCheckHP, CWDT30
+}
 
 if (SmokeMine == "ERROR" or SmokeMine == "")
 {
@@ -113,6 +129,10 @@ if (AutoBottleKey == "ERROR"  or AutoBottleKey == "")
 if (CheckHPKey == "ERROR"  or CheckHPKey == "")
 {
 	IniWrite, % "", %config%, CheckHP, Key
+}
+if (CWDTKey == "ERROR"  or CWDTKey == "")
+{
+	IniWrite, % "", %config%, CheckHP, CWDTKey
 }
 
 
@@ -178,8 +198,8 @@ return
 Settings:
 	Gui, 1:Destroy
 	Gui, 2:Add, Text,			x10 y10, 		Выберите что хотите настроить
-	Gui, 2:Add, Button,			x10 y30  w100	gSettingsAutoBottle, 	Авто бутылки
-	Gui, 2:Add, Button,			x120 y30 w100	gSettingsCheckHP, 		Авто ХП
+	Gui, 2:Add, Button,			x10 y30  w100	gSettingsAutoBottle, 	AutoBottle
+	Gui, 2:Add, Button,			x120 y30 w100	gSettingsCheckHP, 		CheckHP %A_Space% CWDT
 	Gui, 2:Add, Button,			x230 y30 w120	gSettingsBottle, 		Бутылки по кнопке
 	Gui, 2:Add, Text,			x10 y320, 		Mines
 	Gui, 2:Add, Checkbox,		x10 y340 		gSmokeMine 		Checked%SmokeMine%, 	Smoke Mine Setup on Q
@@ -333,13 +353,19 @@ return
 
 SettingsCheckHP:
 	BreakLoopCheckHP := 0
+	BreakLoopCWDT := 0
 	IniRead, CheckHP70, %config%, SelectCheckHP, CheckHP70
 	IniRead, CheckHP48, %config%, SelectCheckHP, CheckHP48
 	IniRead, CheckHP30, %config%, SelectCheckHP, CheckHP30
 	IniRead, CheckHPKey, %config%, CheckHP, Key
+	
+	IniRead, CWDT70, %config%, SelectCheckHP, CWDT70
+	IniRead, CWDT48, %config%, SelectCheckHP, CWDT48
+	IniRead, CWDT30, %config%, SelectCheckHP, CWDT30
+	IniRead, CWDTKey, %config%, CheckHP, CWDTKey
+	
 	Gui, 2:Destroy
-	Gui, 5:Add, Text,			x10 y10, 	Выберите какие бутылки
-	Gui, 5:Add, Text,			x10 y25, 	будут активны
+	Gui, 5:Add, Text,			x10 y10, 	Процент срабатывания CheckHP
 	
 	Gui, 5:Add, radio,			x10 y40 	gCheckHP70 Checked%CheckHP70%, 	70 Процентов ХП
 	Gui, 5:Add, radio,			x10 y70 	gCheckHP48 Checked%CheckHP48%, 	48 Процентов ХП
@@ -349,6 +375,19 @@ SettingsCheckHP:
 	Gui, 5:Add, Button, 		x226 y30	w120    gKeyBindCheckHP, 	Клавиатура
 	Gui, 5:Add, Button, 		x226 y60    w120	gMouseBindCheckHP, 	Мышь
 	Gui, 5:Add, Text,			x200 y90, 	Макрос активируется на: %CheckHPKey%
+	
+;											CWDT
+
+	Gui, 5:Add, Text,			x10 y260, 	Процент срабатывания CWDT
+	
+	Gui, 5:Add, radio,			x10 y290 	gCWDT70 Checked%CWDT70%, 	70 Процентов CWDT
+	Gui, 5:Add, radio,			x10 y320 	gCWDT48 Checked%CWDT48%, 	48 Процентов CWDT
+	Gui, 5:Add, radio,			x10 y350 	gCWDT30 Checked%CWDT30%, 	30 Процентов CWDT
+	
+	Gui, 5:Add, Text,			x205 y260, 	Привязка к Клавиатура/Мышь
+	Gui, 5:Add, Button, 		x226 y280	w120    gKeyBindCWDT, 	Клавиатура
+	Gui, 5:Add, Button, 		x226 y310   w120	gMouseBindCWDT, Мышь
+	Gui, 5:Add, Text,			x200 y340, 	Макрос активируется на: %CWDTKey%
 	
 	;Gui, 5:Add, Button, 		x240 y360 	w150 h30 	gAccept Center, 	Применить
 	Gui, 5:Show, w400 h400,
@@ -363,6 +402,7 @@ KeyBindCheckHP:
 return
 
 MouseBindCheckHP:
+	IniRead, CWDTKey, %config%, CheckHP, CWDTKey
 	Gui, 5:Destroy
 	Gui, BindCheckHP:Add, Text,		x15 y30, 		Мышь: 
 	Gui, BindCheckHP:Add, Edit, 	x60 y27 w120   vCheckHPMouseBind Disabled, %CheckHPKey%
@@ -375,8 +415,16 @@ MouseBindCheckHP:
 			GetKeyState, state, %MouseKey%
 			if (state == "D")
 			{
-				GuiControl, BindCheckHP: Text, CheckHPMouseBind, %MouseKey%
-				IniWrite, %MouseKey%, %config%, CheckHP, Key
+				if (MouseKey = CWDTKey)
+				{
+					msgbox, Клавиша %MouseKey% уже привязана к CWDT
+					Break
+				}
+				else
+				{
+					GuiControl, BindCheckHP: Text, CheckHPMouseBind, %MouseKey%
+					IniWrite, %MouseKey%, %config%, CheckHP, Key
+				}
 			}
 		}
 		if (BreakLoopCheckHP = 1)
@@ -394,6 +442,60 @@ return
 BindCheckHPGuiClose:
 	BreakLoopCheckHP := 1
 	Gui, BindCheckHP:Destroy
+	Goto, SettingsCheckHP
+return
+
+;-------------------------------------------- CWDT --------------------------------------------
+
+KeyBindCWDT:
+	Gui, 5:Destroy
+	Gui, BindCWDT:Add, Text,		x08 y30         vKeyBindUnFocus, 	Клавиша: 
+	Gui, BindCWDT:Add, Hotkey, 		x63 y27 w120	gCWDTBind	vCWDTBind, %CWDTKey%
+	Gui, BindCWDT:Show, w200 h100
+	GuiControl, BindCWDT: Focus, KeyBindUnFocus
+return
+
+MouseBindCWDT:
+	IniRead, CheckHPKey, %config%, CheckHP, Key
+	Gui, 5:Destroy
+	Gui, BindCWDT:Add, Text,	x15 y30, 		Мышь: 
+	Gui, BindCWDT:Add, Edit, 	x60 y27 w120   vCWDTMouseBind Disabled, %CWDTKey%
+	Gui, BindCWDT:Show, w200 h100
+	MouseKeyArray := ["MButton", "XButton1", "XButton2"]
+	Loop
+	{
+		for i, MouseKey in MouseKeyArray
+		{
+			GetKeyState, state, %MouseKey%
+			if (state == "D")
+			{
+				if (MouseKey = CheckHPKey)
+				{
+					msgbox, Клавиша %MouseKey% уже привязана к CheckHP
+					Break
+				}
+				else
+				{
+					GuiControl, BindCWDT: Text, CWDTMouseBind, %MouseKey%
+					IniWrite, %MouseKey%, %config%, CheckHP, CWDTKey
+				}
+			}
+		}
+		if (BreakLoopCWDT = 1)
+		{
+			Break
+		}
+	}
+return
+
+CWDTBind:
+	GuiControl, BindCWDT: Focus, KeyBindUnFocus
+	IniWrite, %CWDTBind%, %config%, CheckHP, CWDTKey
+return
+
+BindCWDTGuiClose:
+	BreakLoopCWDT := 0
+	Gui, BindCWDT:Destroy
 	Goto, SettingsCheckHP
 return
 
@@ -504,16 +606,16 @@ if (Bottle1 = 0 and Bottle2 = 0 and Bottle3 = 0 and Bottle4 = 0 and Bottle5 = 0)
 
 if (AutoBottle2k != 0)
 {
-	if !FileExist("Macros\AutoBottle2k.ahk")
+	if !FileExist("Macros\AutoBottle 2k.ahk")
 	{
-		Version := CheckVersion("AutoBottle 2k")
+		Version := CheckVersion("AutoBottle")
 		UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/AutoBottle2k.ahk, Macros\AutoBottle 2k.ahk
 		if(ErrorLevel || !FileExist("Macros\AutoBottle 2k.ahk") ) 
 		{
 			msgbox, AutoBottle 2k.ahk Download failed!
 			return
 		}
-		IniWrite, %Version%, %config%, AutoBottle 2k, Version
+		IniWrite, %Version%, %config%, AutoBottle, Version
 	}
 	if !WinExist("ahk_group AutoBottle2k")
 	{
@@ -804,6 +906,50 @@ else
 {
 	IniWrite, 0, %config%, SelectCheckHP, CheckHP30
 }
+return
+
+;-------------------------------------------- CWDT --------------------------------------------
+
+CWDT70:
+	ControlGet, CWDT70, Checked , , Button6,
+	if (CWDT70 != 0)
+	{
+		IniWrite, 1, %config%, SelectCheckHP, CWDT70
+		IniWrite, 0, %config%, SelectCheckHP, CWDT48
+		IniWrite, 0, %config%, SelectCheckHP, CWDT30
+	}
+	else
+	{
+		IniWrite, 0, %config%, SelectCheckHP, CWDT70
+	}
+return
+
+CWDT48:
+	ControlGet, CWDT48, Checked , , Button7,
+	if (CWDT48 != 0)
+	{
+		IniWrite, 0, %config%, SelectCheckHP, CWDT70
+		IniWrite, 1, %config%, SelectCheckHP, CWDT48
+		IniWrite, 0, %config%, SelectCheckHP, CWDT30
+	}
+	else
+	{
+		IniWrite, 0, %config%, SelectCheckHP, CWDT48
+	}
+return
+
+CWDT30:
+	ControlGet, CWDT30, Checked , , Button8,
+	if (CWDT30 != 0)
+	{
+		IniWrite, 0, %config%, SelectCheckHP, CWDT70
+		IniWrite, 0, %config%, SelectCheckHP, CWDT48
+		IniWrite, 1, %config%, SelectCheckHP, CWDT30
+	}
+	else
+	{
+		IniWrite, 0, %config%, SelectCheckHP, CWDT30
+	}
 return
 
 ;

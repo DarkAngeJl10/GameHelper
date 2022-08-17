@@ -14,11 +14,11 @@ IniRead, CheckforUpdates, %config%, AutoBottle, CheckforUpdates
 
 if (The_VersionName == "ERROR" or The_VersionName == "")
 {
-	IniWrite, 0, %config%, AutoBottle 2k, Version
+	IniWrite, 0, %config%, AutoBottle, Version
 }
 if (CheckforUpdates == "ERROR" or CheckforUpdates == "")
 {
-	IniWrite, 1, %config%, AutoBottle 2k, CheckforUpdates
+	IniWrite, 1, %config%, AutoBottle, CheckforUpdates
 }
 
 if (HotkeyAutoBottle != "")

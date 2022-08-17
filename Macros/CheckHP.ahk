@@ -1,13 +1,18 @@
 ﻿#SingleInstance Force
 #Include lib\WebIniParse.ahk
-global StartLoop := 0
+global StartLoopCheckHP := 0
+global StartLoopCWDT := 0
 config = %A_WorkingDir%\Data\Settings.ini
 
 IniRead, Debug, %config%, CheckHP, Debug
 IniRead, CheckHP70, %config%, SelectCheckHP, CheckHP70
 IniRead, CheckHP48, %config%, SelectCheckHP, CheckHP48
 IniRead, CheckHP30, %config%, SelectCheckHP, CheckHP30
+IniRead, CWDT70, %config%, SelectCheckHP, CWDT70
+IniRead, CWDT48, %config%, SelectCheckHP, CWDT48
+IniRead, CWDT30, %config%, SelectCheckHP, CWDT30
 IniRead, HotkeyCheckHP, %config%, CheckHP, Key
+IniRead, HotkeyCWDTKey, %config%, CheckHP, CWDTKey
 IniRead, The_VersionName, %config%, CheckHP, Version
 IniRead, CheckforUpdates, %config%, CheckHP, CheckforUpdates
 
@@ -27,7 +32,12 @@ if (CheckforUpdates == "ERROR" or CheckforUpdates == "")
 
 if (HotkeyCheckHP != "")
 {
-	Hotkey, %HotkeyCheckHP%, Start
+	Hotkey, %HotkeyCheckHP%, StartCheckHP
+}
+
+if (HotkeyCWDTKey != "")
+{
+	Hotkey, %HotkeyCWDTKey%, StartCWDT
 }
 
 if (CheckforUpdates != 0)
@@ -60,10 +70,16 @@ Status()
 {
 	Gui, Status:Color,Lime
 	Gui, Status:-Caption +Toolwindow +AlwaysOnTop +LastFound
-	Gui, Status:Show, X90 Y1000 W70 H70 NA
-	WinSet, Region, e W70 H70 0-0
+	Gui, Status:Show, X21 Y1000 W20 H20 NA
+	WinSet, Region, e W20 H20 0-0
 }
 
+StatusCWDT()
+{
+	Gui, StatusCWDT:Color,Lime
+	Gui, StatusCWDT:-Caption +Toolwindow +AlwaysOnTop +LastFound
+	Gui, StatusCWDT:Show, X20 Y1050 W20 H20 NA
+}
 
 Suspend On
 GroupAdd POE, % "Path of Exile"
@@ -74,6 +90,7 @@ WinActive()
 {
 	Suspend Off
 	Status()
+	StatusCWDT()
 	WinWaitNotActive ahk_group POE
 	{
 		WinNotActive()
@@ -83,8 +100,11 @@ WinActive()
 WinNotActive() 
 {
 	Gui, Status:Hide
-	StartLoop := 0
-	SetTimer, Loop, Off
+	Gui, StatusCWDT:Hide
+	StartLoopCheckHP := 0
+	StartLoopCWDT := 0
+	SetTimer, LoopCheckHP, Off
+	SetTimer, LoopCWDT, Off
 	Suspend on
 	WinWaitActive ahk_group POE
 	{
@@ -92,8 +112,8 @@ WinNotActive()
 	}
 }
 
-Start:
-	StartLoop := !StartLoop
+StartCheckHP:
+	StartLoopCheckHP := !StartLoopCheckHP
 	
 	IniRead, CheckHP70, %config%, SelectCheckHP, CheckHP70
 	IniRead, CheckHP48, %config%, SelectCheckHP, CheckHP48
@@ -101,20 +121,20 @@ Start:
 	
 	if (CheckHP70 = 1)
 	{
-		X := 109
-		Y := 924
+		CheckHPX := 109
+		CheckHPY := 924
 	}
 	
 	if (CheckHP48 = 1)
 	{
-		X := 118
-		Y := 980
+		CheckHPX := 118
+		CheckHPY := 980
 	}	
 	
 	if (CheckHP30 = 1)
 	{
-		X := 118
-		Y := 1013
+		CheckHPX := 118
+		CheckHPY := 1013
 	}
 	ifWinActive ahk_group POE
 	{
@@ -125,9 +145,9 @@ Start:
 		Return
 	}
 		
-	PixelGetColor, color1, %X%, %Y%
+	PixelGetColor, ColorCheckHPPreLoop, %CheckHPX%, %CheckHPY%
 	
-	Loop:
+	LoopCheckHP:
 	{
 		ifWinActive ahk_group POE
 		{
@@ -138,29 +158,29 @@ Start:
 			Return
 		}
 		
-		If (StartLoop = 1)
+		If (StartLoopCheckHP = 1)
 		{
-			PixelGetColor, color, %X%, %Y%
+			PixelGetColor, ColorCheckHPInLoop, %CheckHPX%, %CheckHPY%
 			
 			IniRead, Debug, %config%, CheckHP, Debug
 			if (Debug = 1)
 			{
-				if (color != color1)
+				if (ColorCheckHPInLoop != ColorCheckHPPreLoop)
 				{
 					ifWinNotActive ahk_group POE
 					{
 						Return
 					}
-					FileAppend, %color% `n, CheckHPDebug.ini
+					FileAppend, %ColorCheckHPInLoop% `n, CheckHPDebug.ini
 					sleep, 300
 				}
 			}
 			
-			if (color = 0x020102 or color = 0x020100 or color = 0x000000 or color = 0x060606)
+			if (ColorCheckHPInLoop = 0x020102 or ColorCheckHPInLoop = 0x020100 or ColorCheckHPInLoop = 0x000000 or ColorCheckHPInLoop = 0x060606)
 			{	
 			}
 			
-			if (color != color1)
+			if (ColorCheckHPInLoop != ColorCheckHPPreLoop)
 			{
 				ifWinNotActive ahk_group POE
 				{
@@ -171,14 +191,87 @@ Start:
 			}
 		}
 	}
-	If (StartLoop = 0)
+	If (StartLoopCheckHP = 0)
 	{
-		SetTimer, Loop, Off
+		SetTimer, LoopCheckHP, Off
 		Status()
 		return
 	}
-	SetTimer, Loop, 1
+	SetTimer, LoopCheckHP, 1
 return
+
+StartCWDT:
+	StartLoopCWDT := !StartLoopCWDT
+	
+	IniRead, CWDT70, %config%, SelectCheckHP, CWDT70
+	IniRead, CWDT48, %config%, SelectCheckHP, CWDT48
+	IniRead, CWDT30, %config%, SelectCheckHP, CWDT30
+	
+	if (CWDT70 = 1)
+	{
+		CWDTX := 109
+		CWDTY := 924
+	}
+	
+	if (CWDT48 = 1)
+	{
+		CWDTX := 118
+		CWDTY := 980
+	}	
+	
+	if (CWDT30 = 1)
+	{
+		CWDTX := 118
+		CWDTY := 1013
+	}
+	ifWinActive ahk_group POE
+	{
+		Gui, StatusCWDT:Hide
+	}
+	ifWinNotActive ahk_group POE
+	{
+		Return
+	}
+		
+	PixelGetColor, ColorCWDTPreLoop, %CWDTX%, %CWDTY%
+	
+	LoopCWDT:
+	{
+		ifWinActive ahk_group POE
+		{
+			Gui, StatusCWDT:Hide
+		}
+		ifWinNotActive ahk_group POE
+		{
+			Return
+		}
+		
+		If (StartLoopCWDT = 1)
+		{
+			PixelGetColor, ColorCWDTInLoop, %CWDTX%, %CWDTY%
+			if (ColorCWDTInLoop = 0x020102 or ColorCWDTInLoop = 0x020100 or ColorCWDTInLoop = 0x000000 or ColorCWDTInLoop = 0x060606)
+			{	
+			}
+			
+			if (ColorCWDTInLoop != ColorCWDTPreLoop)
+			{
+				ifWinNotActive ahk_group POE
+				{
+					Return
+				}
+				Send {t}
+				sleep, 100
+			}
+		}
+	}
+	If (StartLoopCWDT = 0)
+	{
+		SetTimer, LoopCWDT, Off
+		StatusCWDT()
+		return
+	}
+	SetTimer, LoopCWDT, 1
+Return
 
 
 ;PgUp::							;Отладка всего макроса (по дефолту выключено)
