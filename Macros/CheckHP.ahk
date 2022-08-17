@@ -40,17 +40,17 @@ if (CheckforUpdates != 0)
 			Msgbox, 4, Update, Found a new version: %CheckHPVersion%`n`nWant to update?
 			IfMsgBox Yes
 			{
-				filedelete, CheckHP.ahk
+				filedelete, Macros\CheckHP.ahk
 				IniWrite, %CheckHPVersion%, %config%, CheckHP, Version
-				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/CheckHP.ahk, CheckHP.ahk
+				UrlDownloadToFile, https://raw.githubusercontent.com/DarkAngeJl10/GameHelper/main/Macros/CheckHP.ahk, Macros\CheckHP.ahk
 				Sleep, 1000
-				if(ErrorLevel || !FileExist("CheckHP.ahk") ) 
+				if(ErrorLevel || !FileExist("Macros\CheckHP.ahk") ) 
 				{
 					msgbox, CheckHP.ahk Download failed!
 					ExitApp
 				}
 				Msgbox, Updating to latest version: %CheckHPVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
-				run CheckHP.ahk
+				run Macros\CheckHP.ahk
 			}
 		}
 	}
