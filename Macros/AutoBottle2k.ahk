@@ -9,8 +9,8 @@ IniRead, Bottle3, %config%, SelectAutoBootle, Bottle3
 IniRead, Bottle4, %config%, SelectAutoBootle, Bottle4
 IniRead, Bottle5, %config%, SelectAutoBootle, Bottle5
 IniRead, HotkeyAutoBottle, %config%, AutoBottle, Key
-IniRead, The_VersionName, %config%, AutoBottle 2k, Version
-IniRead, CheckforUpdates, %config%, AutoBottle 2k, CheckforUpdates
+IniRead, The_VersionName, %config%, AutoBottle, Version
+IniRead, CheckforUpdates, %config%, AutoBottle, CheckforUpdates
 
 if (The_VersionName == "ERROR" or The_VersionName == "")
 {
@@ -44,7 +44,7 @@ if (CheckforUpdates != 0)
 					msgbox, AutoBottle 2k.ahk Download failed!
 					ExitApp
 				}
-				IniWrite, %AutoBottle2kVersion%, %config%, AutoBottle 2k, Version
+				IniWrite, %AutoBottle2kVersion%, %config%, AutoBottle, Version
 				Msgbox, Updating to latest version: %AutoBottle2kVersion%`n`nCheck your ...\Data\Settings.ini if you do not want to update automatically.
 				run Macros\AutoBottle 2k.ahk
 			}
