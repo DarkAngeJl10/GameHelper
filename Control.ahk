@@ -204,7 +204,14 @@ Settings:
 	Gui, 2:Add, Text,			x10 y320, 		Mines
 	Gui, 2:Add, Checkbox,		x10 y340 		gSmokeMine 		Checked%SmokeMine%, 	Smoke Mine Setup on Q
 	Gui, 2:Add, Checkbox,		x10 y360		gDefaultMine	Checked%DefaultMine%, 	Any Mines on R
+	
+	Gui, 2:Add, Button, 		x240 y360 	w150 h30 	gBackToStart Center, 	Назад
 	Gui, 2:Show, w400 h400,
+return
+
+BackToStart:
+	Gui, 2:Destroy
+	goto, Start
 return
 
 ;--------------------------------------- AUTO BOTTLE ---------------------------------------
@@ -232,7 +239,7 @@ SettingsAutoBottle:
 	Gui, 3:Add, Button, 		x226 y60    w120	gMouseBindAutoBottle, 	Мышь
 	Gui, 3:Add, Text,			x200 y90, 	Макрос активируется на: %AutoBottleKey%
 	
-	;Gui, 3:Add, Button, 		x240 y360 	w150 h30 	gAccept Center, 	Применить
+	Gui, 3:Add, Button, 		x240 y360 	w150 h30 	gBackToSettings Center, 	Назад
 	Gui, 3:Show, w400 h400,
 return
 
@@ -279,6 +286,13 @@ BindAutoBottleGuiClose:
 	Goto, SettingsAutoBottle
 return
 
+BackToSettings:
+	Gui, 3:Destroy
+	Gui, 4:Destroy
+	Gui, 5:Destroy
+	goto, Settings
+return
+
 ;--------------------------------------- BOTTLE ---------------------------------------
 
 SettingsBottle:
@@ -302,7 +316,7 @@ SettingsBottle:
 	Gui, 4:Add, Button, 		x226 y60    w120	gMouseBindBottle, 	Мышь
 	Gui, 4:Add, Text,			x200 y90, 	Макрос активируется на: %BottleKey%
 
-	;Gui, 4:Add, Button, 		x240 y360 	w150 h30 	gAccept vAccept Center, 	Применить
+	Gui, 4:Add, Button, 		x240 y360 	w150 h30 	gBackToSettings Center, 	Назад
 	Gui, 4:Show, 				w400 h400
 return
 
@@ -378,18 +392,18 @@ SettingsCheckHP:
 	
 ;											CWDT
 
-	Gui, 5:Add, Text,			x10 y260, 	Процент срабатывания CWDT
+	Gui, 5:Add, Text,			x10 y200, 	Процент срабатывания CWDT
 	
-	Gui, 5:Add, radio,			x10 y290 	gCWDT70 Checked%CWDT70%, 	70 Процентов CWDT
-	Gui, 5:Add, radio,			x10 y320 	gCWDT48 Checked%CWDT48%, 	48 Процентов CWDT
-	Gui, 5:Add, radio,			x10 y350 	gCWDT30 Checked%CWDT30%, 	30 Процентов CWDT
+	Gui, 5:Add, radio,			x10 y230 	gCWDT70 Checked%CWDT70%, 	70 Процентов CWDT
+	Gui, 5:Add, radio,			x10 y260 	gCWDT48 Checked%CWDT48%, 	48 Процентов CWDT
+	Gui, 5:Add, radio,			x10 y290 	gCWDT30 Checked%CWDT30%, 	30 Процентов CWDT
 	
-	Gui, 5:Add, Text,			x205 y260, 	Привязка к Клавиатура/Мышь
-	Gui, 5:Add, Button, 		x226 y280	w120    gKeyBindCWDT, 	Клавиатура
-	Gui, 5:Add, Button, 		x226 y310   w120	gMouseBindCWDT, Мышь
-	Gui, 5:Add, Text,			x200 y340, 	Макрос активируется на: %CWDTKey%
+	Gui, 5:Add, Text,			x205 y200, 	Привязка к Клавиатура/Мышь
+	Gui, 5:Add, Button, 		x226 y220	w120    gKeyBindCWDT, 	Клавиатура
+	Gui, 5:Add, Button, 		x226 y250   w120	gMouseBindCWDT, Мышь
+	Gui, 5:Add, Text,			x200 y280, 	Макрос активируется на: %CWDTKey%
 	
-	;Gui, 5:Add, Button, 		x240 y360 	w150 h30 	gAccept Center, 	Применить
+	Gui, 5:Add, Button, 		x240 y360 	w150 h30 	gBackToSettings Center, 	Назад
 	Gui, 5:Show, w400 h400,
 return
 
