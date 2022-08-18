@@ -57,6 +57,16 @@ Return
 WinActive() 
 {
 	Suspend Off
+	IniRead, SmokeMine, %A_WorkingDir%\Data\Settings.ini, Main, SmokeMine
+	IniRead, DefaultMine, %A_WorkingDir%\Data\Settings.ini, Main, DefaultMine
+	if (SmokeMine = 1)
+	{
+		Hotkey, q, SmokeMine
+	}
+	if (DefaultMine = 1)
+	{
+		Hotkey, r, AnyMine
+	}	
 	WinWaitNotActive ahk_group POE
 	{
 		WinNotActive()
@@ -254,10 +264,7 @@ return
 	}
 Return
 
-if (SmokeMine = 1)
-$q::
-	IniRead, SmokeMine, %config%, Main, SmokeMine
-	if (SmokeMine = 1)
+SmokeMine:
 	{
 		ifWinNotActive ahk_group POE
 		{
@@ -274,10 +281,7 @@ $q::
 	}
 Return
 
-if (DefaultMine = 1)
-$r::
-	IniRead, DefaultMine, %config%, Main, DefaultMine
-	if (DefaultMine = 1)
+AnyMine:
 	{
 		ifWinNotActive ahk_group POE
 		{
