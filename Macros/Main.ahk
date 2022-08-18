@@ -265,38 +265,26 @@ return
 Return
 
 SmokeMine:
+	ifWinNotActive ahk_group POE
 	{
-		ifWinNotActive ahk_group POE
-		{
-			Return
-		}
-		Send, {q}
-		Send, {q}
-		sleep, 250
-		Send, {d}
+		Return
 	}
-	else
-	{
-		send {q}
-	}
+	Send, {q}
+	Send, {q}
+	sleep, 250
+	Send, {d}
 Return
 
 AnyMine:
+	ifWinNotActive ahk_group POE
 	{
-		ifWinNotActive ahk_group POE
-		{
-			return
-		}
-		Send, {r}
-		Send, {r}
-		sleep, 50
-		Send, {d}
-		sleep, 50
+		return
 	}
-	else
-	{
-		send {r}
-	}
+	Send, {r}
+	Send, {r}
+	sleep, 50
+	Send, {d}
+	sleep, 50
 return
 	
 	
