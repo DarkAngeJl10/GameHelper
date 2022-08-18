@@ -52,9 +52,9 @@ if (CheckforUpdates != 0)
 	}
 }
 
-Suspend On
 GroupAdd POE, % "Path of Exile"
 WinNotActive()
+Suspend On
 Return
 
 WinActive() 

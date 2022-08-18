@@ -21,11 +21,6 @@ if (CheckforUpdates == "ERROR" or CheckforUpdates == "")
 	IniWrite, 1, %config%, AutoBottle, CheckforUpdates
 }
 
-if (HotkeyAutoBottle != "")
-{
-	Hotkey, %HotkeyAutoBottle%, Start
-}
-
 if (CheckforUpdates != 0)
 {
 	AutoBottleVersion := CheckVersion("AutoBottle")
@@ -61,14 +56,19 @@ Status()
 
 
 
-Suspend On
 GroupAdd POE, % "Path of Exile"
 WinNotActive()
+Suspend On
 Return
 
 WinActive() 
 {
 	Suspend Off
+	IniRead, HotkeyAutoBottle, %A_WorkingDir%\Data\Settings.ini, AutoBottle, Key
+	if (HotkeyAutoBottle != "")
+	{
+		Hotkey, %HotkeyAutoBottle%, Start
+	}
 	Status()
 	WinWaitNotActive ahk_group POE
 	{

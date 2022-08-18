@@ -49,10 +49,10 @@ chaosrec := 0
 send, {LCtrl down}
 send, {LCtrl up}
 
-Suspend On
 GroupAdd POE, % "Path of Exile"
-WinActive()
-return
+WinNotActive()
+Suspend On
+Return
 
 WinActive() 
 {

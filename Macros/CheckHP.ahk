@@ -2,6 +2,7 @@
 #Include lib\WebIniParse.ahk
 global StartLoopCheckHP := 0
 global StartLoopCWDT := 0
+global ActivityCWDT := 0
 config = %A_WorkingDir%\Data\Settings.ini
 
 IniRead, Debug, %config%, CheckHP, Debug
@@ -13,6 +14,7 @@ IniRead, CWDT48, %config%, SelectCheckHP, CWDT48
 IniRead, CWDT30, %config%, SelectCheckHP, CWDT30
 IniRead, HotkeyCheckHP, %config%, CheckHP, Key
 IniRead, HotkeyCWDTKey, %config%, CheckHP, CWDTKey
+IniRead, ActivityCWDT, %config%, CheckHP, ActivityCWDT
 IniRead, The_VersionName, %config%, CheckHP, Version
 IniRead, CheckforUpdates, %config%, CheckHP, CheckforUpdates
 
@@ -28,16 +30,6 @@ if (The_VersionName == "ERROR" or The_VersionName == "")
 if (CheckforUpdates == "ERROR" or CheckforUpdates == "")
 {
 	IniWrite, 1, %config%, CheckHP, CheckforUpdates
-}
-
-if (HotkeyCheckHP != "")
-{
-	Hotkey, %HotkeyCheckHP%, StartCheckHP
-}
-
-if (HotkeyCWDTKey != "")
-{
-	Hotkey, %HotkeyCWDTKey%, StartCWDT
 }
 
 if (CheckforUpdates != 0)
@@ -81,16 +73,30 @@ StatusCWDT()
 	Gui, StatusCWDT:Show, X20 Y1050 W20 H20 NA
 }
 
-Suspend On
 GroupAdd POE, % "Path of Exile"
 WinNotActive()
+Suspend On
 Return
 
 WinActive() 
 {
 	Suspend Off
+	IniRead, HotkeyCheckHP, %A_WorkingDir%\Data\Settings.ini, CheckHP, Key
+	IniRead, HotkeyCWDTKey, %A_WorkingDir%\Data\Settings.ini, CheckHP, CWDTKey
+	IniRead, ActivityCWDT, %A_WorkingDir%\Data\Settings.ini, CheckHP, ActivityCWDT
+	if (HotkeyCheckHP != "")
+	{
+		Hotkey, %HotkeyCheckHP%, StartCheckHP
+	}
+	if (ActivityCWDT = 1)
+	{
+		if (HotkeyCWDTKey != "")
+		{
+			Hotkey, %HotkeyCWDTKey%, StartCWDT
+		}
+		StatusCWDT()
+	}	
 	Status()
-	StatusCWDT()
 	WinWaitNotActive ahk_group POE
 	{
 		WinNotActive()
@@ -100,17 +106,23 @@ WinActive()
 WinNotActive() 
 {
 	Gui, Status:Hide
-	Gui, StatusCWDT:Hide
 	StartLoopCheckHP := 0
-	StartLoopCWDT := 0
 	SetTimer, LoopCheckHP, Off
-	SetTimer, LoopCWDT, Off
+	
+	if (ActivityCWDT = 1)
+	{
+		Gui, StatusCWDT:Hide
+		StartLoopCWDT := 0
+		SetTimer, LoopCWDT, Off
+	}
+	
 	Suspend on
 	WinWaitActive ahk_group POE
 	{
 		WinActive()
 	}
 }
+
 
 StartCheckHP:
 	StartLoopCheckHP := !StartLoopCheckHP
@@ -201,6 +213,8 @@ StartCheckHP:
 return
 
 StartCWDT:
+if (ActivityCWDT = 1)
+{
 	StartLoopCWDT := !StartLoopCWDT
 	
 	IniRead, CWDT70, %config%, SelectCheckHP, CWDT70
@@ -271,6 +285,8 @@ StartCWDT:
 		return
 	}
 	SetTimer, LoopCWDT, 1
+Return
+}
 Return
 
 

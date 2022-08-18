@@ -10,6 +10,7 @@ global CloseGuiAutoBottle2k := 0
 global CloseGuiBottle := 1
 global CloseGuiCheckHP := 0
 global CloseGuiMain := 0
+global ActivityCWDT := 0
 
 config = %A_WorkingDir%\Data\Settings.ini
 
@@ -30,10 +31,11 @@ IniRead, CWDT48, %config%, SelectCheckHP, CWDT48
 IniRead, CWDT30, %config%, SelectCheckHP, CWDT30
 IniRead, SmokeMine, %config%, Main, SmokeMine
 IniRead, DefaultMine, %config%, Main, DefaultMine
-IniRead, BottleKey, %config%, Bottle, Key
+IniRead, AutoBottleKey, %config%, AutoBottle, Key
 IniRead, CheckHPKey, %config%, CheckHP, Key
 IniRead, CWDTKey, %config%, CheckHP, CWDTKey
-IniRead, AutoBottleKey, %config%, AutoBottle, Key
+IniRead, BottleKey, %config%, Bottle, Key
+IniRead, ActivityCWDT, %config%, CheckHP, ActivityCWDT
 IniRead, The_VersionName, %config%, Control, Version
 IniRead, CheckforUpdates, %config%, Control, CheckforUpdates
 
@@ -45,6 +47,7 @@ IfNotExist,  %A_WorkingDir%\Macros
 {
 	FileCreateDir,  %A_WorkingDir%\Macros
 }
+
 
 if (AutoBottle1 == "ERROR" or AutoBottle1 == "")
 {
@@ -67,6 +70,7 @@ if (AutoBottle5 == "ERROR" or AutoBottle5 == "")
 	IniWrite, 0, %config%, SelectAutoBootle, Bottle5
 }
 
+
 if (Bottle15 == "ERROR" or Bottle15 == "")
 {
 	IniWrite, 0, %config%, SelectBootle, Bottle1-5
@@ -83,6 +87,7 @@ if (Bottle45 == "ERROR" or Bottle45 == "")
 {
 	IniWrite, 0, %config%, SelectBootle, Bottle4-5
 }
+
 
 if (CheckHP70 == "ERROR" or CheckHP70 == "")
 {
@@ -109,6 +114,7 @@ if (CWDT30 == "ERROR" or CWDT30 == "")
 	IniWrite, 0, %config%, SelectCheckHP, CWDT30
 }
 
+
 if (SmokeMine == "ERROR" or SmokeMine == "")
 {
 	IniWrite, 0, %config%, Main, SmokeMine
@@ -117,6 +123,7 @@ if (DefaultMine == "ERROR" or DefaultMine == "")
 {
 	IniWrite, 0, %config%, Main, DefaultMine
 }
+
 
 if (BottleKey == "ERROR"  or BottleKey == "")
 {
@@ -133,6 +140,12 @@ if (CheckHPKey == "ERROR"  or CheckHPKey == "")
 if (CWDTKey == "ERROR"  or CWDTKey == "")
 {
 	IniWrite, % "", %config%, CheckHP, CWDTKey
+}
+
+
+if (ActivityCWDT == "ERROR" or ActivityCWDT == "")
+{
+	IniWrite, 0, %config%, CheckHP, ActivityCWDT
 }
 
 
@@ -178,7 +191,7 @@ MH = %A_ScreenHeight%
 Start:
 if (MW = 1920 and MH = 1080)
 {
-	Gui, 1:Add, Checkbox,		x10 y10 	gAutoBottle vAutoBottle Checked%CloseGuiAutoBottle%, 		Auto Bottle
+	Gui, 1:Add, Checkbox,		x10 y10	 	gAutoBottle vAutoBottle Checked%CloseGuiAutoBottle%, 		Auto Bottle
 }
 if (MW = 2560 and MH = 1440)
 {
@@ -217,7 +230,6 @@ return
 ;--------------------------------------- AUTO BOTTLE ---------------------------------------
 
 SettingsAutoBottle:
-	BreakLoopAutoBottle := 0
 	IniRead, AutoBottle1, %config%, SelectAutoBootle, Bottle1
 	IniRead, AutoBottle2, %config%, SelectAutoBootle, Bottle2
 	IniRead, AutoBottle3, %config%, SelectAutoBootle, Bottle3
@@ -252,6 +264,7 @@ KeyBindAutoBottle:
 return
 
 MouseBindAutoBottle:
+	BreakLoopAutoBottle := 0
 	Gui, 3:Destroy
 	Gui, BindAutoBottle:Add, Text,		x15 y30, 	Мышь: 
 	Gui, BindAutoBottle:Add, Edit, 		x60 y27 w120   vAutoBottleMouseBind Disabled, %AutoBottleKey%
@@ -264,6 +277,18 @@ MouseBindAutoBottle:
 			GetKeyState, state, %MouseKey%
 			if (state == "D")
 			{
+				if (MouseKey = BottleKey)
+				{
+					IniWrite, % "", %config%, Bottle, Key
+				}
+				if (MouseKey = CheckHPKey)
+				{
+					IniWrite, % "", %config%, CheckHP, Key
+				}
+				if (MouseKey = CWDTKey)
+				{
+					IniWrite, % "", %config%, CheckHP, CWDTKey
+				}
 				GuiControl, BindAutoBottle: Text, AutoBottleMouseBind, %MouseKey%
 				IniWrite, %MouseKey%, %config%, AutoBottle, Key
 			}
@@ -277,6 +302,18 @@ return
 
 AutoBottleBind:
 	GuiControl, BindAutoBottle: Focus, KeyBindUnFocus
+	if (AutoBottleBind = BottleKey)
+	{
+		IniWrite, % "", %config%, Bottle, Key
+	}
+	if (AutoBottleBind = CheckHPKey)
+	{
+		IniWrite, % "", %config%, CheckHP, Key
+	}
+	if (AutoBottleBind = CWDTKey)
+	{
+		IniWrite, % "", %config%, CheckHP, CWDTKey
+	}
 	IniWrite, %AutoBottleBind%, %config%, AutoBottle, Key
 return
 
@@ -296,7 +333,6 @@ return
 ;--------------------------------------- BOTTLE ---------------------------------------
 
 SettingsBottle:
-	BreakLoopBottle := 0
 	IniRead, Bottle15, %config%, SelectBootle, Bottle1-5
 	IniRead, Bottle25, %config%, SelectBootle, Bottle2-5
 	IniRead, Bottle35, %config%, SelectBootle, Bottle3-5
@@ -329,6 +365,7 @@ KeyBindBottle:
 return
 
 MouseBindBottle:
+	BreakLoopBottle := 0
 	Gui, 4:Destroy
 	Gui, BindBottle:Add, Text,		x15 y30, 	Мышь: 
 	Gui, BindBottle:Add, Edit, 		x60 y27 w120   vBottleMouseBind Disabled, %BottleKey%
@@ -341,6 +378,18 @@ MouseBindBottle:
 			GetKeyState, state, %MouseKey%
 			if (state == "D")
 			{
+				if (MouseKey = AutoBottleKey)
+				{
+					IniWrite, % "", %config%, AutoBottle, Key
+				}
+				if (MouseKey = CheckHPKey)
+				{
+					IniWrite, % "", %config%, CheckHP, Key
+				}
+				if (MouseKey = CWDTKey)
+				{
+					IniWrite, % "", %config%, CheckHP, CWDTKey
+				}
 				GuiControl, BindBottle: Text, BottleMouseBind, %MouseKey%
 				IniWrite, %MouseKey%, %config%, Bottle, Key
 			}
@@ -354,6 +403,18 @@ return
 	
 BottleBind:
 	GuiControl, BindBottle: Focus, KeyBindUnFocus
+	if (BottleBind = AutoBottleKey)
+	{
+		IniWrite, % "", %config%, AutoBottle, Key
+	}
+	if (BottleBind = CheckHPKey)
+	{
+		IniWrite, % "", %config%, CheckHP, Key
+	}
+	if (BottleBind = CWDTKey)
+	{
+		IniWrite, % "", %config%, CheckHP, CWDTKey
+	}
 	IniWrite, %BottleBind%, %config%, Bottle, Key
 return
 
@@ -366,8 +427,7 @@ return
 ;--------------------------------------- CHECK HP ---------------------------------------
 
 SettingsCheckHP:
-	BreakLoopCheckHP := 0
-	BreakLoopCWDT := 0
+{
 	IniRead, CheckHP70, %config%, SelectCheckHP, CheckHP70
 	IniRead, CheckHP48, %config%, SelectCheckHP, CheckHP48
 	IniRead, CheckHP30, %config%, SelectCheckHP, CheckHP30
@@ -377,6 +437,8 @@ SettingsCheckHP:
 	IniRead, CWDT48, %config%, SelectCheckHP, CWDT48
 	IniRead, CWDT30, %config%, SelectCheckHP, CWDT30
 	IniRead, CWDTKey, %config%, CheckHP, CWDTKey
+	
+	IniRead, ActivityCWDT, %config%, CheckHP, ActivityCWDT
 	
 	Gui, 2:Destroy
 	Gui, 5:Add, Text,			x10 y10, 	Процент срабатывания CheckHP
@@ -390,21 +452,65 @@ SettingsCheckHP:
 	Gui, 5:Add, Button, 		x226 y60    w120	gMouseBindCheckHP, 	Мышь
 	Gui, 5:Add, Text,			x200 y90, 	Макрос активируется на: %CheckHPKey%
 	
+	Gui, 5:Add, Button, 		x240 y360 	w150 h30 	gBackToSettings Center, 	Назад
+	
 ;											CWDT
 
-	Gui, 5:Add, Text,			x10 y200, 	Процент срабатывания CWDT
+	Gui, 5:Add, Button, 		x127 y150	w120    gActivityCWDT, 	Активация CWDT
 	
-	Gui, 5:Add, radio,			x10 y230 	gCWDT70 Checked%CWDT70%, 	70 Процентов CWDT
-	Gui, 5:Add, radio,			x10 y260 	gCWDT48 Checked%CWDT48%, 	48 Процентов CWDT
-	Gui, 5:Add, radio,			x10 y290 	gCWDT30 Checked%CWDT30%, 	30 Процентов CWDT
+	Gui, 5:Add, Text,			x10 y200							vActivityCWDT1, 	Процент срабатывания CWDT
+	Gui, 5:Add, radio,			x10 y230 			gCWDT70 		vActivityCWDT2 Checked%CWDT70%, 	70 Процентов CWDT
+	Gui, 5:Add, radio,			x10 y260 			gCWDT48 		vActivityCWDT3 Checked%CWDT48%, 	48 Процентов CWDT
+	Gui, 5:Add, radio,			x10 y290 			gCWDT30 		vActivityCWDT4 Checked%CWDT30%, 	30 Процентов CWDT
 	
-	Gui, 5:Add, Text,			x205 y200, 	Привязка к Клавиатура/Мышь
-	Gui, 5:Add, Button, 		x226 y220	w120    gKeyBindCWDT, 	Клавиатура
-	Gui, 5:Add, Button, 		x226 y250   w120	gMouseBindCWDT, Мышь
-	Gui, 5:Add, Text,			x200 y280, 	Макрос активируется на: %CWDTKey%
+	Gui, 5:Add, Text,			x205 y200							vActivityCWDT5, 	Привязка к Клавиатура/Мышь
+	Gui, 5:Add, Button, 		x226 y220	w120    gKeyBindCWDT 	vActivityCWDT6, 	Клавиатура
+	Gui, 5:Add, Button, 		x226 y250   w120	gMouseBindCWDT 	vActivityCWDT7, 	Мышь
+	Gui, 5:Add, Text,			x200 y280							vActivityCWDT8, 	Макрос активируется на: %CWDTKey%
 	
-	Gui, 5:Add, Button, 		x240 y360 	w150 h30 	gBackToSettings Center, 	Назад
+	if (ActivityCWDT = 0)
+	{
+		GuiControl, 5: Disable, ActivityCWDT1
+		GuiControl, 5: Disable, ActivityCWDT2
+		GuiControl, 5: Disable, ActivityCWDT3
+		GuiControl, 5: Disable, ActivityCWDT4
+		GuiControl, 5: Disable, ActivityCWDT5
+		GuiControl, 5: Disable, ActivityCWDT6
+		GuiControl, 5: Disable, ActivityCWDT7
+		GuiControl, 5: Disable, ActivityCWDT8
+	}
+	
 	Gui, 5:Show, w400 h400,
+}
+return
+
+ActivityCWDT:
+	ActivityCWDT := !ActivityCWDT
+	IniWrite, %ActivityCWDT%, %config%, CheckHP, ActivityCWDT
+	
+	if (ActivityCWDT = 1)
+	{
+		GuiControl, 5: Enable, ActivityCWDT1
+		GuiControl, 5: Enable, ActivityCWDT2
+		GuiControl, 5: Enable, ActivityCWDT3
+		GuiControl, 5: Enable, ActivityCWDT4
+		GuiControl, 5: Enable, ActivityCWDT5
+		GuiControl, 5: Enable, ActivityCWDT6
+		GuiControl, 5: Enable, ActivityCWDT7
+		GuiControl, 5: Enable, ActivityCWDT8
+	}
+	
+	if (ActivityCWDT = 0)
+	{
+		GuiControl, 5: Disable, ActivityCWDT1
+		GuiControl, 5: Disable, ActivityCWDT2
+		GuiControl, 5: Disable, ActivityCWDT3
+		GuiControl, 5: Disable, ActivityCWDT4
+		GuiControl, 5: Disable, ActivityCWDT5
+		GuiControl, 5: Disable, ActivityCWDT6
+		GuiControl, 5: Disable, ActivityCWDT7
+		GuiControl, 5: Disable, ActivityCWDT8
+	}
 return
 
 KeyBindCheckHP:
@@ -416,7 +522,7 @@ KeyBindCheckHP:
 return
 
 MouseBindCheckHP:
-	IniRead, CWDTKey, %config%, CheckHP, CWDTKey
+	BreakLoopCheckHP := 0
 	Gui, 5:Destroy
 	Gui, BindCheckHP:Add, Text,		x15 y30, 		Мышь: 
 	Gui, BindCheckHP:Add, Edit, 	x60 y27 w120   vCheckHPMouseBind Disabled, %CheckHPKey%
@@ -429,16 +535,20 @@ MouseBindCheckHP:
 			GetKeyState, state, %MouseKey%
 			if (state == "D")
 			{
+				if (MouseKey = AutoBottleKey)
+				{
+					IniWrite, % "", %config%, AutoBottle, Key
+				}
+				if (MouseKey = BottleKey)
+				{
+					IniWrite, % "", %config%, Bottle, Key
+				}
 				if (MouseKey = CWDTKey)
 				{
-					msgbox, Клавиша %MouseKey% уже привязана к CWDT
-					Break
+					IniWrite, % "", %config%, CheckHP, CWDTKey
 				}
-				else
-				{
-					GuiControl, BindCheckHP: Text, CheckHPMouseBind, %MouseKey%
-					IniWrite, %MouseKey%, %config%, CheckHP, Key
-				}
+				GuiControl, BindCheckHP: Text, CheckHPMouseBind, %MouseKey%
+				IniWrite, %MouseKey%, %config%, CheckHP, Key
 			}
 		}
 		if (BreakLoopCheckHP = 1)
@@ -450,6 +560,18 @@ return
 
 CheckHPBind:
 	GuiControl, BindCheckHP: Focus, KeyBindUnFocus
+	if (CheckHPBind = AutoBottleKey)
+	{
+		IniWrite, % "", %config%, AutoBottle, Key
+	}
+	if (CheckHPBind = BottleKey)
+	{
+		IniWrite, % "", %config%, Bottle, Key
+	}
+	if (CheckHPBind = CWDTKey)
+	{
+		IniWrite, % "", %config%, CheckHP, CWDTKey
+	}
 	IniWrite, %CheckHPBind%, %config%, CheckHP, Key
 return
 
@@ -470,6 +592,7 @@ KeyBindCWDT:
 return
 
 MouseBindCWDT:
+	BreakLoopCWDT := 0
 	IniRead, CheckHPKey, %config%, CheckHP, Key
 	Gui, 5:Destroy
 	Gui, BindCWDT:Add, Text,	x15 y30, 		Мышь: 
@@ -483,16 +606,20 @@ MouseBindCWDT:
 			GetKeyState, state, %MouseKey%
 			if (state == "D")
 			{
+				if (MouseKey = AutoBottleKey)
+				{
+					IniWrite, % "", %config%, AutoBottle, Key
+				}
+				if (MouseKey = BottleKey)
+				{
+					IniWrite, % "", %config%, Bottle, Key
+				}
 				if (MouseKey = CheckHPKey)
 				{
-					msgbox, Клавиша %MouseKey% уже привязана к CheckHP
-					Break
+					IniWrite, % "", %config%, CheckHP, Key
 				}
-				else
-				{
-					GuiControl, BindCWDT: Text, CWDTMouseBind, %MouseKey%
-					IniWrite, %MouseKey%, %config%, CheckHP, CWDTKey
-				}
+				GuiControl, BindCWDT: Text, CWDTMouseBind, %MouseKey%
+				IniWrite, %MouseKey%, %config%, CheckHP, CWDTKey
 			}
 		}
 		if (BreakLoopCWDT = 1)
@@ -504,11 +631,23 @@ return
 
 CWDTBind:
 	GuiControl, BindCWDT: Focus, KeyBindUnFocus
+	if (CWDTBind = AutoBottleKey)
+	{
+		IniWrite, % "", %config%, AutoBottle, Key
+	}
+	if (CWDTBind = BottleKey)
+	{
+		IniWrite, % "", %config%, Bottle, Key
+	}
+	if (CWDTBind = CheckHPKey)
+	{
+		IniWrite, % "", %config%, CheckHP, Key
+	}
 	IniWrite, %CWDTBind%, %config%, CheckHP, CWDTKey
 return
 
 BindCWDTGuiClose:
-	BreakLoopCWDT := 0
+	BreakLoopCWDT := 1
 	Gui, BindCWDT:Destroy
 	Goto, SettingsCheckHP
 return
