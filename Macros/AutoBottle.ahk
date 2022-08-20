@@ -1,4 +1,5 @@
 #SingleInstance Force
+SetTitleMatchMode, 3
 #Include lib\WebIniParse.ahk
 global StartLoop := 0
 config = %A_WorkingDir%\Data\Settings.ini
@@ -141,7 +142,8 @@ Start:
 		{
 			Return
 		}
-	
+		sleep, 100
+		
 		If (StartLoop = 1)
 		{
 			if (Bottle1 = 1)
@@ -154,7 +156,6 @@ Start:
 					{
 						Return
 					}
-					sleep, 50
 					Send {1}
 				}
 			}
@@ -169,7 +170,6 @@ Start:
 					{
 						Return
 					}
-					sleep, 50
 					Send {2}
 				}
 			}
@@ -184,7 +184,6 @@ Start:
 					{
 						Return
 					}
-					sleep, 50
 					Send {3}
 				}
 			}
@@ -199,7 +198,6 @@ Start:
 					{
 						Return
 					}
-					sleep, 50
 					Send {4}
 				}
 			}
@@ -214,7 +212,6 @@ Start:
 					{
 						Return
 					}
-					sleep, 50
 					Send {5}
 				}
 			}

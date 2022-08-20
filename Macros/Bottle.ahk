@@ -1,4 +1,5 @@
 ﻿#SingleInstance Force
+SetTitleMatchMode, 3
 #Include lib\WebIniParse.ahk
 config = %A_WorkingDir%\Data\Settings.ini
 

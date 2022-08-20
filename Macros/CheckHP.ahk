@@ -1,4 +1,5 @@
 ﻿#SingleInstance Force
+SetTitleMatchMode, 3
 #Include lib\WebIniParse.ahk
 global StartLoopCheckHP := 0
 global StartLoopCWDT := 0

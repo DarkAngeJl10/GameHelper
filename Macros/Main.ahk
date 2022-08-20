@@ -1,4 +1,5 @@
 ﻿#SingleInstance Force
+SetTitleMatchMode, 3
 #Include lib\WebIniParse.ahk
 config = %A_WorkingDir%\Data\Settings.ini
 
@@ -59,13 +60,14 @@ WinActive()
 	Suspend Off
 	IniRead, SmokeMine, %A_WorkingDir%\Data\Settings.ini, Main, SmokeMine
 	IniRead, DefaultMine, %A_WorkingDir%\Data\Settings.ini, Main, DefaultMine
+	;msgbox, %SmokeMine%
 	if (SmokeMine = 1)
 	{
-		Hotkey, q, SmokeMine
+		Hotkey, $q, SmokeMineKey
 	}
 	if (DefaultMine = 1)
 	{
-		Hotkey, r, AnyMine
+		Hotkey, $r, AnyMine
 	}	
 	WinWaitNotActive ahk_group POE
 	{
@@ -264,7 +266,7 @@ return
 	}
 Return
 
-SmokeMine:
+SmokeMineKey:
 	ifWinNotActive ahk_group POE
 	{
 		Return
