@@ -11,8 +11,6 @@ global CloseGuiCheckHP := 0
 global CloseGuiMain := 0
 global ActivityCWDT := 0
 
-global CheckHPPID := 0
-
 config = %A_WorkingDir%\Data\Settings.ini
 
 IniRead, AutoBottle1, %config%, SelectAutoBootle, Bottle1
@@ -686,6 +684,7 @@ if (Choice = "Bottle")
 	{
 		Run, Macros\Bottle.ahk,,, BottlePID
 		Process, Wait, %BottlePID%
+		GroupAdd, CloseBottle, ahk_pid %BottlePID%
 		CABottle := 1
 		CloseGuiBottle := 2
 	}
@@ -695,7 +694,7 @@ else
 	CABottle := 0
 	CloseGuiBottle := 1
 	SetTimer, ListOfBottle, off
-	WinClose, ahk_pid %BottlePID%
+	WinClose, ahk_group CloseBottle
 }
 if (CABottle = 1)
 {
@@ -729,6 +728,7 @@ if (AutoBottle != 0)
 	{
 		Run, Macros\AutoBottle.ahk,,, AutoBottlePID
 		Process, Wait, %AutoBottlePID%
+		GroupAdd, CloseAutoBottle, ahk_pid %AutoBottlePID%
 		CAAutoBottle := 1
 		CloseGuiAutoBottle := 1
 	}
@@ -738,7 +738,7 @@ else
 	CAAutoBottle := 0
 	CloseGuiAutoBottle := 0
 	SetTimer, AutoBottle, off
-	WinClose, ahk_pid %AutoBottlePID%
+	WinClose, ahk_group CloseAutoBottle
 }
 
 if (CAAutoBottle = 1)
@@ -775,6 +775,7 @@ if (AutoBottle2k != 0)
 	{
 		Run, Macros\AutoBottle 2k.ahk,,, AutoBottle2kPID
 		Process, Wait, %AutoBottle2kPID%
+		GroupAdd, CloseAutoBottle2k, ahk_pid %AutoBottle2kPID%
 		CAAutoBottle2k := 1
 		CloseGuiAutoBottle2k := 1
 	}
@@ -784,7 +785,7 @@ else
 	CAAutoBottle2k := 0
 	CloseGuiAutoBottle2k := 0
 	SetTimer, AutoBottle2k, off
-	WinClose, ahk_pid %AutoBottle2kPID%
+	WinClose, ahk_group CloseAutoBottle2k
 }
 if (CAAutoBottle2k = 1)
 {
@@ -818,6 +819,7 @@ if (CheckHP != 0)
 	{
 		Run, Macros\CheckHP.ahk,,, CheckHPPID
 		Process, Wait, %CheckHPPID%
+		GroupAdd, CloseCheckHP, ahk_pid %CheckHPPID%
 		CACheckHP := 1
 		CloseGuiCheckHP := 1
 	}
@@ -827,7 +829,7 @@ else
 	CACheckHP := 0
 	CloseGuiCheckHP := 0
 	SetTimer, CheckHP, off
-	WinClose, ahk_pid %CheckHPPID%
+	WinClose, ahk_group CloseCheckHP
 }
 if (CACheckHP = 1)
 {
@@ -854,6 +856,7 @@ if (Main != 0)
 	{
 		Run, Macros\Main.ahk,,, MainPID
 		Process, Wait, %MainPID%
+		GroupAdd, CloseMain, ahk_pid %MainPID%
 		CAMain := 1
 		CloseGuiMain := 1
 	}
@@ -863,7 +866,7 @@ else
 	CAMain := 0
 	CloseGuiMain := 0
 	SetTimer, Main, off
-	WinClose, ahk_pid %MainPID%
+	WinClose, ahk_group CloseMain
 }
 if (CAMain = 1)
 {
