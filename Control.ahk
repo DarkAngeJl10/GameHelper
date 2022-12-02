@@ -1,6 +1,5 @@
 ﻿#SingleInstance Force
 DetectHiddenWindows, On
-SetTitleMatchMode, 2
 #Include lib\WebIniParse.ahk
 global AutoBottle := 0
 global CheckHP := 0
@@ -11,6 +10,8 @@ global CloseGuiBottle := 1
 global CloseGuiCheckHP := 0
 global CloseGuiMain := 0
 global ActivityCWDT := 0
+
+global CheckHPPID := 0
 
 config = %A_WorkingDir%\Data\Settings.ini
 
@@ -681,10 +682,10 @@ if (Choice = "Bottle")
 		}
 		IniWrite, %Version%, %config%, Bottle, Version
 	}
-	if !WinExist("ahk_group Bottle")
+	if !WinExist("ahk_pid" BottlePID)
 	{
-		Run, Macros\Bottle.ahk
-		GroupAdd, Bottle, Bottle.ahk
+		Run, Macros\Bottle.ahk,,, BottlePID
+		Process, Wait, %BottlePID%
 		CABottle := 1
 		CloseGuiBottle := 2
 	}
@@ -694,7 +695,7 @@ else
 	CABottle := 0
 	CloseGuiBottle := 1
 	SetTimer, ListOfBottle, off
-	WinClose, ahk_group Bottle
+	WinClose, ahk_pid %BottlePID%
 }
 if (CABottle = 1)
 {
@@ -724,10 +725,10 @@ if (AutoBottle != 0)
 		}
 		IniWrite, %Version%, %config%, AutoBottle, Version
 	}
-	if !WinExist("ahk_group AutoBottle")
+	if !WinExist("ahk_pid" AutoBottlePID)
 	{
-		Run, Macros\AutoBottle.ahk
-		GroupAdd, AutoBottle, AutoBottle.ahk
+		Run, Macros\AutoBottle.ahk,,, AutoBottlePID
+		Process, Wait, %AutoBottlePID%
 		CAAutoBottle := 1
 		CloseGuiAutoBottle := 1
 	}
@@ -737,7 +738,7 @@ else
 	CAAutoBottle := 0
 	CloseGuiAutoBottle := 0
 	SetTimer, AutoBottle, off
-	WinClose, ahk_group AutoBottle
+	WinClose, ahk_pid %AutoBottlePID%
 }
 
 if (CAAutoBottle = 1)
@@ -770,10 +771,10 @@ if (AutoBottle2k != 0)
 		}
 		IniWrite, %Version%, %config%, AutoBottle, Version
 	}
-	if !WinExist("ahk_group AutoBottle2k")
+	if !WinExist("ahk_pid" AutoBottle2kPID)
 	{
-		Run, Macros\AutoBottle 2k.ahk
-		GroupAdd, AutoBottle2k, AutoBottle 2k.ahk
+		Run, Macros\AutoBottle 2k.ahk,,, AutoBottle2kPID
+		Process, Wait, %AutoBottle2kPID%
 		CAAutoBottle2k := 1
 		CloseGuiAutoBottle2k := 1
 	}
@@ -783,7 +784,7 @@ else
 	CAAutoBottle2k := 0
 	CloseGuiAutoBottle2k := 0
 	SetTimer, AutoBottle2k, off
-	WinClose, ahk_group AutoBottle2k
+	WinClose, ahk_pid %AutoBottle2kPID%
 }
 if (CAAutoBottle2k = 1)
 {
@@ -813,10 +814,10 @@ if (CheckHP != 0)
 		}
 		IniWrite, %Version%, %config%, CheckHP, Version
 	}
-	if !WinExist("ahk_group CheckHP")
+	if !WinExist("ahk_pid" CheckHPPID)
 	{
-		Run, Macros\CheckHP.ahk
-		GroupAdd, CheckHP, CheckHP.ahk
+		Run, Macros\CheckHP.ahk,,, CheckHPPID
+		Process, Wait, %CheckHPPID%
 		CACheckHP := 1
 		CloseGuiCheckHP := 1
 	}
@@ -826,7 +827,7 @@ else
 	CACheckHP := 0
 	CloseGuiCheckHP := 0
 	SetTimer, CheckHP, off
-	WinClose, ahk_group CheckHP
+	WinClose, ahk_pid %CheckHPPID%
 }
 if (CACheckHP = 1)
 {
@@ -849,10 +850,10 @@ if (Main != 0)
 		}
 		IniWrite, %Version%, %config%, Main, Version
 	}
-	if !WinExist("ahk_group Main")
+	if !WinExist("ahk_pid" MainPID)
 	{
-		Run, Macros\Main.ahk
-		GroupAdd, Main, Main.ahk
+		Run, Macros\Main.ahk,,, MainPID
+		Process, Wait, %MainPID%
 		CAMain := 1
 		CloseGuiMain := 1
 	}
@@ -862,7 +863,7 @@ else
 	CAMain := 0
 	CloseGuiMain := 0
 	SetTimer, Main, off
-	WinClose, ahk_group Main
+	WinClose, ahk_pid %MainPID%
 }
 if (CAMain = 1)
 {
@@ -872,27 +873,33 @@ return
 
 
 ExitMacros:
-	GroupAdd, CloseMacros, AutoBottle.ahk
+	GroupAdd, ClosePID, ahk_pid %AutoBottlePID%
 	SetTimer, AutoBottle, off
 	GuiControl,,AutoBottle,0
+	;WinClose, ahk_pid %AutoBottlePID%
 	
-	GroupAdd, CloseMacros, AutoBottle 2k.ahk
+	GroupAdd, ClosePID, ahk_pid %AutoBottle2kPID%
 	SetTimer, AutoBottle2k, off
 	GuiControl,,AutoBottle2k,0
+	;WinClose, ahk_pid %AutoBottle2kPID%
 	
-	GroupAdd, CloseMacros, CheckHP.ahk
+	GroupAdd, ClosePID, ahk_pid %CheckHPPID%
 	SetTimer, CheckHP, off
 	GuiControl,,CheckHP,0
+	;WinClose, ahk_pid %CheckHPPID%
 	
-	GroupAdd, CloseMacros, Main.ahk
+	GroupAdd, ClosePID, ahk_pid %MainPID%
 	SetTimer, Main, off
 	GuiControl,,Main,0
+	;WinClose, ahk_pid %MainPID%
 	
-	GroupAdd, CloseMacros, Bottle.ahk
+	GroupAdd, ClosePID, ahk_pid %BottlePID%
 	SetTimer, ListOfBottle, off
 	GuiControl, Choose, Choice, 1
+	;WinClose, ahk_pid %BottlePID%
 	
-	WinClose, ahk_group CloseMacros
+	WinClose, ahk_group ClosePID
+	
 return
 
 AutoBottle1:

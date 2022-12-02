@@ -52,18 +52,22 @@ if (CheckforUpdates != 0)
 	}
 }
 
+Process, Wait, PaathOfExile.exe, 60
+PoEPID := ErrorLevel
+if not PoEPID
+{
+    MsgBox Процесс PathOfExile не найден, запустите игру а потом скрипт
+	ExitApp
+}
+GroupAdd, POE, ahk_pid %PoEPID%
+WinNotActive()
+
 Status()
 {
 	Gui, Status:Color,lime
 	Gui, Status:-Caption +Toolwindow +AlwaysOnTop +LastFound
 	Gui, Status:Show, X302 Y962 W235 H12 NA
 }
-
-
-Suspend On
-GroupAdd POE, % "Path of Exile"
-WinNotActive()
-Return
 
 WinActive() 
 {

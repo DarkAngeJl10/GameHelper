@@ -1,5 +1,4 @@
 ﻿#SingleInstance Force
-SetTitleMatchMode, 3
 #Include lib\WebIniParse.ahk
 config = %A_WorkingDir%\Data\Settings.ini
 
@@ -50,10 +49,15 @@ chaosrec := 0
 send, {LCtrl down}
 send, {LCtrl up}
 
-GroupAdd POE, % "Path of Exile"
+Process, Wait, PaathOfExile.exe, 60
+PoEPID := ErrorLevel
+if not PoEPID
+{
+    MsgBox Процесс PathOfExile не найден, запустите игру а потом скрипт
+	ExitApp
+}
+GroupAdd, POE, ahk_pid %PoEPID%
 WinNotActive()
-Suspend On
-Return
 
 WinActive() 
 {

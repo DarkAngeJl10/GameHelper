@@ -1,5 +1,4 @@
 ﻿#SingleInstance Force
-SetTitleMatchMode, 3
 #Include lib\WebIniParse.ahk
 global StartLoopCheckHP := 0
 global StartLoopCWDT := 0
@@ -59,6 +58,16 @@ if (CheckforUpdates != 0)
 	}
 }
 
+Process, Wait, PaathOfExile.exe, 60
+PoEPID := ErrorLevel
+if not PoEPID
+{
+    MsgBox Процесс PathOfExile не найден, запустите игру а потом скрипт
+	ExitApp
+}
+GroupAdd, POE, ahk_pid %PoEPID%
+WinNotActive()
+
 Status()
 {
 	Gui, Status:Color,Lime
@@ -74,12 +83,7 @@ StatusCWDT()
 	Gui, StatusCWDT:Show, X20 Y1050 W20 H20 NA
 }
 
-GroupAdd POE, % "Path of Exile"
-WinNotActive()
-Suspend On
-Return
-
-WinActive() 
+WinActive()
 {
 	Suspend Off
 	IniRead, HotkeyCheckHP, %A_WorkingDir%\Data\Settings.ini, CheckHP, Key
@@ -104,7 +108,7 @@ WinActive()
 	}
 }
 
-WinNotActive() 
+WinNotActive()
 {
 	Gui, Status:Hide
 	StartLoopCheckHP := 0

@@ -1,5 +1,4 @@
 #SingleInstance Force
-SetTitleMatchMode, 3
 #Include lib\WebIniParse.ahk
 global StartLoop := 0
 config = %A_WorkingDir%\Data\Settings.ini
@@ -48,19 +47,22 @@ if (CheckforUpdates != 0)
 	}
 }
 
+Process, Wait, PaathOfExile.exe, 60
+PoEPID := ErrorLevel
+if not PoEPID
+{
+    MsgBox Процесс PathOfExile не найден, запустите игру а потом скрипт
+	ExitApp
+}
+GroupAdd, POE, ahk_pid %PoEPID%
+WinNotActive()
+
 Status()
 {
 	Gui, Status:Color,lime
 	Gui, Status:-Caption +Toolwindow +AlwaysOnTop +LastFound
 	Gui, Status:Show, X302 Y962 W235 H12 NA
 }
-
-
-
-GroupAdd POE, % "Path of Exile"
-WinNotActive()
-Suspend On
-Return
 
 WinActive() 
 {
@@ -82,6 +84,7 @@ WinNotActive()
 	Gui, Status:Hide
 	StartLoop := 0
 	SetTimer, Loop, Off
+	SetTimer, Blessing, off
 	Suspend on
 	WinWaitActive ahk_group POE
 	{
@@ -123,6 +126,45 @@ return
 	sleep, 50
 return
 
+;$t::
+{
+	ifWinNotActive ahk_group POE
+	{
+		SetTimer, Blessing, off
+		return
+	}
+	
+	gosub, Blessing
+	
+}
+return
+	
+	
+Blessing:
+	{
+		ifWinNotActive ahk_group POE
+		{
+			return
+		}
+		If (StartLoop = 1)
+		{
+			BlockInput On
+			Send {2}
+			sleep, 100
+			Send {t down}
+			sleep, 200
+			Send {t up}
+			BlockInput Off
+			SetTimer, Blessing, -16000
+		}
+		If (StartLoop = 0)
+		{
+			Send {t}
+			SetTimer, Blessing, Off
+		}
+	}
+return
+
 
 Start:
 	StartLoop := !StartLoop
@@ -140,6 +182,7 @@ Start:
 		}
 		ifWinNotActive ahk_group POE
 		{
+			SetTimer, Blessing, off
 			Return
 		}
 		sleep, 100
@@ -154,6 +197,7 @@ Start:
 				{
 					ifWinNotActive ahk_group POE
 					{
+						SetTimer, Blessing, off
 						Return
 					}
 					Send {1}
@@ -168,6 +212,7 @@ Start:
 				{
 					ifWinNotActive ahk_group POE
 					{
+						SetTimer, Blessing, off
 						Return
 					}
 					Send {2}
@@ -182,6 +227,7 @@ Start:
 				{
 					ifWinNotActive ahk_group POE
 					{
+						SetTimer, Blessing, off
 						Return
 					}
 					Send {3}
@@ -196,6 +242,7 @@ Start:
 				{
 					ifWinNotActive ahk_group POE
 					{
+						SetTimer, Blessing, off
 						Return
 					}
 					Send {4}
@@ -210,6 +257,7 @@ Start:
 				{
 					ifWinNotActive ahk_group POE
 					{
+						SetTimer, Blessing, off
 						Return
 					}
 					Send {5}
