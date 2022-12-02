@@ -49,7 +49,7 @@ chaosrec := 0
 send, {LCtrl down}
 send, {LCtrl up}
 
-Process, Wait, PaathOfExile.exe, 60
+Process, Wait, PathOfExile.exe, 60
 PoEPID := ErrorLevel
 if not PoEPID
 {

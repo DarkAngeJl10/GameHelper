@@ -58,7 +58,7 @@ if (CheckforUpdates != 0)
 	}
 }
 
-Process, Wait, PaathOfExile.exe, 60
+Process, Wait, PathOfExile.exe, 60
 PoEPID := ErrorLevel
 if not PoEPID
 {
