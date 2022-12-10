@@ -55,8 +55,13 @@ if not PoEPID
 	PoEPID := ErrorLevel
 	if not PoEPID
 	{
-		MsgBox Процесс PathOfExile не найден, запустите игру а потом скрипт
-		ExitApp
+		Process, Wait, PathOfExileSteam.exe, 0
+		PoEPID := ErrorLevel
+		if not PoEPID
+		{
+			MsgBox Процесс PathOfExile не найден, запустите игру а потом скрипт
+			ExitApp
+		}
 	}
 }
 GroupAdd, POE, ahk_pid %PoEPID%
