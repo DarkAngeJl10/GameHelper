@@ -58,12 +58,17 @@ if (CheckforUpdates != 0)
 	}
 }
 
-Process, Wait, PathOfExile.exe, 60
+Process, Wait, PathOfExile_x64.exe, 0
 PoEPID := ErrorLevel
 if not PoEPID
 {
-    MsgBox Процесс PathOfExile не найден, запустите игру а потом скрипт
-	ExitApp
+	Process, Wait, PathOfExile.exe, 0
+	PoEPID := ErrorLevel
+	if not PoEPID
+	{
+		MsgBox Процесс PathOfExile не найден, запустите игру а потом скрипт
+		ExitApp
+	}
 }
 GroupAdd, POE, ahk_pid %PoEPID%
 WinNotActive()
