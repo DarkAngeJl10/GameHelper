@@ -358,7 +358,7 @@ capslock::
 	;	send, {LButton}
 	;	mousemove, %Xm%, %Ym%, 0
 		send, ^f
-		clipboard = weapon
+		clipboard = "class: wand|bow|dagger|staff|staves|sword"
 		sleep, 50
 		send, ^v
 	}
