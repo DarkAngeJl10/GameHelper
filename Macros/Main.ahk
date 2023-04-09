@@ -310,42 +310,56 @@ capslock::
 	if (chaosrec = 1)
 	{
 		send, ^f
-		clipboard = ring
+		clipboard = "class: ring"
 		sleep, 50
 		send, ^v
+		PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 25, Fast
+		if ( ErrorLevel > 0 )
+			{
+			msgbox, Rings not found
+			return
+			}
+		else
+			{
+			mousemove, %PxItem%, %PyItem%, 0
+			sleep, 100
+			click
+			Return
+			}
+		
 	}
 	if (chaosrec = 2)
 	{
 		send, ^f
-		clipboard = amulet
+		clipboard = "class: amulet"
 		sleep, 50
 		send, ^v
 	}
 	if (chaosrec = 3)
 	{
 		send, ^f
-		clipboard = gloves
+		clipboard = "class: gloves"
 		sleep, 50
 		send, ^v
 	}
 	if (chaosrec = 4)
 	{
 		send, ^f
-		clipboard = boots
+		clipboard = "class: boots"
 		sleep, 50
 		send, ^v
 	}
 	if (chaosrec = 5)
 	{
 		send, ^f
-		clipboard = belt
+		clipboard = "class: belt"
 		sleep, 50
 		send, ^v
 	}
 	if (chaosrec = 6)
 	{
 		send, ^f
-		clipboard = helmet
+		clipboard = "class: helmet"
 		sleep, 50
 		send, ^v
 	}
@@ -358,11 +372,24 @@ capslock::
 	;	send, {LButton}
 	;	mousemove, %Xm%, %Ym%, 0
 		send, ^f
-		clipboard = "class: wand|bow|dagger|staff|staves|sword"
+		clipboard = "class: wand|dagger|sceptre"
 		sleep, 50
 		send, ^v
 	}
 	if (chaosrec = 8)
+	{
+	;	mousegetpos, Xm, Ym
+	;	sleep, 50
+	;	mousemove, 192, 110, 0
+	;	sleep, 50
+	;	send, {LButton}
+	;	mousemove, %Xm%, %Ym%, 0
+		send, ^f
+		clipboard = "class: bow|staff|staves|sword|axe|maces"
+		sleep, 50
+		send, ^v
+	}
+	if (chaosrec = 9)
 	{
 	;	mousegetpos, Xm, Ym
 	;	sleep, 50
@@ -371,11 +398,11 @@ capslock::
 	;	send, {LButton}
 	;	mousemove, %Xm%, %Ym%, 0
 		send, ^f
-		clipboard = body
+		clipboard = "class: body"
 		sleep, 50
 		send, ^v
 	}
-	if (chaosrec = 9)
+	if (chaosrec = 10)
 	{
 	;	mousegetpos, Xm, Ym
 	;	sleep, 50
