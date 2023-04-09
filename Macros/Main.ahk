@@ -182,7 +182,6 @@ ChaosRecipes()
 	}
 }
 
-
 SellingChaosRecipe() 
 {
 	loop,
@@ -214,6 +213,16 @@ SellingChaosRecipe()
 		mousemove, 381, 821
 		t += 1	
 	}
+}
+
+TakingItem()
+{
+	sleep, 25
+	send ^{LButton}
+	send, ^f
+	send {Del}
+	mousemove, 67, 108, 0
+	send {LButton}
 }
 
 UpdateFilter() 
@@ -306,102 +315,897 @@ return
 	
 
 capslock:: 
-	chaosrec += 1
-	if (chaosrec = 1)
+	chaosrec := 1
+	chaosset := 0
+	
+; ------------------------------------ CHAOS SET SLOT ITEM ------------------------------------
+	
+	if (chaosrec = 99)
+	{
+		send, ^f
+		clipboard = "rare"|"item level: ([6][0-9]|[7][0-4])"
+		send, ^v
+		sleep, 125
+		PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+		if ( ErrorLevel > 0 )
+		{
+			mousemove, 127, 109, 0
+			send {LButton}
+			sleep, 25
+			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+			if ( ErrorLevel > 0 )
+			{
+				tooltip, Chaos Item lvl 60-74 not found
+				SetTimer, RemoveToolTip, -2500
+				return
+			}
+			else
+			{
+				PxItem += 10
+				PyItem += 10
+				mousemove, %PxItem%, %PyItem%, 0
+				TakingItem()
+				return
+			}
+		}
+		else
+		{
+			PxItem += 10
+			PyItem += 10
+			mousemove, %PxItem%, %PyItem%, 0
+			TakingItem()
+			return
+		}
+	}
+	
+; ------------------------------------ RING ------------------------------------
+
+	if (chaosset = 0)
+	{
+		if (chaosrec = 1)
+		{
+			send, ^f
+			clipboard = "class: ring" "item level: ([6][0-9]|[7][0-4])"
+			send, ^v
+			sleep, 350
+			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+			if ( ErrorLevel > 0 )
+			{
+				mousemove, 127, 109, 0
+				send {LButton}
+				sleep, 25
+				PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+				if ( ErrorLevel > 0 )
+				{
+				;	tooltip, Chaos set Ring not found, 248, 60
+					SetTimer, RemoveToolTip, -5000
+					mousemove, 67, 108, 0
+					send {LButton}
+					anysetrec := 1
+				}
+				else
+				{
+					PxItem += 10
+					PyItem += 10
+					mousemove, %PxItem%, %PyItem%, 0
+					TakingItem()
+					anysetrec := 2
+					chaosset := 1
+				}
+			}
+			else
+			{
+				PxItem += 10
+				PyItem += 10
+				mousemove, %PxItem%, %PyItem%, 0
+				TakingItem()
+				anysetrec := 2
+				chaosset := 1
+			}
+		}
+	}
+
+	
+	if (anysetrec = 1)
 	{
 		send, ^f
 		clipboard = "class: ring"
-		sleep, 50
 		send, ^v
-		PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 25, Fast
+		sleep, 350
+		PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 		if ( ErrorLevel > 0 )
+		{
+			mousemove, 127, 109, 0
+			send {LButton}
+			sleep, 25
+			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+			if ( ErrorLevel > 0 )
 			{
-			msgbox, Rings not found
-			return
+				msgbox, Ring not found, 248, 60
+				SetTimer, RemoveToolTip, -5000
+				mousemove, 67, 108, 0
+				send {LButton}
+				return
 			}
+			else
+			{
+				PxItem += 10
+				PyItem += 10
+				mousemove, %PxItem%, %PyItem%, 0
+				TakingItem()
+				if (chaosset = 1)
+				{
+					anysetrec := 2
+				}
+				else
+				{
+					chaosrec := 2 
+				}
+			}
+		}
 		else
-			{
+		{
+			PxItem += 10
+			PyItem += 10
 			mousemove, %PxItem%, %PyItem%, 0
-			sleep, 100
-			click
-			Return
+			TakingItem()
+			if (chaosset = 1)
+			{
+				anysetrec := 2
 			}
-		
+			else
+			{
+				chaosrec := 2
+			}
+		}
 	}
-	if (chaosrec = 2)
+
+; ------------------------------------ AMULET ------------------------------------
+	if (chaosset = 0)
+	{
+		if (chaosrec = 2)
+		{
+			send, ^f
+			clipboard = "class: amulet" "item level: ([6][0-9]|[7][0-4])"
+			send, ^v
+			sleep, 350
+			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+			if ( ErrorLevel > 0 )
+			{
+				mousemove, 127, 109, 0
+				send {LButton}
+				sleep, 25
+				PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+				if ( ErrorLevel > 0 )
+				{
+				;	tooltip, Chaos set Amulet not found, 248, 60
+					SetTimer, RemoveToolTip, -5000
+					mousemove, 67, 108, 0
+					send {LButton}
+					anysetrec := 2
+				}
+				else
+				{
+					PxItem += 10
+					PyItem += 10
+					mousemove, %PxItem%, %PyItem%, 0
+					TakingItem()
+					anysetrec := 3
+					chaosset := 1
+				}
+			}
+			else
+			{
+				PxItem += 10
+				PyItem += 10
+				mousemove, %PxItem%, %PyItem%, 0
+				TakingItem()
+				anysetrec := 3
+				chaosset := 1
+			}
+		}
+	}
+	
+	
+	if (anysetrec = 2)
 	{
 		send, ^f
 		clipboard = "class: amulet"
-		sleep, 50
 		send, ^v
+		sleep, 350
+		PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+		if ( ErrorLevel > 0 )
+		{
+			mousemove, 127, 109, 0
+			send {LButton}
+			sleep, 25
+			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+			if ( ErrorLevel > 0 )
+			{
+				msgbox, Amulet not found, 248, 60
+				SetTimer, RemoveToolTip, -5000
+				mousemove, 67, 108, 0
+				send {LButton}
+				return
+			}
+			else
+			{
+				PxItem += 10
+				PyItem += 10
+				mousemove, %PxItem%, %PyItem%, 0
+				TakingItem()
+				if (chaosset = 1)
+				{
+					anysetrec := 3
+				}
+				else
+				{
+					chaosrec := 3
+				}
+			}
+		}
+		else
+		{
+			PxItem += 10
+			PyItem += 10
+			mousemove, %PxItem%, %PyItem%, 0
+			TakingItem()
+			if (chaosset = 1)
+			{
+				anysetrec := 3
+			}
+			else
+			{
+				chaosrec := 3
+			}
+		}
 	}
-	if (chaosrec = 3)
+	
+; ------------------------------------ SECOND RING ------------------------------------
+	
+	if (chaosset = 0)
+	{
+		if (chaosrec = 3)
+		{
+			send, ^f
+			clipboard = "class: ring" "item level: ([6][0-9]|[7][0-4])"
+			send, ^v
+			sleep, 350
+			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+			if ( ErrorLevel > 0 )
+			{
+				mousemove, 127, 109, 0
+				send {LButton}
+				sleep, 25
+				PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+				if ( ErrorLevel > 0 )
+				{
+				;	msgbox, Second Chaos set Ring not found, 248, 60
+					SetTimer, RemoveToolTip, -5000
+					mousemove, 67, 108, 0
+					send {LButton}
+					anysetrec := 3
+				}
+				else
+				{
+					PxItem += 10
+					PyItem += 10
+					mousemove, %PxItem%, %PyItem%, 0
+					TakingItem()
+					anysetrec := 4
+					chaosset := 1
+				}
+			}
+			else
+			{
+				PxItem += 10
+				PyItem += 10
+				mousemove, %PxItem%, %PyItem%, 0
+				TakingItem()
+				anysetrec := 4
+				chaosset := 1
+			}
+		}
+	}
+	
+	
+	if (anysetrec = 3)
+	{
+		send, ^f
+		clipboard = "class: ring"
+		send, ^v
+		sleep, 350
+		PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+		if ( ErrorLevel > 0 )
+		{
+			mousemove, 127, 109, 0
+			send {LButton}
+			sleep, 25
+			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+			if ( ErrorLevel > 0 )
+			{
+				msgbox, Second Ring not found, 248, 60
+				SetTimer, RemoveToolTip, -5000
+				mousemove, 67, 108, 0
+				send {LButton}
+				return
+			}
+			else
+			{
+				PxItem += 10
+				PyItem += 10
+				mousemove, %PxItem%, %PyItem%, 0
+				TakingItem()
+				if (chaosset = 1)
+				{
+					anysetrec := 4
+				}
+				else
+				{
+					chaosrec := 4
+				}
+			}
+		}
+		else
+		{
+			PxItem += 10
+			PyItem += 10
+			mousemove, %PxItem%, %PyItem%, 0
+			TakingItem()
+			if (chaosset = 1)
+			{
+				anysetrec := 4
+			}
+			else
+			{
+				chaosrec := 4
+			}
+		}
+	}
+		
+; ------------------------------------ GLOVES ------------------------------------
+	
+	if (chaosset = 0)
+	{
+		if (chaosrec = 4)
+		{
+			send, ^f
+			clipboard = "class: gloves" "item level: ([6][0-9]|[7][0-4])"
+			send, ^v
+			sleep, 350
+			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+			if ( ErrorLevel > 0 )
+			{
+				mousemove, 127, 109, 0
+				send {LButton}
+				sleep, 25
+				PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+				if ( ErrorLevel > 0 )
+				{
+				;	msgbox, Gloves not found, 248, 60
+					SetTimer, RemoveToolTip, -5000
+					mousemove, 67, 108, 0
+					send {LButton}
+					anysetrec := 4
+				}
+				else
+				{
+					PxItem += 10
+					PyItem += 10
+					mousemove, %PxItem%, %PyItem%, 0
+					TakingItem()
+					anysetrec := 5
+					chaosset := 1
+				}
+			}
+			else
+			{
+				PxItem += 10
+				PyItem += 10
+				mousemove, %PxItem%, %PyItem%, 0
+				TakingItem()
+				anysetrec := 5
+				chaosset := 1
+			}
+		}
+	}
+	
+	
+	if (anysetrec = 4)
 	{
 		send, ^f
 		clipboard = "class: gloves"
-		sleep, 50
 		send, ^v
+		sleep, 350
+		PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+		if ( ErrorLevel > 0 )
+		{
+			mousemove, 127, 109, 0
+			send {LButton}
+			sleep, 25
+			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+			if ( ErrorLevel > 0 )
+			{
+				msgbox, Gloves not found, 248, 60
+				SetTimer, RemoveToolTip, -5000
+				mousemove, 67, 108, 0
+				send {LButton}
+				return
+			}
+			else
+			{
+				PxItem += 10
+				PyItem += 10
+				mousemove, %PxItem%, %PyItem%, 0
+				TakingItem()
+				if (chaosset = 1)
+				{
+					anysetrec := 5
+				}
+				else
+				{
+					chaosrec := 5
+				}
+			}
+		}
+		else
+		{
+			PxItem += 10
+			PyItem += 10
+			mousemove, %PxItem%, %PyItem%, 0
+			TakingItem()
+			if (chaosset = 1)
+			{
+				anysetrec := 5
+			}
+			else
+			{
+				chaosrec := 5
+			}
+		}
 	}
-	if (chaosrec = 4)
+	
+; ------------------------------------ BOOTS ------------------------------------
+	
+	if (chaosset = 0)
+	{
+		if (chaosrec = 5)
+		{
+			send, ^f
+			clipboard = "class: boots" "item level: ([6][0-9]|[7][0-4])"
+			send, ^v
+			sleep, 350
+			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+			if ( ErrorLevel > 0 )
+			{
+				mousemove, 127, 109, 0
+				send {LButton}
+				sleep, 25
+				PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+				if ( ErrorLevel > 0 )
+				{
+				;	msgbox, Boots not found, 248, 60
+					SetTimer, RemoveToolTip, -5000
+					mousemove, 67, 108, 0
+					send {LButton}
+					anysetrec := 5
+				}
+				else
+				{
+					PxItem += 10
+					PyItem += 10
+					mousemove, %PxItem%, %PyItem%, 0
+					TakingItem()
+					anysetrec := 6
+					chaosset := 1
+				}
+			}
+			else
+			{
+				PxItem += 10
+				PyItem += 10
+				mousemove, %PxItem%, %PyItem%, 0
+				TakingItem()
+				anysetrec := 6
+				chaosset := 1
+			}
+		}
+	}
+	
+	
+	
+	
+	if (anysetrec = 5)
 	{
 		send, ^f
 		clipboard = "class: boots"
-		sleep, 50
 		send, ^v
+		sleep, 350
+		PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+		if ( ErrorLevel > 0 )
+		{
+			mousemove, 127, 109, 0
+			send {LButton}
+			sleep, 25
+			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+			if ( ErrorLevel > 0 )
+			{
+				msgbox, Boots not found, 248, 60
+				SetTimer, RemoveToolTip, -5000
+				mousemove, 67, 108, 0
+				send {LButton}
+				return
+			}
+			else
+			{
+				PxItem += 10
+				PyItem += 10
+				mousemove, %PxItem%, %PyItem%, 0
+				TakingItem()
+				if (chaosset = 1)
+				{
+					anysetrec := 6
+				}
+				else
+				{
+					chaosrec := 6
+				}
+			}
+		}
+		else
+		{
+			PxItem += 10
+			PyItem += 10
+			mousemove, %PxItem%, %PyItem%, 0
+			TakingItem()
+			if (chaosset = 1)
+			{
+				anysetrec := 6
+			}
+			else
+			{
+				chaosrec := 6
+			}
+		}
 	}
-	if (chaosrec = 5)
+	
+; ------------------------------------ BELT ------------------------------------
+	
+	if (chaosset = 0)
+	{
+		if (chaosrec = 6)
+		{
+			send, ^f
+			clipboard = "class: belt" "item level: ([6][0-9]|[7][0-4])"
+			send, ^v
+			sleep, 350
+			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+			if ( ErrorLevel > 0 )
+			{
+				mousemove, 127, 109, 0
+				send {LButton}
+				sleep, 25
+				PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+				if ( ErrorLevel > 0 )
+				{
+				;	msgbox, Belt not found, 248, 60
+					SetTimer, RemoveToolTip, -5000
+					mousemove, 67, 108, 0
+					send {LButton}
+					anysetrec := 6
+				}
+				else
+				{
+					PxItem += 10
+					PyItem += 10
+					mousemove, %PxItem%, %PyItem%, 0
+					TakingItem()
+					anysetrec := 7
+					chaosset := 1
+				}
+			}
+			else
+			{
+				PxItem += 10
+				PyItem += 10
+				mousemove, %PxItem%, %PyItem%, 0
+				TakingItem()
+				anysetrec := 7
+				chaosset := 1
+			}
+		}
+	}
+	
+	
+	if (anysetrec = 6)
 	{
 		send, ^f
 		clipboard = "class: belt"
-		sleep, 50
 		send, ^v
+		sleep, 350
+		PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+		if ( ErrorLevel > 0 )
+		{
+			mousemove, 127, 109, 0
+			send {LButton}
+			sleep, 25
+			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+			if ( ErrorLevel > 0 )
+			{
+				msgbox, Belt not found, 248, 60
+				SetTimer, RemoveToolTip, -5000
+				mousemove, 67, 108, 0
+				send {LButton}
+				return
+			}
+			else
+			{
+				PxItem += 10
+				PyItem += 10
+				mousemove, %PxItem%, %PyItem%, 0
+				TakingItem()
+				if (chaosset = 1)
+				{
+					anysetrec := 7
+				}
+				else
+				{
+					chaosrec := 7
+				}
+			}
+		}
+		else
+		{
+			PxItem += 10
+			PyItem += 10
+			mousemove, %PxItem%, %PyItem%, 0
+			TakingItem()
+			if (chaosset = 1)
+			{
+				anysetrec := 7
+			}
+			else
+			{
+				chaosrec := 7
+			}
+		}
 	}
-	if (chaosrec = 6)
+	
+; ------------------------------------ HELMET ------------------------------------
+	
+	if (chaosset = 0)
+	{
+		if (chaosrec = 7)
+		{
+			send, ^f
+			clipboard = "class: helmet" "item level: ([6][0-9]|[7][0-4])"
+			send, ^v
+			sleep, 350
+			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+			if ( ErrorLevel > 0 )
+			{
+				mousemove, 127, 109, 0
+				send {LButton}
+				sleep, 25
+				PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+				if ( ErrorLevel > 0 )
+				{
+				;	msgbox, Helmet not found, 248, 60
+					SetTimer, RemoveToolTip, -5000
+					mousemove, 67, 108, 0
+					send {LButton}
+					anysetrec := 7
+				}
+				else
+				{
+					PxItem += 10
+					PyItem += 10
+					mousemove, %PxItem%, %PyItem%, 0
+					TakingItem()
+					anysetrec := 8
+					chaosset := 1
+				}
+			}
+			else
+			{
+				PxItem += 10
+				PyItem += 10
+				mousemove, %PxItem%, %PyItem%, 0
+				TakingItem()
+				anysetrec := 8
+				chaosset := 1
+			}
+		}
+	}
+	
+	
+	if (anysetrec = 7)
 	{
 		send, ^f
 		clipboard = "class: helmet"
-		sleep, 50
 		send, ^v
+		sleep, 350
+		PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+		if ( ErrorLevel > 0 )
+		{
+			mousemove, 127, 109, 0
+			send {LButton}
+			sleep, 25
+			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+			if ( ErrorLevel > 0 )
+			{
+				msgbox, Helmet not found, 248, 60
+				SetTimer, RemoveToolTip, -5000
+				mousemove, 67, 108, 0
+				send {LButton}
+				return
+			}
+			else
+			{
+				PxItem += 10
+				PyItem += 10
+				mousemove, %PxItem%, %PyItem%, 0
+				TakingItem()
+				if (chaosset = 1)
+				{
+					anysetrec := 8
+				}
+				else
+				{
+					chaosrec := 8
+				}
+			}
+		}
+		else
+		{
+			PxItem += 10
+			PyItem += 10
+			mousemove, %PxItem%, %PyItem%, 0
+			TakingItem()
+			if (chaosset = 1)
+			{
+				anysetrec := 8
+			}
+			else
+			{
+				chaosrec := 8
+			}
+		}
 	}
-	if (chaosrec = 7)
+	
+; ------------------------------------ BODY ------------------------------------
+	
+	if (chaosset = 0)
 	{
-	;	mousegetpos, Xm, Ym
-	;	sleep, 50
-	;	mousemove, 192, 110, 0
-	;	sleep, 50
-	;	send, {LButton}
-	;	mousemove, %Xm%, %Ym%, 0
-		send, ^f
-		clipboard = "class: wand|dagger|sceptre"
-		sleep, 50
-		send, ^v
+		if (chaosrec = 8)
+		{
+			send, ^f
+			clipboard = "class: body" "item level: ([6][0-9]|[7][0-4])"
+			send, ^v
+			sleep, 350
+			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+			if ( ErrorLevel > 0 )
+			{
+				mousemove, 127, 109, 0
+				send {LButton}
+				sleep, 25
+				PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+				if ( ErrorLevel > 0 )
+				{
+				;	msgbox, Body Armor not found, 248, 60
+					SetTimer, RemoveToolTip, -5000
+					mousemove, 67, 108, 0
+					send {LButton}
+					anysetrec := 8
+				}
+				else
+				{
+					PxItem += 10
+					PyItem += 10
+					mousemove, %PxItem%, %PyItem%, 0
+					TakingItem()
+					chaosrec := 9
+					chaosset := 1
+				}
+			}
+			else
+			{
+				PxItem += 10
+				PyItem += 10
+				mousemove, %PxItem%, %PyItem%, 0
+				TakingItem()
+				chaosrec := 9
+				chaosset := 1
+			}
+		}
 	}
-	if (chaosrec = 8)
+	
+	
+	if (anysetrec = 8)
 	{
-	;	mousegetpos, Xm, Ym
-	;	sleep, 50
-	;	mousemove, 192, 110, 0
-	;	sleep, 50
-	;	send, {LButton}
-	;	mousemove, %Xm%, %Ym%, 0
-		send, ^f
-		clipboard = "class: bow|staff|staves|sword|axe|maces"
-		sleep, 50
-		send, ^v
-	}
-	if (chaosrec = 9)
-	{
-	;	mousegetpos, Xm, Ym
-	;	sleep, 50
-	;	mousemove, 290, 111, 0
-	;	sleep, 50
-	;	send, {LButton}
-	;	mousemove, %Xm%, %Ym%, 0
 		send, ^f
 		clipboard = "class: body"
-		sleep, 50
 		send, ^v
+		sleep, 350
+		PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+		if ( ErrorLevel > 0 )
+		{
+			mousemove, 127, 109, 0
+			send {LButton}
+			sleep, 25
+			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+			if ( ErrorLevel > 0 )
+			{
+				msgbox, Body Armor not found, 248, 60
+				SetTimer, RemoveToolTip, -5000
+				mousemove, 67, 108, 0
+				send {LButton}
+				return
+			}
+			else
+			{
+				PxItem += 10
+				PyItem += 10
+				mousemove, %PxItem%, %PyItem%, 0
+				TakingItem()
+				chaosrec := 9
+			}
+		}
+		else
+		{
+			PxItem += 10
+			PyItem += 10
+			mousemove, %PxItem%, %PyItem%, 0
+			TakingItem()
+			if (chaosset = 1)
+			chaosrec := 9
+		}
 	}
+	
+; ------------------------------------ TWO HAND ------------------------------------
+	
+	if (chaosrec = 9)
+	{
+		send, ^f
+		clipboard = "class: bow|staff|staves|sword|axe|maces"
+		send, ^v
+		sleep, 350
+		PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+		if ( ErrorLevel > 0 )
+		{
+			mousemove, 127, 109, 0
+			send {LButton}
+			sleep, 25
+			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
+			if ( ErrorLevel > 0 )
+			{
+			;	msgbox, Two Hand Weapon not found, 248, 60
+				SetTimer, RemoveToolTip, -5000
+				mousemove, 67, 108, 0
+				send {LButton}
+				return
+			}
+			else
+			{
+				PxItem += 10
+				PyItem += 10
+				mousemove, %PxItem%, %PyItem%, 0
+				TakingItem()
+				chaosrec := 10
+			}
+		}
+		else
+		{
+			PxItem += 10
+			PyItem += 10
+			mousemove, %PxItem%, %PyItem%, 0
+			TakingItem()
+			chaosrec := 10
+		}
+	}
+
+; ------------------------------------ CHAOS SET COMPLETE ------------------------------------
+	
 	if (chaosrec = 10)
 	{
 	;	mousegetpos, Xm, Ym
@@ -436,7 +1240,6 @@ return
 	send, {Enter}
 	UpdateFilter()
 return
-
 
 lWin::						;Спам CTRL+LMouseClick для быстрого перемещения валюты/вещей
 <^lWin::					;Спам CTRL+LMouseClick для быстрого перемещения валюты/вещей
