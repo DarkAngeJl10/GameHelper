@@ -1,4 +1,4 @@
-#SingleInstance Force
+﻿#SingleInstance Force
 #Include lib\WebIniParse.ahk
 config = %A_WorkingDir%\Data\Settings.ini
 
