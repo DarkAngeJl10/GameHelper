@@ -1,4 +1,4 @@
-﻿#SingleInstance Force
+#SingleInstance Force
 #Include lib\WebIniParse.ahk
 config = %A_WorkingDir%\Data\Settings.ini
 
@@ -1217,7 +1217,7 @@ capslock::
 		send, ^f
 		send, ^a
 		send, {Backspace}
-		tooltip, Хаус сет собран
+		tooltip, Chaos Set Taken
 		chaosrec := 0
 		SetTimer, RemoveToolTip, -2500
 		return
