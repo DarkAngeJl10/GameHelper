@@ -213,7 +213,11 @@ StartCheckHP:
 				{
 					Return
 				}
-				Send {1}
+				PixelSearch, Px1, Py1, 316, 1055, 340, 1058, 0x0D195A, 5, Fast
+				if (ErrorLevel = 0)
+				{
+					send {1}
+				}
 				sleep, 100
 			}
 		}
@@ -288,7 +292,7 @@ if (ActivityCWDT = 1)
 				{
 					Return
 				}
-				Send {t}
+				Send {E}
 				sleep, 100
 			}
 		}

@@ -18,6 +18,7 @@ IniRead, AutoBottle2, %config%, SelectAutoBootle, Bottle2
 IniRead, AutoBottle3, %config%, SelectAutoBootle, Bottle3
 IniRead, AutoBottle4, %config%, SelectAutoBootle, Bottle4
 IniRead, AutoBottle5, %config%, SelectAutoBootle, Bottle5
+IniRead, IsManaAutoBottle2, %config%, SelectAutoBootle, ManaBottle2
 IniRead, Bottle15, %config%, SelectBootle, Bottle1-5
 IniRead, Bottle25, %config%, SelectBootle, Bottle2-5
 IniRead, Bottle35, %config%, SelectBootle, Bottle3-5
@@ -47,7 +48,6 @@ IfNotExist,  %A_WorkingDir%\Macros
 	FileCreateDir,  %A_WorkingDir%\Macros
 }
 
-
 if (AutoBottle1 == "ERROR" or AutoBottle1 == "")
 {
 	IniWrite, 0, %config%, SelectAutoBootle, Bottle1
@@ -67,6 +67,10 @@ if (AutoBottle4 == "ERROR" or AutoBottle4 == "")
 if (AutoBottle5 == "ERROR" or AutoBottle5 == "")
 {
 	IniWrite, 0, %config%, SelectAutoBootle, Bottle5
+}
+if (IsManaAutoBottle2 == "ERROR" or IsManaAutoBottle2 == "")
+{
+	IniWrite, 0, %config%, SelectAutoBootle, ManaBottle2
 }
 
 
@@ -234,6 +238,7 @@ SettingsAutoBottle:
 	IniRead, AutoBottle3, %config%, SelectAutoBootle, Bottle3
 	IniRead, AutoBottle4, %config%, SelectAutoBootle, Bottle4
 	IniRead, AutoBottle5, %config%, SelectAutoBootle, Bottle5
+	IniRead, IsManaAutoBottle2, %config%, SelectAutoBootle, ManaBottle2
 	IniRead, AutoBottleKey, %config%, AutoBottle, Key
 	Gui, 2:Destroy
 	Gui, 3:Add, Text,			x10 y10, 	Выберите какие бутылки
@@ -241,6 +246,7 @@ SettingsAutoBottle:
 	
 	Gui, 3:Add, Checkbox,		x10 y40 	gAutoBottle1 Checked%AutoBottle1%, 	1 Бутылка
 	Gui, 3:Add, Checkbox,		x10 y70 	gAutoBottle2 Checked%AutoBottle2%, 	2 Бутылка
+	Gui, 3:Add, Checkbox,		x90 y70 	gIsManaAutoBottle2 Checked%IsManaAutoBottle2%, 	Мана Бутылка?
 	Gui, 3:Add, Checkbox,		x10 y100 	gAutoBottle3 Checked%AutoBottle3%, 	3 Бутылка
 	Gui, 3:Add, Checkbox,		x10 y130 	gAutoBottle4 Checked%AutoBottle4%, 	4 Бутылка
 	Gui, 3:Add, Checkbox,		x10 y160 	gAutoBottle5 Checked%AutoBottle5%, 	5 Бутылка
@@ -930,7 +936,7 @@ else
 return
 
 AutoBottle3:
-ControlGet, AutoBottle3, Checked , , Button3,
+ControlGet, AutoBottle3, Checked , , Button4,
 if (AutoBottle3 != 0)
 {
 	IniWrite, 1, %config%, SelectAutoBootle, Bottle3
@@ -942,7 +948,7 @@ else
 return
 
 AutoBottle4:
-ControlGet, AutoBottle4, Checked , , Button4,
+ControlGet, AutoBottle4, Checked , , Button5,
 if (AutoBottle4 != 0)
 {
 	IniWrite, 1, %config%, SelectAutoBootle, Bottle4
@@ -954,7 +960,7 @@ else
 return
 
 AutoBottle5:
-ControlGet, AutoBottle5, Checked , , Button5,
+ControlGet, AutoBottle5, Checked , , Button6,
 if (AutoBottle5 != 0)
 {
 	IniWrite, 1, %config%, SelectAutoBootle, Bottle5
@@ -962,6 +968,18 @@ if (AutoBottle5 != 0)
 else
 {
 	IniWrite, 0, %config%, SelectAutoBootle, Bottle5
+}
+return
+
+IsManaAutoBottle2:
+ControlGet, IsManaAutoBottle2, Checked , , Button3,
+if (IsManaAutoBottle2 != 0)
+{
+	IniWrite, 1, %config%, SelectAutoBootle, ManaBottle2
+}
+else
+{
+	IniWrite, 0, %config%, SelectAutoBootle, ManaBottle2
 }
 return
 

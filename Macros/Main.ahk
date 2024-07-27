@@ -1,4 +1,4 @@
-#SingleInstance Force
+﻿#SingleInstance Force
 #Include lib\WebIniParse.ahk
 config = %A_WorkingDir%\Data\Settings.ini
 
@@ -182,47 +182,81 @@ ChaosRecipes()
 	}
 }
 
+;F6::
+ MouseGetPos, MouseX, MouseY
+ PixelGetColor, color, %MouseX%,%MouseY%
+ Clipboard := color
+ ;msgbox color , %MouseX%,%MouseY%
+return
+
+;F7::
+ MouseGetPos, MouseX, MouseY
+ PixelGetColor, color, %MouseX%,%MouseY%
+ Clipboard = %MouseX%, %MouseY%
+ ;msgbox color , %MouseX%,%MouseY%
+return
+
+;F8::
+PixelGetColor, test, 325, 1056
+Clipboard := test
+return
+
+;F9::
+{
+	PixelSearch, Px2, Py2, 355, 1065, 395, 1075, 0x99D7F9, 0, Fast
+	if (ErrorLevel != 0)
+	{
+		ifWinNotActive ahk_group POE
+		{
+			;SetTimer, Blessing, off
+			Return
+		}
+		PixelSearch, Px1, Py1, 316, 1055, 340, 1058, 0x0D195A, 5, Fast
+		if (ErrorLevel = 0)
+		{
+			send {1}
+		}
+	}
+}
+return
+
 SellingChaosRecipe() 
 {
-	loop,
-	{
-		if (t >= 1)
-		{
-			return
-		}
-		mousemove, 1321, 664
-		send <^{LButton}
-		mousemove, 1400, 665
-		send <^{LButton}
-		mousemove, 1454, 668
-		send <^{LButton}
-		mousemove, 1530, 640
-		send <^{LButton}
-		mousemove, 1528, 719
-		send <^{LButton}
-		mousemove, 1559, 772
-		send <^{LButton}
-		mousemove, 1506, 764
-		send <^{LButton}
-		mousemove, 1508, 829
-		send <^{LButton}
-		mousemove, 1431, 800
-		send <^{LButton}
-		mousemove, 1324, 795
-		send <^{LButton}
-		mousemove, 381, 821
-		t += 1	
-	}
+	mousemove, 1293, 607, 0
+	send ^{LButton}
+	mousemove, 1295, 664, 0
+	send ^{LButton}
+	mousemove, 1294, 715, 0
+	send ^{LButton}
+	mousemove, 1293, 766, 0
+	send ^{LButton}
+	mousemove, 1340, 600, 0
+	send ^{LButton}
+	mousemove, 1339, 716, 0
+	send ^{LButton}
+	mousemove, 1397, 767, 0
+	send ^{LButton}
+	mousemove, 1446, 605, 0
+	send ^{LButton}
+	mousemove, 1557, 608, 0
+	send ^{LButton}
+	mousemove, 410, 864, 0
 }
 
 TakingItem()
 {
 	sleep, 25
 	send ^{LButton}
-	send, ^f
-	send {Del}
+	sleep, 25
+	send ^{F}
+	sleep, 25
+	send {del}
+	sleep, 25
 	mousemove, 67, 108, 0
-	send {LButton}
+	send, {LButton}
+	sleep, 25
+	mousemove, 13, 8, 0
+	sleep, 25
 }
 
 UpdateFilter() 
@@ -234,11 +268,9 @@ UpdateFilter()
 	clipboard = %clipboardBuffer%
 }
 
-
 RemoveToolTip:
 	ToolTip
 return
-
 
 ;Capslock:: 																					;#Selling Chaos Sets																		
 	mousegetpos, XSaveMouse, YSaveMouse
@@ -312,7 +344,9 @@ AnyMine:
 	sleep, 50
 return
 	
-	
+F1::
+SellingChaosRecipe()		
+return
 
 capslock:: 
 	chaosrec := 1
@@ -322,9 +356,9 @@ capslock::
 	
 	if (chaosrec = 99)
 	{
-		send, ^f
+		send, ^{f}
 		clipboard = "rare"|"item level: ([6][0-9]|[7][0-4])"
-		send, ^v
+		send, ^{v}
 		sleep, 125
 		PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 		if ( ErrorLevel > 0 )
@@ -364,9 +398,10 @@ capslock::
 	{
 		if (chaosrec = 1)
 		{
-			send, ^f
 			clipboard = "class: ring" "item level: ([6][0-9]|[7][0-4])"
-			send, ^v
+			send, ^{f}
+			sleep, 50
+			send, ^{v}
 			sleep, 350
 			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 			if ( ErrorLevel > 0 )
@@ -380,7 +415,7 @@ capslock::
 				;	tooltip, Chaos set Ring not found, 248, 60
 					SetTimer, RemoveToolTip, -5000
 					mousemove, 67, 108, 0
-					send {LButton}
+					send, {LButton}
 					anysetrec := 1
 				}
 				else
@@ -408,16 +443,17 @@ capslock::
 	
 	if (anysetrec = 1)
 	{
-		send, ^f
 		clipboard = "class: ring"
-		send, ^v
+		send, ^{f}
+		sleep, 50
+		send, ^{v}
 		sleep, 350
 		PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 		if ( ErrorLevel > 0 )
 		{
 			mousemove, 127, 109, 0
 			send {LButton}
-			sleep, 25
+			sleep, 100
 			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 			if ( ErrorLevel > 0 )
 			{
@@ -465,16 +501,17 @@ capslock::
 	{
 		if (chaosrec = 2)
 		{
-			send, ^f
 			clipboard = "class: amulet" "item level: ([6][0-9]|[7][0-4])"
-			send, ^v
+			send, ^{f}
+			sleep, 50
+			send, ^{v}
 			sleep, 350
 			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 			if ( ErrorLevel > 0 )
 			{
 				mousemove, 127, 109, 0
 				send {LButton}
-				sleep, 25
+				sleep, 100
 				PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 				if ( ErrorLevel > 0 )
 				{
@@ -509,16 +546,17 @@ capslock::
 	
 	if (anysetrec = 2)
 	{
-		send, ^f
 		clipboard = "class: amulet"
-		send, ^v
+		send, ^{f}
+		sleep, 50
+		send, ^{v}
 		sleep, 350
 		PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 		if ( ErrorLevel > 0 )
 		{
 			mousemove, 127, 109, 0
 			send {LButton}
-			sleep, 25
+			sleep, 100
 			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 			if ( ErrorLevel > 0 )
 			{
@@ -567,16 +605,17 @@ capslock::
 	{
 		if (chaosrec = 3)
 		{
-			send, ^f
 			clipboard = "class: ring" "item level: ([6][0-9]|[7][0-4])"
-			send, ^v
+			send, ^{f}
+			sleep, 50
+			send, ^{v}
 			sleep, 350
 			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 			if ( ErrorLevel > 0 )
 			{
 				mousemove, 127, 109, 0
 				send {LButton}
-				sleep, 25
+				sleep, 100
 				PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 				if ( ErrorLevel > 0 )
 				{
@@ -611,16 +650,17 @@ capslock::
 	
 	if (anysetrec = 3)
 	{
-		send, ^f
 		clipboard = "class: ring"
-		send, ^v
+		send, ^{f}
+		sleep, 50
+		send, ^{v}
 		sleep, 350
 		PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 		if ( ErrorLevel > 0 )
 		{
 			mousemove, 127, 109, 0
 			send {LButton}
-			sleep, 25
+			sleep, 100
 			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 			if ( ErrorLevel > 0 )
 			{
@@ -669,16 +709,17 @@ capslock::
 	{
 		if (chaosrec = 4)
 		{
-			send, ^f
 			clipboard = "class: gloves" "item level: ([6][0-9]|[7][0-4])"
-			send, ^v
+			send, ^{f}
+			sleep, 50
+			send, ^{v}
 			sleep, 350
 			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 			if ( ErrorLevel > 0 )
 			{
 				mousemove, 127, 109, 0
 				send {LButton}
-				sleep, 25
+				sleep, 100
 				PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 				if ( ErrorLevel > 0 )
 				{
@@ -713,16 +754,17 @@ capslock::
 	
 	if (anysetrec = 4)
 	{
-		send, ^f
 		clipboard = "class: gloves"
-		send, ^v
+		send, ^{f}
+		sleep, 50
+		send, ^{v}
 		sleep, 350
 		PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 		if ( ErrorLevel > 0 )
 		{
 			mousemove, 127, 109, 0
 			send {LButton}
-			sleep, 25
+			sleep, 100
 			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 			if ( ErrorLevel > 0 )
 			{
@@ -771,16 +813,17 @@ capslock::
 	{
 		if (chaosrec = 5)
 		{
-			send, ^f
 			clipboard = "class: boots" "item level: ([6][0-9]|[7][0-4])"
-			send, ^v
+			send, ^{f}
+			sleep, 50
+			send, ^{v}
 			sleep, 350
 			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 			if ( ErrorLevel > 0 )
 			{
 				mousemove, 127, 109, 0
 				send {LButton}
-				sleep, 25
+				sleep, 100
 				PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 				if ( ErrorLevel > 0 )
 				{
@@ -817,16 +860,17 @@ capslock::
 	
 	if (anysetrec = 5)
 	{
-		send, ^f
 		clipboard = "class: boots"
-		send, ^v
+		send, ^{f}
+		sleep, 50
+		send, ^{v}
 		sleep, 350
 		PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 		if ( ErrorLevel > 0 )
 		{
 			mousemove, 127, 109, 0
 			send {LButton}
-			sleep, 25
+			sleep, 100
 			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 			if ( ErrorLevel > 0 )
 			{
@@ -875,16 +919,17 @@ capslock::
 	{
 		if (chaosrec = 6)
 		{
-			send, ^f
 			clipboard = "class: belt" "item level: ([6][0-9]|[7][0-4])"
-			send, ^v
+			send, ^{f}
+			sleep, 50
+			send, ^{v}
 			sleep, 350
 			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 			if ( ErrorLevel > 0 )
 			{
 				mousemove, 127, 109, 0
 				send {LButton}
-				sleep, 25
+				sleep, 100
 				PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 				if ( ErrorLevel > 0 )
 				{
@@ -919,16 +964,17 @@ capslock::
 	
 	if (anysetrec = 6)
 	{
-		send, ^f
 		clipboard = "class: belt"
-		send, ^v
+		send, ^{f}
+		sleep, 50
+		send, ^{v}
 		sleep, 350
 		PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 		if ( ErrorLevel > 0 )
 		{
 			mousemove, 127, 109, 0
 			send {LButton}
-			sleep, 25
+			sleep, 100
 			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 			if ( ErrorLevel > 0 )
 			{
@@ -977,16 +1023,17 @@ capslock::
 	{
 		if (chaosrec = 7)
 		{
-			send, ^f
 			clipboard = "class: helmet" "item level: ([6][0-9]|[7][0-4])"
-			send, ^v
+			send, ^{f}
+			sleep, 50
+			send, ^{v}
 			sleep, 350
 			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 			if ( ErrorLevel > 0 )
 			{
 				mousemove, 127, 109, 0
 				send {LButton}
-				sleep, 25
+				sleep, 100
 				PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 				if ( ErrorLevel > 0 )
 				{
@@ -1021,16 +1068,17 @@ capslock::
 	
 	if (anysetrec = 7)
 	{
-		send, ^f
 		clipboard = "class: helmet"
-		send, ^v
+		send, ^{f}
+		sleep, 50
+		send, ^{v}
 		sleep, 350
 		PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 		if ( ErrorLevel > 0 )
 		{
 			mousemove, 127, 109, 0
 			send {LButton}
-			sleep, 25
+			sleep, 100
 			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 			if ( ErrorLevel > 0 )
 			{
@@ -1079,16 +1127,17 @@ capslock::
 	{
 		if (chaosrec = 8)
 		{
-			send, ^f
 			clipboard = "class: body" "item level: ([6][0-9]|[7][0-4])"
-			send, ^v
+			send, ^{f}
+			sleep, 50
+			send, ^{v}
 			sleep, 350
 			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 			if ( ErrorLevel > 0 )
 			{
 				mousemove, 127, 109, 0
 				send {LButton}
-				sleep, 25
+				sleep, 100
 				PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 				if ( ErrorLevel > 0 )
 				{
@@ -1123,16 +1172,17 @@ capslock::
 	
 	if (anysetrec = 8)
 	{
-		send, ^f
 		clipboard = "class: body"
-		send, ^v
+		send, ^{f}
+		sleep, 50
+		send, ^{v}
 		sleep, 350
 		PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 		if ( ErrorLevel > 0 )
 		{
 			mousemove, 127, 109, 0
 			send {LButton}
-			sleep, 25
+			sleep, 100
 			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 			if ( ErrorLevel > 0 )
 			{
@@ -1166,16 +1216,17 @@ capslock::
 	
 	if (chaosrec = 9)
 	{
-		send, ^f
-		clipboard = "class: bow|staff|staves|sword|axe|maces"
-		send, ^v
+		clipboard = "class: Two Hand|Bow|Warstaff|Staff"
+		send, ^{f}
+		sleep, 50
+		send, ^{v}
 		sleep, 350
 		PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 		if ( ErrorLevel > 0 )
 		{
 			mousemove, 127, 109, 0
 			send {LButton}
-			sleep, 25
+			sleep, 100
 			PixelSearch, PxItem, PyItem, 15, 125, 649, 759, 0x77B4E7, 5, Fast
 			if ( ErrorLevel > 0 )
 			{
@@ -1214,7 +1265,7 @@ capslock::
 	;	sleep, 50
 	;	send, {LButton}
 	;	mousemove, %Xm%, %Ym%, 0
-		send, ^f
+		send, ^{f}
 		send, ^a
 		send, {Backspace}
 		tooltip, Chaos Set Taken
@@ -1282,8 +1333,8 @@ return
 
 	
 ;NumpadAdd::						;Спам CTRL+Numpad + для быстрого перемещения контрактов
-;<^NumpadAdd::					;Спам CTRL+Numpad + для быстрого перемещения контрактов
-	С := !С
+;<^NumpadAdd::						;Спам CTRL+Numpad + для быстрого перемещения контрактов
+	РЎ := !РЎ
 	contract := 0
 	send, {LCtrl down}
 LoopContract: 
@@ -1354,311 +1405,40 @@ If !B
 SetTimer, VaalClarity, 22000
 Return
 	
-;F7::							;Отладка всего макроса (по дефолту выключено)
-	SwithDebug += 1
-	if (SwithDebug = 3)
-	{
-		SwithDebug -= 2
-	}
-	if (SwithDebug = 1)
-	{
-		tooltip, Режим работы Дебаг Координаты, 1825, 1010
-	}
-	if (SwithDebug = 2)
-	{
-		tooltip, Режим работы Дебаг Цвет, 1825, 1010
-	}
-SetTimer, RemoveToolTip, -10000
-return
-	
-;F8::							;Отладка всего макроса (по дефолту выключено)
-	MouseGetPos, MouseX, MouseY
-	PixelGetColor, color, %MouseX%, %MouseY%
-	if (SwithDebug = 1)
-	{
-		clipboard = %MouseX%, %MouseY% 
-	}
-	if (SwithDebug = 2)
-	{
-		clipboard := color
-	}
-return	
-	
-;F9::
-	PixelGetColor, color, 403, 795
-	clipboard := color
-return
-	
-;f10::
-mousemove, 634, 791
-return
-	
-NumpadMult::					;Включение аур (ток для моего ауработа)
-	MouseGetPos, MouseX, MouseY
-	send, {LCtrl down}
-	sleep, 30
-	send, {q}
-	sleep, 30
-	send, {w}
-	sleep, 30
-	send, {e}
-	sleep, 30
-	send, {r}
-	sleep, 30
-	send, {t}
-	sleep, 30
 
-	;первая полоска первый скилл
-;	mousemove, 1438, 1045, 0	;меню
-;	sleep, 30
-;	Click
-;	sleep, 30
-;	mousemove, 1439, 507, 0	;выбор скилла
-;	sleep, 30
-;	Click
-;	sleep, 50
-;	send, {q}
-;	sleep, 30
-	
-	;первая полоска второй скилл
-	mousemove, 1438, 1045, 0	;меню
-	sleep, 30
-	Click
-	sleep, 30
-	mousemove, 1512, 835, 0	;выбор скилла
-	sleep, 30
-	Click
-	sleep, 50
-	send, {q}
-	sleep, 30	
-
-	;первая полоска третий скилл
-;	mousemove, 1440, 1050, 0	;меню
-;	sleep, 30
-;	Click
-;	sleep, 30
-;	mousemove, 1575, 513, 0	;выбор скилла
-;	sleep, 30
-;	Click
-;	sleep, 50
-;	send, {q}
-;	sleep, 30	
-	
-	;вторая полоска первый скилл	
-	mousemove, 1440, 1050, 0	;меню
-	sleep, 30
-	Click
-	sleep, 30
-	mousemove, 1509, 771, 0	;выбор скилла
-	sleep, 30
-	Click
-	sleep, 50
-	send, {q}
-	sleep, 30		
-	
-;	;вторая полоска второй скилл
-;	mousemove, 1440, 1050	;меню
-;	sleep, 30
-;	Click
-;	sleep, 30
-;	mousemove, 1506, 510, 0	;выбор скилла
-;	sleep, 30
-;	Click
-;	sleep, 50
-;	send, {q}
-;	sleep, 30	
-	
-	;вторая полоска третий скилл
-;	mousemove, 1440, 1050	;меню
-;	sleep, 30
-;	Click
-;	sleep, 30
-;	mousemove, 1573, 513, 0	;выбор скилла
-;	sleep, 30
-;	Click
-;	sleep, 50
-;	send, {q}
-;	sleep, 30	
-	
-	;третья полоска первый скилл
-;	mousemove, 1440, 1050	;меню
-;	sleep, 30
-;	Click
-;	sleep, 30
-;	mousemove, 1446, 576, 0	;выбор скилла
-;	sleep, 30
-;	Click
-;	sleep, 50
-;	send, {q}
-;	sleep, 30	
-	
-	;третья полоска второй скилл
-;	mousemove, 1440, 1050	;меню
-;	sleep, 30
-;	Click
-;	sleep, 30
-;	mousemove, 1507, 577, 0	;выбор скилла
-;	sleep, 30
-;	Click
-;	sleep, 50
-;	send, {q}
-;	sleep, 30	
-	
-	;третья полоска третий скилл
-	mousemove, 1440, 1050, 0	;меню
-	sleep, 30
-	Click
-	sleep, 30
-	mousemove, 1572, 705, 0	;выбор скилла
-	sleep, 30
-	Click
-	sleep, 50
-	send, {q}
-	sleep, 30	
-
-	;четвертая полоска первый скилл
-;	mousemove, 1440, 1050, 0	;меню
-;	sleep, 30
-;	Click
-;	sleep, 30
-;	mousemove, 1444, 709, 0	;выбор скилла (четвертая полоска первый скилл)
-;	sleep, 30
-;	Click
-;	sleep, 50
-;	send, {q}
-;	sleep, 30	
-	
-	;четвертая полоска второй скилл
-;	mousemove, 1440, 1050, 0	;меню
-;	sleep, 30
-;	Click
-;	sleep, 30
-;	mousemove, 1509, 710, 0	;выбор скилла (четвертая полоска первый скилл)
-;	sleep, 30
-;	Click
-;	sleep, 50
-;	send, {q}
-;	sleep, 30	
-
-	;четвертая полоска третий скилл
-;	mousemove, 1440, 1050, 0	;меню
-;	sleep, 30
-;	Click
-;	sleep, 30
-;	mousemove, 1573, 640, 0	;выбор скилла (четвертая полоска первый скилл)
-;	sleep, 30
-;	Click
-;	sleep, 50
-;	send, {q}
-;	sleep, 30	
-	
-	;пятая полоска первый скилл
-	mousemove, 1440, 1050, 0	;меню
-	sleep, 30
-	Click
-	sleep, 30
-	mousemove, 1444, 576, 0	;выбор скилла (четвертая полоска первый скилл)
-	sleep, 30
-	Click
-	sleep, 50
-	send, {q}
-	sleep, 30	
-
-	;пятая полоска второй скилл
-	mousemove, 1440, 1050, 0	;меню
-	sleep, 30
-	Click
-	sleep, 30
-	mousemove, 1510, 574, 0	;выбор скилла (четвертая полоска второй скилл)
-	sleep, 30
-	Click
-	sleep, 50
-	send, {q}
-	sleep, 30	
-	
-	;пятая полоска третий скилл
-;	mousemove, 1440, 1050, 0	;меню
-;	sleep, 30
-;	Click
-;	sleep, 30
-;	mousemove, 1510, 574, 0	;выбор скилла (четвертая полоска третий скилл)
-;	sleep, 30
-;	Click
-;	sleep, 50
-;	send, {q}
-;	sleep, 30	
-	
-	;шестая полоска первый скилл
-;	mousemove, 1440, 1050, 0	;меню
-;	sleep, 30
-;	Click
-;	sleep, 30
-;	mousemove, 1444, 512, 0	;выбор скилла (шестая полоска первый скилл)
-;	sleep, 30
-;	Click
-;	sleep, 50
-;	send, {q}
-;	sleep, 30	
-	
-	;шестая полоска второй скилл
-;	mousemove, 1440, 1050, 0	;меню
-;	sleep, 30
-;	Click
-;	sleep, 30
-;	mousemove, 1444, 512, 0	;выбор скилла (шестая полоска первый скилл)
-;	sleep, 30
-;	Click
-;	sleep, 50
-;	send, {q}
-;	sleep, 30
-	
-
-
-	;выбор hatred
-;	mousemove, 1440, 1050, 0	;меню
-;	sleep, 30
-;	Click
-;	sleep, 30
-;	mousemove, 1506, 448, 0	;выбор скилла (шестая полоска первый скилл)
-;	sleep, 30
-;	Click
-;	sleep, 50
-;	send, {q}
-;	sleep, 30
-
-	;выбор malevpolence
-	mousemove, 1440, 1050, 0	;меню
-	sleep, 30
-	Click
-	sleep, 30
-	mousemove, 1572, 637, 0	;выбор скилла (шестая полоска первый скилл)
-	sleep, 30
-	Click
-	sleep, 50
-	send, {q}
-	sleep, 30
-
-	;выбор zealotry
-;	mousemove, 1440, 1050, 0	;меню
-;	sleep, 30
-;	Click
-;	sleep, 30
-;	mousemove, 1443, 770, 0	;выбор скилла (шестая полоска первый скилл)
-;	sleep, 30
-;	Click
-;	sleep, 50
-;	send, {q}
-;	sleep, 30
-
-	;первоначальный скилл который стоит на q
-	mousemove, 1440, 1050, 0	;меню
-	sleep, 30
-	Click
-	sleep, 30
-	mousemove, 1574, 512, 0	;выбор скилла (;пятая полоска второй скилл)
-	sleep, 30
-	Click
-	sleep, 30
-	send, {LCtrl up}
-	Mousemove, %MouseX%, %MouseY%
+;F2::
+	clipboardBuffer = %clipboard%
+	clipboard = Take only my trade, watch who you pay for the service
+	send, {Enter}
+	send, ^{v}
+	send, {Enter}
+	clipboard = %clipboardBuffer%
 	return
+	
+;F3::
+	clipboardBuffer = %clipboard%
+	clipboard = Go in and stand together, if someone dies dont be respawn
+	send, {Enter}
+	send, ^{v}
+	send, {Enter}
+	clipboard = %clipboardBuffer%
+	return
+	
+;F4::
+	clipboardBuffer = %clipboard%
+	clipboard = IF YOURE DIE, DONT BE RESPAWN, YOURE BREAKING 5WAY FOR EVERYONE
+	send, {Enter}
+	send, ^{v}
+	send, {Enter}
+	clipboard = %clipboardBuffer%
+	return
+	
+;F5::
+	clipboardBuffer = %clipboard%
+	clipboard = Please give vouche in services-vouches | Tag @DarkZiga
+	send, {Enter}
+	send, ^{v}
+	send, {Enter}
+	clipboard = %clipboardBuffer%
+	return
+

@@ -1,4 +1,4 @@
-#SingleInstance Force
+﻿#SingleInstance Force
 #Include lib\WebIniParse.ahk
 global StartLoop := 0
 config = %A_WorkingDir%\Data\Settings.ini
@@ -186,6 +186,7 @@ Start:
 		IniRead, Bottle3, %config%, SelectAutoBootle, Bottle3
 		IniRead, Bottle4, %config%, SelectAutoBootle, Bottle4
 		IniRead, Bottle5, %config%, SelectAutoBootle, Bottle5
+		IniRead, IsManaAutoBottle2, %config%, SelectAutoBootle, ManaBottle2
 		ifWinActive ahk_group POE
 		{
 			Gui, Status:Hide
@@ -202,75 +203,98 @@ Start:
 			if (Bottle1 = 1)
 			{
 				PixelSearch, Px1, Py1, 314, 1065, 344, 1075, 0x99D7F9, 0, Fast
-				PixelGetColor, color1, %Px1%, %Py1%
-				if not (color1 = 0x99D7F9)
+				if (ErrorLevel != 0)
 				{
 					ifWinNotActive ahk_group POE
 					{
 						SetTimer, Blessing, off
 						Return
 					}
-					Send {1}
+					PixelSearch, Px1, Py1, 317, 1055, 338, 1062, 0x477324, 35, Fast
+					if (ErrorLevel = 0)
+					{
+						Send {1}
+					}
 				}
 			}
 			
 			if (Bottle2 = 1)
 			{
 				PixelSearch, Px2, Py2, 355, 1065, 395, 1075, 0x99D7F9, 0, Fast
-				PixelGetColor, color2, %Px2%, %Py2%
-				if not (color2 = 0x99D7F9)
+				if (ErrorLevel != 0)
 				{
 					ifWinNotActive ahk_group POE
 					{
-						SetTimer, Blessing, off
+						;SetTimer, Blessing, off
 						Return
 					}
-					Send {2}
+					if (IsManaAutoBottle2 = 0)
+					{
+						ColorBootle2 := 0x6D270C 
+					}
+					else if (IsManaAutoBottle2 = 1)
+					{
+						ColorBootle2 := 0x732B12
+					}
+					PixelSearch, Px1, Py1, 365, 1055, 384, 1058, 0x732B12, 10, Fast
+					if (ErrorLevel = 0)
+					{
+						send {2}
+					}
 				}
 			}
 				
 			if (Bottle3 = 1)
 			{
 				PixelSearch, Px3, Py3, 403, 1065, 440, 1075, 0x99D7F9, 0, Fast
-				PixelGetColor, color3, %Px3%, %Py3%
-				if not (color3 = 0x99D7F9)
+				if (ErrorLevel != 0)
 				{
 					ifWinNotActive ahk_group POE
 					{
 						SetTimer, Blessing, off
 						Return
 					}
-					Send {3}
+					PixelSearch, Px1, Py1, 409, 1055, 430, 1062, 0x477324, 35, Fast
+					if (ErrorLevel = 0)
+					{
+						Send {3}
+					}
 				}
 			}
 				
 			if (Bottle4 = 1)
 			{
 				PixelSearch, Px4, Py4, 452, 1065, 490, 1075, 0x99D7F9, 0, Fast
-				PixelGetColor, color4, %Px4%, %Py4%
-				if not (color4 = 0x99D7F9)
+				if (ErrorLevel != 0)
 				{
 					ifWinNotActive ahk_group POE
 					{
 						SetTimer, Blessing, off
 						Return
 					}
-					Send {4}
+					PixelSearch, Px1, Py1, 455, 1055, 476, 1062, 0x477324, 35, Fast
+					if (ErrorLevel = 0)
+					{
+						Send {4}
+					}
 				}
 			}
 				
 			if (Bottle5 = 1)
 			{
 				PixelSearch, Px5, Py5, 500, 1065, 540, 1075, 0x99D7F9, 0, Fast
-				PixelGetColor, color5, %Px5%, %Py5%
-				if not (color5 = 0x99D7F9)
+				if (ErrorLevel != 0)
 				{
 					ifWinNotActive ahk_group POE
 					{
 						SetTimer, Blessing, off
 						Return
 					}
-					Send {5}
+					PixelSearch, Px1, Py1, 501, 1055, 521, 1062, 0x477324, 35, Fast
+					if (ErrorLevel = 0)
+					{
+						Send {5}
+					}
 				}
 			}
 		}
