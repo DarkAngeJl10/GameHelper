@@ -230,16 +230,19 @@ Start:
 					}
 					if (IsManaAutoBottle2 = 0)
 					{
-						ColorBootle2 := 0x6D270C 
+						;PixelSearch, Px1, Py1, 363, 1055, 385, 1058, 0x477324, 35, Fast
+						ColorBottle2 := 0x477324
+
 					}
 					else if (IsManaAutoBottle2 = 1)
 					{
-						ColorBootle2 := 0x732B12
+						;PixelSearch, Px1, Py1, 363, 1055, 385, 1058, 0x732B12, 10, Fast
+						ColorBottle2 := 0x732B12
 					}
-					PixelSearch, Px1, Py1, 365, 1055, 384, 1058, 0x732B12, 10, Fast
+					PixelSearch, Px1, Py1, 363, 1055, 385, 1058, %ColorBottle2%, 30, Fast
 					if (ErrorLevel = 0)
 					{
-						send {2}
+						Send {2}
 					}
 				}
 			}
@@ -306,6 +309,25 @@ Start:
 		return
 	}
 	SetTimer, Loop, 1
+return
+
+F6::
+ MouseGetPos, MouseX, MouseY
+ PixelGetColor, color, %MouseX%,%MouseY%
+ Clipboard := color
+ ;msgbox color , %MouseX%,%MouseY%
+return
+
+F7::
+ MouseGetPos, MouseX, MouseY
+ PixelGetColor, color, %MouseX%,%MouseY%
+ Clipboard = %MouseX%, %MouseY%
+ ;msgbox color , %MouseX%,%MouseY%
+return
+
+F8::
+PixelGetColor, test, 374, 1058
+Clipboard := test
 return
 		
 ;F8::
