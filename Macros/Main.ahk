@@ -344,7 +344,7 @@ AnyMine:
 	sleep, 50
 return
 	
-F1::
+;F1::
 SellingChaosRecipe()		
 return
 
