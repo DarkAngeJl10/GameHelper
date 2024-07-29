@@ -320,21 +320,21 @@ Start:
 	SetTimer, Loop, 1
 return
 
-F6::
+;F6::
  MouseGetPos, MouseX, MouseY
  PixelGetColor, color, %MouseX%,%MouseY%
  Clipboard := color
  ;msgbox color , %MouseX%,%MouseY%
 return
 
-F7::
+;F7::
  MouseGetPos, MouseX, MouseY
  PixelGetColor, color, %MouseX%,%MouseY%
  Clipboard = %MouseX%, %MouseY%
  ;msgbox color , %MouseX%,%MouseY%
 return
 
-F8::
+;F8::
 PixelGetColor, test, 478, 991
 Clipboard := test
 return
