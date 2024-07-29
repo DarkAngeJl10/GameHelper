@@ -348,7 +348,7 @@ return
 SellingChaosRecipe()		
 return
 
-capslock:: 
+;capslock:: 
 	chaosrec := 1
 	chaosset := 0
 	
