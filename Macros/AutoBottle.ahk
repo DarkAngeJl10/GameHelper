@@ -187,6 +187,7 @@ Start:
 		IniRead, Bottle4, %config%, SelectAutoBootle, Bottle4
 		IniRead, Bottle5, %config%, SelectAutoBootle, Bottle5
 		IniRead, IsManaAutoBottle2, %config%, SelectAutoBootle, ManaBottle2
+		IniRead, IsTinctureAutoBottle4, %config%, SelectAutoBootle, TinctureBottle4
 		ifWinActive ahk_group POE
 		{
 			Gui, Status:Hide
@@ -225,18 +226,15 @@ Start:
 				{
 					ifWinNotActive ahk_group POE
 					{
-						;SetTimer, Blessing, off
+						SetTimer, Blessing, off
 						Return
 					}
 					if (IsManaAutoBottle2 = 0)
 					{
-						;PixelSearch, Px1, Py1, 363, 1055, 385, 1058, 0x477324, 35, Fast
 						ColorBottle2 := 0x477324
-
 					}
 					else if (IsManaAutoBottle2 = 1)
 					{
-						;PixelSearch, Px1, Py1, 363, 1055, 385, 1058, 0x732B12, 10, Fast
 						ColorBottle2 := 0x732B12
 					}
 					PixelSearch, Px1, Py1, 363, 1055, 385, 1058, %ColorBottle2%, 30, Fast
@@ -249,7 +247,7 @@ Start:
 				
 			if (Bottle3 = 1)
 			{
-				PixelSearch, Px3, Py3, 403, 1065, 440, 1075, 0x99D7F9, 0, Fast
+				PixelSearch, , , 403, 1065, 440, 1075, 0x99D7F9, 0, Fast
 				if (ErrorLevel != 0)
 				{
 					ifWinNotActive ahk_group POE
@@ -257,7 +255,7 @@ Start:
 						SetTimer, Blessing, off
 						Return
 					}
-					PixelSearch, Px1, Py1, 409, 1055, 430, 1062, 0x477324, 35, Fast
+					PixelSearch, , , 409, 1055, 430, 1062, 0x477324, 35, Fast
 					if (ErrorLevel = 0)
 					{
 						Send {3}
@@ -267,7 +265,7 @@ Start:
 				
 			if (Bottle4 = 1)
 			{
-				PixelSearch, Px4, Py4, 452, 1065, 490, 1075, 0x99D7F9, 0, Fast
+				PixelSearch, , , 452, 1065, 490, 1075, 0x99D7F9, 0, Fast
 				if (ErrorLevel != 0)
 				{
 					ifWinNotActive ahk_group POE
@@ -275,10 +273,21 @@ Start:
 						SetTimer, Blessing, off
 						Return
 					}
-					PixelSearch, Px1, Py1, 455, 1055, 476, 1062, 0x477324, 35, Fast
-					if (ErrorLevel = 0)
+					if (IsTinctureAutoBottle4 = 0)
+						{
+							PixelSearch, , , 455, 1055, 476, 1062, 0x477324, 35, Fast
+							if (ErrorLevel = 0)
+							{
+								Send {4}
+							}
+						}
+					else if (IsTinctureAutoBottle4 = 1)
 					{
-						Send {4}
+						PixelSearch, test22, test33, 444, 981, 483, 995, 0x384CB9, 5, Fast
+						if (ErrorLevel != 0)
+						{
+							Send {4}
+						}
 					}
 				}
 			}
@@ -326,17 +335,6 @@ F7::
 return
 
 F8::
-PixelGetColor, test, 374, 1058
+PixelGetColor, test, 478, 991
 Clipboard := test
 return
-		
-;F8::
-		X = 309
-		Y = 117
-	;	Mousemove, %X%, %Y%
-	;	MouseGetPos, MouseX, MouseY
-		PixelGetColor, color, %X%, %Y%
-	;	PixelGetColor, color, %MouseX%, %MouseY%
-		clipboard := color
-	;	msgbox %color% , %MouseX%, %MouseY%
-	return
