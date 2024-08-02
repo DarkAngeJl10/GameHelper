@@ -200,7 +200,7 @@ Blessing:
 		IniRead, IsEnableBlessing, %config%, Blessing, Enable
 		IniRead, CDBlessing, %config%, Blessing, CD
 		IniRead, BlessingInGame, %config%, Blessing, KeyInGame
-		CDBlessingMS := Round(CDBlessing * 1000)
+		CDBlessingMS := Round(CDBlessing * 1000) - 500
 
 		ifWinActive ahk_group POE
 		{

@@ -280,7 +280,7 @@ SettingsBlessing:
 	IniRead, BlessingKeyInGame, %config%, Blessing, KeyInGame
 	Gui, 2:Destroy
 	Gui, Blessing:Add, Checkbox,		x10 y10 			gBlessing Checked%IsEnableBlessing%, 	Включить Blessing?
-	Gui, Blessing:Add, Text,			x10 y50 w150		vBlessingUnFocus, 						Сколько КД у Blessing? (Вводить в секундах)
+	Gui, Blessing:Add, Text,			x10 y50 w150		vBlessingUnFocus, 						Сколько Длительность у Blessing? (Вводить в секундах)
 	Gui, Blessing:Add, Edit, 			x10 y80 w100 h20 	vInputCDBlessing gCDBlessing, %CDBlessing%		
 
 	Gui, Blessing:Add, Text, 			x10 y110 w150 h30 vErrorText cRed, 							В поле ввода содержатся недопустимые символы.
