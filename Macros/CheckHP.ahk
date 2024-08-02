@@ -307,37 +307,3 @@ if (ActivityCWDT = 1)
 Return
 }
 Return
-
-
-;PgUp::							;Отладка всего макроса (по дефолту выключено)
-	SwithDebug += 1
-	if (SwithDebug = 3)
-		{
-		SwithDebug -= 2
-		}
-	if (SwithDebug = 1)
-		{
-		tooltip, Режим работы Дебаг Координаты, 1825, 1010
-		}
-	if (SwithDebug = 2)
-		{
-		tooltip, Режим работы Дебаг Цвет, 1825, 1010
-		}
-	SetTimer, RemoveToolTip, -10000
-	return
-	RemoveToolTip:
-	tooltip
-	return
-	
-;PgDn::							;Отладка всего макроса (по дефолту выключено)
-	MouseGetPos, MouseX, MouseY
-	PixelGetColor, color, %MouseX%, %MouseY%
-	if (SwithDebug = 1)
-		{
-		clipboard = %MouseX%, %MouseY% 
-		}
-	if (SwithDebug = 2)
-		{
-		clipboard := color
-		}
-	return	

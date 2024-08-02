@@ -14,12 +14,13 @@ global ActivityCWDT := 0
 config = %A_WorkingDir%\Data\Settings.ini
 
 IniRead, AutoBottle1, %config%, SelectAutoBootle, Bottle1
+IniRead, IsProgenesisAutoBottle1, %config%, SelectAutoBootle, ProgenesisBottle1
 IniRead, AutoBottle2, %config%, SelectAutoBootle, Bottle2
+IniRead, IsManaAutoBottle2, %config%, SelectAutoBootle, ManaBottle2
 IniRead, AutoBottle3, %config%, SelectAutoBootle, Bottle3
 IniRead, AutoBottle4, %config%, SelectAutoBootle, Bottle4
-IniRead, AutoBottle5, %config%, SelectAutoBootle, Bottle5
-IniRead, IsManaAutoBottle2, %config%, SelectAutoBootle, ManaBottle2
 IniRead, IsTinctureAutoBottle4, %config%, SelectAutoBootle, TinctureBottle4
+IniRead, AutoBottle5, %config%, SelectAutoBootle, Bottle5
 IniRead, Bottle15, %config%, SelectBootle, Bottle1-5
 IniRead, Bottle25, %config%, SelectBootle, Bottle2-5
 IniRead, Bottle35, %config%, SelectBootle, Bottle3-5
@@ -30,15 +31,20 @@ IniRead, CheckHP30, %config%, SelectCheckHP, CheckHP30
 IniRead, CWDT70, %config%, SelectCheckHP, CWDT70
 IniRead, CWDT48, %config%, SelectCheckHP, CWDT48
 IniRead, CWDT30, %config%, SelectCheckHP, CWDT30
+IniRead, IsEnableBlessing, %config%, Blessing, Enable
+IniRead, CDBlessing, %config%, Blessing, CD
 IniRead, SmokeMine, %config%, Main, SmokeMine
 IniRead, DefaultMine, %config%, Main, DefaultMine
 IniRead, AutoBottleKey, %config%, AutoBottle, Key
 IniRead, CheckHPKey, %config%, CheckHP, Key
 IniRead, CWDTKey, %config%, CheckHP, CWDTKey
 IniRead, BottleKey, %config%, Bottle, Key
+IniRead, BlessingKey, %config%, Blessing, Key
+IniRead, BlessingKeyInGame, %config%, Blessing, KeyInGame
 IniRead, ActivityCWDT, %config%, CheckHP, ActivityCWDT
 IniRead, The_VersionName, %config%, Control, Version
 IniRead, CheckforUpdates, %config%, Control, CheckforUpdates
+IniRead, Debug, %config%, Control, Debug
 
 IfNotExist,  %A_WorkingDir%\Data
 {
@@ -68,6 +74,10 @@ if (AutoBottle4 == "ERROR" or AutoBottle4 == "")
 if (AutoBottle5 == "ERROR" or AutoBottle5 == "")
 {
 	IniWrite, 0, %config%, SelectAutoBootle, Bottle5
+}
+if (IsProgenesisAutoBottle1 == "ERROR" or IsProgenesisAutoBottle1 == "")
+{
+	IniWrite, 0, %config%, SelectAutoBootle, ProgenesisBottle1
 }
 if (IsManaAutoBottle2 == "ERROR" or IsManaAutoBottle2 == "")
 {
@@ -123,6 +133,16 @@ if (CWDT30 == "ERROR" or CWDT30 == "")
 }
 
 
+if (IsEnableBlessing == "ERROR" or IsEnableBlessing == "")
+	{
+		IniWrite, 0, %config%, Blessing, Enable
+	}
+if (CDBlessing == "ERROR" or CDBlessing == "")
+{
+	IniWrite, 0, %config%, Blessing, CD
+}
+
+
 if (SmokeMine == "ERROR" or SmokeMine == "")
 {
 	IniWrite, 0, %config%, Main, SmokeMine
@@ -149,13 +169,20 @@ if (CWDTKey == "ERROR"  or CWDTKey == "")
 {
 	IniWrite, % "", %config%, CheckHP, CWDTKey
 }
+if (BlessingKey == "ERROR"  or BlessingKey == "")
+{
+	IniWrite, % "", %config%, Blessing, Key
+}
+if (BlessingKeyInGame == "ERROR"  or BlessingKeyInGame == "")
+{
+	IniWrite, % "", %config%, Blessing, KeyInGame
+}
 
 
 if (ActivityCWDT == "ERROR" or ActivityCWDT == "")
 {
 	IniWrite, 0, %config%, CheckHP, ActivityCWDT
 }
-
 
 
 if (The_VersionName == "ERROR" or The_VersionName == "")
@@ -166,6 +193,11 @@ if (CheckforUpdates == "ERROR" or CheckforUpdates == "")
 {
 	IniWrite, 1, %config%, Control, CheckforUpdates
 }
+if (Debug == "ERROR" or Debug == "")
+{
+	IniWrite, 0, %config%, Control, Debug
+}
+
 
 if (CheckforUpdates != 0)
 {
@@ -195,38 +227,42 @@ if (CheckforUpdates != 0)
 
 MW = %A_ScreenWidth%
 MH = %A_ScreenHeight%
+CheckDebugHotkeys()
 
 Start:
 if (MW = 1920 and MH = 1080)
 {
-	Gui, 1:Add, Checkbox,		x10 y10	 	gAutoBottle vAutoBottle Checked%CloseGuiAutoBottle%, 		Auto Bottle
+	Gui, 1:Add, Checkbox,		x10 y10	 				gAutoBottle vAutoBottle Checked%CloseGuiAutoBottle%, 		Auto Bottle
 }
 if (MW = 2560 and MH = 1440)
 {
-	Gui, 1:Add, Checkbox,		x10 y10 	gAutoBottle2k vAutoBottle2k Checked%CloseGuiAutoBottle2k%, 	Auto Bottle
+	Gui, 1:Add, Checkbox,		x10 y10 				gAutoBottle2k vAutoBottle2k Checked%CloseGuiAutoBottle2k%, 	Auto Bottle
 }
-	Gui, 1:Add, Checkbox,		x140 y10 	gCheckHP vCheckHP Checked%CloseGuiCheckHP%,  			Check HP
-	Gui, 1:Add, Checkbox, 		x10 y40 	gMain vMain Checked%CloseGuiMain%, 	 				Main
+	Gui, 1:Add, Checkbox,		x140 y10 				gCheckHP vCheckHP Checked%CloseGuiCheckHP%,  				Check HP
+	Gui, 1:Add, Checkbox, 		x10 y40					gMain vMain Checked%CloseGuiMain%, 	 						Main
 	
-	Gui, 1:Add, Text,			x270 y10, 	Бутылки по кнопке
-	Gui, 1:Add, DropDownList,	x270 y30 	gListOfBottle vChoice Choose%CloseGuiBottle%,  Disable|Bottle
+	Gui, 1:Add, Text,			x270 y10, 																			Бутылки по кнопке
+	Gui, 1:Add, DropDownList,	x270 y30				gListOfBottle vChoice Choose%CloseGuiBottle%,  				Disable|Bottle
 
-	Gui, 1:Add, Button, 		x10 y360 	w150 h30 	gSettings Center, 		Настройки
-	Gui, 1:Add, Button, 		x240 y360 	w150 h30 	gExitMacros Center, 	Выключить все макросы
+	Gui, 1:Add, Button, 		x10 y360 w150 h30 		gSettings Center, 											Настройки
+	Gui, 1:Add, Button, 		x240 y360 w150 h30 		gExitMacros Center, 										Выключить все макросы
 	Gui, 1:show, w400 h400
 return
 
 Settings:
 	Gui, 1:Destroy
-	Gui, 2:Add, Text,			x10 y10, 		Выберите что хотите настроить
-	Gui, 2:Add, Button,			x10 y30  w100	gSettingsAutoBottle, 	AutoBottle
-	Gui, 2:Add, Button,			x120 y30 w100	gSettingsCheckHP, 		CheckHP %A_Space% CWDT
-	Gui, 2:Add, Button,			x230 y30 w120	gSettingsBottle, 		Бутылки по кнопке
-	Gui, 2:Add, Text,			x10 y320, 		Mines
-	Gui, 2:Add, Checkbox,		x10 y340 		gSmokeMine 		Checked%SmokeMine%, 	Smoke Mine Setup on Q
-	Gui, 2:Add, Checkbox,		x10 y360		gDefaultMine	Checked%DefaultMine%, 	Any Mines on R
+	Gui, 2:Add, Text,			x10 y10, 														Выберите что хотите настроить
+	Gui, 2:Add, Button,			x10 y30 w100			gSettingsAutoBottle, 					AutoBottle
+	Gui, 2:Add, Button,			x120 y30 w100			gSettingsCheckHP, 						CheckHP %A_Space% CWDT
+	Gui, 2:Add, Button,			x230 y30 w120			gSettingsBottle, 						Бутылки по кнопке
+	Gui, 2:Add, Button,			x10 y70 w100			gSettingsBlessing, 						Blessing
+	Gui, 2:Add, Text,			x10 y320, 				Mines
+	Gui, 2:Add, Checkbox,		x10 y340 				gSmokeMine Checked%SmokeMine%, 			Smoke Mine Setup on Q
+	Gui, 2:Add, Checkbox,		x10 y360				gDefaultMine Checked%DefaultMine%, 		Any Mines on R
 	
-	Gui, 2:Add, Button, 		x240 y360 	w150 h30 	gBackToStart Center, 	Назад
+	Gui, 2:Add, Checkbox,		x240 y340 				gDebugMode Checked%Debug%, 				Debug Mode
+
+	Gui, 2:Add, Button, 		x240 y360 w150 h30  	gBackToStart Center, 					Назад
 	Gui, 2:Show, w400 h400,
 return
 
@@ -235,10 +271,159 @@ BackToStart:
 	goto, Start
 return
 
+;--------------------------------------- BLESSING ---------------------------------------
+
+SettingsBlessing:
+	IniRead, CDBlessing, %config%, Blessing, CD
+	IniRead, IsEnableBlessing, %config%, Blessing, Enable
+	IniRead, BlessingKey, %config%, Blessing, Key
+	IniRead, BlessingKeyInGame, %config%, Blessing, KeyInGame
+	Gui, 2:Destroy
+	Gui, Blessing:Add, Checkbox,		x10 y10 			gBlessing Checked%IsEnableBlessing%, 	Включить Blessing?
+	Gui, Blessing:Add, Text,			x10 y50 w150		vBlessingUnFocus, 						Сколько КД у Blessing? (Вводить в секундах)
+	Gui, Blessing:Add, Edit, 			x10 y80 w100 h20 	vInputCDBlessing gCDBlessing, %CDBlessing%		
+
+	Gui, Blessing:Add, Text, 			x10 y110 w150 h30 vErrorText cRed, 							В поле ввода содержатся недопустимые символы.
+    GuiControl, Blessing: Hide,	ErrorText	
+
+	Gui, Blessing:Add, Text,			x200 y140, 													На какой клавише Blessing в игре?
+	Gui, Blessing:Add, Button, 			x226 y160	w120    gKeyBindBlessingInGame, 				Назначить
+	Gui, Blessing:Add, Text,			x200 y90, 													Клавиша: %BlessingKeyInGame%
+	
+	Gui, Blessing:Add, Text,			x205 y10, 													Привязка к Клавиатура/Мышь
+	Gui, Blessing:Add, Button, 			x226 y30	w120    gKeyBindBlessing, 						Клавиатура
+	Gui, Blessing:Add, Button, 			x226 y60    w120	gMouseBindBlessing, 					Мышь
+	Gui, Blessing:Add, Text,			x200 y90, 													Макрос активируется на: %BlessingKey%
+	
+	Gui, Blessing:Add, Button, 			x240 y360 w150 h30  gBackToSettings Center, 				Назад
+	Gui, Blessing:Show, w400 h400,
+	GuiControl, Blessing: Focus, BlessingUnFocus
+return
+
+KeyBindBlessingInGame:
+	Gui, Blessing:Destroy
+	Gui, BindBlessing:Add, Text,		x08 y30         vKeyBindUnFocus, 							Клавиша: 
+	Gui, BindBlessing:Add, Hotkey, 		x63 y27 w120	gBlessingBindInGame	vBlessingBindInGame, 	%BlessingKeyInGame%
+	Gui, BindBlessing:Show, w200 h100
+	GuiControl, BindBlessing: Focus, KeyBindUnFocus
+return
+
+KeyBindBlessing:
+	Gui, Blessing:Destroy
+	Gui, BindBlessing:Add, Text,		x08 y30         vKeyBindUnFocus, 							Клавиша: 
+	Gui, BindBlessing:Add, Hotkey, 		x63 y27 w120	gBlessingBind	vBlessingBind, %BlessingKey%
+	Gui, BindBlessing:Show, w200 h100
+	GuiControl, BindBlessing: Focus, KeyBindUnFocus
+return
+
+MouseBindBlessing:
+	BreakLoopBlessing := 0
+	Gui, Blessing:Destroy
+	Gui, BindBlessing:Add, Text,		x15 y30, 													Мышь: 
+	Gui, BindBlessing:Add, Edit, 		x60 y27 w120   vBlessingMouseBind Disabled, %BlessingKey%
+	Gui, BindBlessing:Show, w200 h100
+	MouseKeyArray := ["MButton", "XButton1", "XButton2"]
+	Loop
+	{
+		for i, MouseKey in MouseKeyArray
+		{
+			GetKeyState, state, %MouseKey%
+			if (state == "D")
+			{
+				if (MouseKey = AutoBottleKey)
+				{
+					IniWrite, % "", %config%, AutoBottle, Key
+				}
+				if (MouseKey = BottleKey)
+				{
+					IniWrite, % "", %config%, Bottle, Key
+				}
+				if (MouseKey = CheckHPKey)
+				{
+					IniWrite, % "", %config%, CheckHP, Key
+				}
+				if (MouseKey = CWDTKey)
+				{
+					IniWrite, % "", %config%, CheckHP, CWDTKey
+				}
+				GuiControl, BindBlessing: Text, BlessingMouseBind, %MouseKey%
+				IniWrite, %MouseKey%, %config%, Blessing, Key
+			}
+		}
+		if (BreakLoopBlessing = 1)
+		{
+			Break
+		}
+	}
+return
+
+BlessingBindInGame:
+	GuiControl, BindBlessing: Focus, KeyBindUnFocus
+	;W.I.P.
+	;TODO
+	;Add check for all Key Binds
+	IniWrite, %BlessingBindInGame%, %config%, Blessing, KeyInGame
+return
+
+BlessingBind:
+	GuiControl, BindBlessing: Focus, KeyBindUnFocus
+	if (BlessingBind = AutoBottleKey)
+	{
+		IniWrite, % "", %config%, AutoBottle, Key
+	}
+	if (BlessingBind = BottleKey)
+	{
+		IniWrite, % "", %config%, Bottle, Key
+	}
+	if (BlessingBind = CheckHPKey)
+	{
+		IniWrite, % "", %config%, CheckHP, Key
+	}
+	if (BlessingBind = CWDTKey)
+	{
+		IniWrite, % "", %config%, CheckHP, CWDTKey
+	}
+	IniWrite, %BlessingBind%, %config%, Blessing, Key
+return
+
+Blessing:
+	ControlGet, IsEnableBlessing, Checked , , Button1,
+	if (IsEnableBlessing != 0)
+	{
+		IniWrite, 1, %config%, Blessing, Enable
+	}
+	else
+	{
+		IniWrite, 0, %config%, Blessing, Enable
+	}
+return
+
+CDBlessing:
+	GuiControlGet, InputCDBlessing,, InputCDBlessing
+	If (RegExMatch(InputCDBlessing, "[^\d,.]"))
+	{
+		GuiControl, Show, ErrorText
+	}
+	else 
+	{
+		GuiControl, Hide, ErrorText
+		StringReplace, InputCDBlessing, InputCDBlessing, `,, .
+		IniWrite, %InputCDBlessing%, %config%, Blessing, CD
+	}
+return
+
+BindBlessingGuiClose:
+	BreakLoopBlessing := 1
+	Gui, BindBlessing:Destroy
+	Goto, SettingsBlessing
+return
+
+
 ;--------------------------------------- AUTO BOTTLE ---------------------------------------
 
 SettingsAutoBottle:
 	IniRead, AutoBottle1, %config%, SelectAutoBootle, Bottle1
+	IniRead, IsProgenesisAutoBottle1, %config%, SelectAutoBootle, ProgenesisBottle1
 	IniRead, AutoBottle2, %config%, SelectAutoBootle, Bottle2
 	IniRead, IsManaAutoBottle2, %config%, SelectAutoBootle, ManaBottle2
 	IniRead, AutoBottle3, %config%, SelectAutoBootle, Bottle3
@@ -251,6 +436,7 @@ SettingsAutoBottle:
 	Gui, 3:Add, Text,			x10 y25, 	будут активны
 	
 	Gui, 3:Add, Checkbox,		x10 y40 	gAutoBottle1 Checked%AutoBottle1%, 	1 Бутылка
+	Gui, 3:Add, Checkbox,		x90 y40 	gIsProgenesisAutoBottle1 Checked%IsProgenesisAutoBottle1%, 	Progenesis?
 	Gui, 3:Add, Checkbox,		x10 y70 	gAutoBottle2 Checked%AutoBottle2%, 	2 Бутылка
 	Gui, 3:Add, Checkbox,		x90 y70 	gIsManaAutoBottle2 Checked%IsManaAutoBottle2%, 	Мана Бутылка?
 	Gui, 3:Add, Checkbox,		x10 y100 	gAutoBottle3 Checked%AutoBottle3%, 	3 Бутылка
@@ -301,6 +487,10 @@ MouseBindAutoBottle:
 				{
 					IniWrite, % "", %config%, CheckHP, CWDTKey
 				}
+				if (MouseKey = BlessingKey)
+				{
+					IniWrite, % "", %config%, Blessing, Key
+				}
 				GuiControl, BindAutoBottle: Text, AutoBottleMouseBind, %MouseKey%
 				IniWrite, %MouseKey%, %config%, AutoBottle, Key
 			}
@@ -326,6 +516,10 @@ AutoBottleBind:
 	{
 		IniWrite, % "", %config%, CheckHP, CWDTKey
 	}
+	if (AutoBottleBind = BlessingKey)
+	{
+		IniWrite, % "", %config%, Blessing, Key
+	}
 	IniWrite, %AutoBottleBind%, %config%, AutoBottle, Key
 return
 
@@ -339,6 +533,7 @@ BackToSettings:
 	Gui, 3:Destroy
 	Gui, 4:Destroy
 	Gui, 5:Destroy
+	Gui, Blessing:Destroy
 	goto, Settings
 return
 
@@ -402,6 +597,10 @@ MouseBindBottle:
 				{
 					IniWrite, % "", %config%, CheckHP, CWDTKey
 				}
+				if (MouseKey = BlessingKey)
+				{
+					IniWrite, % "", %config%, Blessing, Key
+				}
 				GuiControl, BindBottle: Text, BottleMouseBind, %MouseKey%
 				IniWrite, %MouseKey%, %config%, Bottle, Key
 			}
@@ -426,6 +625,10 @@ BottleBind:
 	if (BottleBind = CWDTKey)
 	{
 		IniWrite, % "", %config%, CheckHP, CWDTKey
+	}
+	if (BottleBind = BlessingKey)
+	{
+		IniWrite, % "", %config%, Blessing, Key
 	}
 	IniWrite, %BottleBind%, %config%, Bottle, Key
 return
@@ -559,6 +762,10 @@ MouseBindCheckHP:
 				{
 					IniWrite, % "", %config%, CheckHP, CWDTKey
 				}
+				if (MouseKey = BlessingKey)
+				{
+					IniWrite, % "", %config%, Blessing, Key
+				}
 				GuiControl, BindCheckHP: Text, CheckHPMouseBind, %MouseKey%
 				IniWrite, %MouseKey%, %config%, CheckHP, Key
 			}
@@ -583,6 +790,10 @@ CheckHPBind:
 	if (CheckHPBind = CWDTKey)
 	{
 		IniWrite, % "", %config%, CheckHP, CWDTKey
+	}
+	if (MouseKey = BlessingKey)
+	{
+		IniWrite, % "", %config%, Blessing, Key
 	}
 	IniWrite, %CheckHPBind%, %config%, CheckHP, Key
 return
@@ -630,6 +841,10 @@ MouseBindCWDT:
 				{
 					IniWrite, % "", %config%, CheckHP, Key
 				}
+				if (MouseKey = BlessingKey)
+				{
+					IniWrite, % "", %config%, Blessing, Key
+				}
 				GuiControl, BindCWDT: Text, CWDTMouseBind, %MouseKey%
 				IniWrite, %MouseKey%, %config%, CheckHP, CWDTKey
 			}
@@ -654,6 +869,10 @@ CWDTBind:
 	if (CWDTBind = CheckHPKey)
 	{
 		IniWrite, % "", %config%, CheckHP, Key
+	}
+	if (MouseKey = BlessingKey)
+	{
+		IniWrite, % "", %config%, Blessing, Key
 	}
 	IniWrite, %CWDTBind%, %config%, CheckHP, CWDTKey
 return
@@ -930,8 +1149,20 @@ else
 }
 return
 
+IsProgenesisAutoBottle1:
+ControlGet, IsProgenesisAutoBottle1, Checked , , Button2,
+if (IsProgenesisAutoBottle1 != 0)
+{
+	IniWrite, 1, %config%, SelectAutoBootle, ProgenesisBottle1
+}
+else
+{
+	IniWrite, 0, %config%, SelectAutoBootle, ProgenesisBottle1
+}
+return
+
 AutoBottle2:
-ControlGet, AutoBottle2, Checked , , Button2,
+ControlGet, AutoBottle2, Checked , , Button3,
 if (AutoBottle2 != 0)
 {
 	IniWrite, 1, %config%, SelectAutoBootle, Bottle2
@@ -943,7 +1174,7 @@ else
 return
 
 IsManaAutoBottle2:
-ControlGet, IsManaAutoBottle2, Checked , , Button3,
+ControlGet, IsManaAutoBottle2, Checked , , Button4,
 if (IsManaAutoBottle2 != 0)
 {
 	IniWrite, 1, %config%, SelectAutoBootle, ManaBottle2
@@ -955,7 +1186,7 @@ else
 return
 
 AutoBottle3:
-ControlGet, AutoBottle3, Checked , , Button4,
+ControlGet, AutoBottle3, Checked , , Button5,
 if (AutoBottle3 != 0)
 {
 	IniWrite, 1, %config%, SelectAutoBootle, Bottle3
@@ -967,7 +1198,7 @@ else
 return
 
 AutoBottle4:
-ControlGet, AutoBottle4, Checked , , Button5,
+ControlGet, AutoBottle4, Checked , , Button6,
 if (AutoBottle4 != 0)
 {
 	IniWrite, 1, %config%, SelectAutoBootle, Bottle4
@@ -979,7 +1210,7 @@ else
 return
 
 IsTinctureAutoBottle4:
-ControlGet, IsTinctureAutoBottle4, Checked , , Button6,
+ControlGet, IsTinctureAutoBottle4, Checked , , Button7,
 if (IsTinctureAutoBottle4 != 0)
 {
 	IniWrite, 1, %config%, SelectAutoBootle, TinctureBottle4
@@ -991,7 +1222,7 @@ else
 return
 
 AutoBottle5:
-ControlGet, AutoBottle5, Checked , , Button7,
+ControlGet, AutoBottle5, Checked , , Button8,
 if (AutoBottle5 != 0)
 {
 	IniWrite, 1, %config%, SelectAutoBootle, Bottle5
@@ -1155,7 +1386,7 @@ return
 ;
 
 SmokeMine:
-ControlGet, SmokeMine, Checked , , Button4,
+ControlGet, SmokeMine, Checked , , Button5,
 if (SmokeMine != 0)
 {
 	IniWrite, 1, %config%, Main, SmokeMine
@@ -1167,7 +1398,7 @@ else
 return
 
 DefaultMine:
-ControlGet, DefaultMine, Checked , , Button5,
+ControlGet, DefaultMine, Checked , , Button6,
 if (DefaultMine != 0)
 {
 	IniWrite, 1, %config%, Main, DefaultMine
@@ -1175,6 +1406,20 @@ if (DefaultMine != 0)
 else
 {
 	IniWrite, 0, %config%, Main, DefaultMine
+}
+return
+
+DebugMode:
+ControlGet, Debug, Checked , , Button7,
+if (Debug != 0)
+{
+	IniWrite, 1, %config%, Control, Debug
+	CheckDebugHotkeys()
+}
+else
+{
+	IniWrite, 0, %config%, Control, Debug
+	CheckDebugHotkeys()
 }
 return
 
@@ -1201,3 +1446,36 @@ return
 GuiClose:
 gosub, ExitMacros
 ExitApp
+
+
+CheckDebugHotkeys() {
+    global Debug
+    if (Debug = 1) {
+        Hotkey, F6, HandleF6, On
+        Hotkey, F7, HandleF7, On
+        Hotkey, F8, HandleF8, On
+    } else {
+        Hotkey, F6, HandleF6, Off
+        Hotkey, F7, HandleF7, Off
+        Hotkey, F8, HandleF8, Off
+    }
+}
+
+HandleF6:
+    MouseGetPos, MouseX, MouseY
+    PixelGetColor, color, %MouseX%, %MouseY%
+    Clipboard := color
+    ;msgbox color , %MouseX%, %MouseY%
+    return
+
+HandleF7:
+    MouseGetPos, MouseX, MouseY
+    PixelGetColor, color, %MouseX%, %MouseY%
+    Clipboard = %MouseX%, %MouseY%
+    ;msgbox color , %MouseX%, %MouseY%
+    return
+
+HandleF8:
+    PixelGetColor, test, 378, 1051
+    Clipboard := test
+    return

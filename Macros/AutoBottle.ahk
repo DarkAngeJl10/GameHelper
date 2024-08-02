@@ -1,6 +1,7 @@
 ﻿#SingleInstance Force
 #Include lib\WebIniParse.ahk
 global StartLoop := 0
+global StartLoopBlessing := 0
 config = %A_WorkingDir%\Data\Settings.ini
 
 IniRead, Bottle1, %config%, SelectAutoBootle, Bottle1
@@ -8,9 +9,22 @@ IniRead, Bottle2, %config%, SelectAutoBootle, Bottle2
 IniRead, Bottle3, %config%, SelectAutoBootle, Bottle3
 IniRead, Bottle4, %config%, SelectAutoBootle, Bottle4
 IniRead, Bottle5, %config%, SelectAutoBootle, Bottle5
+IniRead, IsProgenesisAutoBottle1, %config%, SelectAutoBootle, ProgenesisBottle1
+IniRead, IsManaAutoBottle2, %config%, SelectAutoBootle, ManaBottle2
+IniRead, IsTinctureAutoBottle4, %config%, SelectAutoBootle, TinctureBottle4
 IniRead, HotkeyAutoBottle, %config%, AutoBottle, Key
+IniRead, IsEnableBlessing, %config%, Blessing, Enable
+IniRead, CDBlessing, %config%, Blessing, CD
+IniRead, HotkeyBlessing, %config%, Blessing, Key
+IniRead, BlessingInGame, %config%, Blessing, KeyInGame
 IniRead, The_VersionName, %config%, AutoBottle, Version
 IniRead, CheckforUpdates, %config%, AutoBottle, CheckforUpdates
+
+ColorProgenesis := 0xE52D32
+ColorManaBottle := 0x732B12
+ColorTincture := 0x384CB9
+ColorUtilityBootle := 0x3D9227
+RangeColors := 15
 
 if (The_VersionName == "ERROR" or The_VersionName == "")
 {
@@ -74,15 +88,38 @@ Status()
 	Gui, Status:Show, X302 Y962 W235 H12 NA
 }
 
+StatusBlessing()
+{
+	Gui, StatusBlessing:Color,lime
+	Gui, StatusBlessing:-Caption +Toolwindow +AlwaysOnTop +LastFound
+	Gui, StatusBlessing:Show, X1696 Y1038 W20 H20 NA
+	WinSet, Region, e W20 H20 0-0
+}
+
 WinActive() 
 {
 	Suspend Off
 	IniRead, HotkeyAutoBottle, %A_WorkingDir%\Data\Settings.ini, AutoBottle, Key
+	IniRead, IsEnableBlessing, %A_WorkingDir%\Data\Settings.ini, Blessing, Enable
+	IniRead, HotkeyBlessing, %A_WorkingDir%\Data\Settings.ini, Blessing, Key
+	IniRead, BlessingInGame, %A_WorkingDir%\Data\Settings.ini, Blessing, KeyInGame
 	if (HotkeyAutoBottle != "")
 	{
 		Hotkey, %HotkeyAutoBottle%, Start
 	}
+	if (HotkeyBlessing != "")
+	{
+		Hotkey, %HotkeyBlessing%, Blessing
+	}
 	Status()
+	If (IsEnableBlessing)
+	{
+		StatusBlessing()
+	}
+	else
+	{
+		Gui, StatusBlessing:hide
+	}
 	WinWaitNotActive ahk_group POE
 	{
 		WinNotActive()
@@ -92,9 +129,14 @@ WinActive()
 WinNotActive() 
 {
 	Gui, Status:Hide
+	If (IsEnableBlessing)
+		{
+			Gui, StatusBlessing:Hide
+		}
+	StartLoopBlessing := 0
 	StartLoop := 0
+	SetTimer, LoopBlessing, off
 	SetTimer, Loop, Off
-	SetTimer, Blessing, off
 	Suspend on
 	WinWaitActive ahk_group POE
 	{
@@ -151,28 +193,39 @@ return
 	
 	
 Blessing:
+	StartLoopBlessing := !StartLoopBlessing
+
+	LoopBlessing:
 	{
+		IniRead, IsEnableBlessing, %config%, Blessing, Enable
+		IniRead, CDBlessing, %config%, Blessing, CD
+		IniRead, BlessingInGame, %config%, Blessing, KeyInGame
+		CDBlessingMS := Round(CDBlessing * 1000)
+
+		ifWinActive ahk_group POE
+		{
+			Gui, StatusBlessing:Hide
+		}
 		ifWinNotActive ahk_group POE
 		{
-			return
+			Return
 		}
-		If (StartLoop = 1)
+
+		if (IsEnableBlessing = 1)
 		{
-			BlockInput On
-			Send {2}
-			sleep, 100
-			Send {t down}
-			sleep, 200
-			Send {t up}
-			BlockInput Off
-			SetTimer, Blessing, -16000
-		}
-		If (StartLoop = 0)
-		{
-			Send {t}
-			SetTimer, Blessing, Off
+			If (StartLoopBlessing = 1)
+			{
+				Send {%BlessingInGame%}
+			}
 		}
 	}
+	If (StartLoopBlessing = 0)
+	{
+		SetTimer, LoopBlessing, Off
+		StatusBlessing()
+		return
+	}
+	SetTimer, LoopBlessing, -%CDBlessingMS%
 return
 
 
@@ -182,19 +235,21 @@ Start:
 	Loop:
 	{
 		IniRead, Bottle1, %config%, SelectAutoBootle, Bottle1
+		IniRead, IsProgenesisAutoBottle1, %config%, SelectAutoBootle, ProgenesisBottle1
 		IniRead, Bottle2, %config%, SelectAutoBootle, Bottle2
+		IniRead, IsManaAutoBottle2, %config%, SelectAutoBootle, ManaBottle2
 		IniRead, Bottle3, %config%, SelectAutoBootle, Bottle3
 		IniRead, Bottle4, %config%, SelectAutoBootle, Bottle4
-		IniRead, Bottle5, %config%, SelectAutoBootle, Bottle5
-		IniRead, IsManaAutoBottle2, %config%, SelectAutoBootle, ManaBottle2
 		IniRead, IsTinctureAutoBottle4, %config%, SelectAutoBootle, TinctureBottle4
+		IniRead, Bottle5, %config%, SelectAutoBootle, Bottle5
+		CDBlessingMS := Round(CDBlessing * 1000)
+
 		ifWinActive ahk_group POE
 		{
 			Gui, Status:Hide
 		}
 		ifWinNotActive ahk_group POE
 		{
-			SetTimer, Blessing, off
 			Return
 		}
 		sleep, 100
@@ -203,44 +258,56 @@ Start:
 		{
 			if (Bottle1 = 1)
 			{
-				PixelSearch, Px1, Py1, 314, 1065, 344, 1075, 0x99D7F9, 0, Fast
+				PixelSearch, , , 314, 1065, 344, 1075, 0x99D7F9, 0, Fast
 				if (ErrorLevel != 0)
 				{
 					ifWinNotActive ahk_group POE
 					{
-						SetTimer, Blessing, off
 						Return
 					}
-					PixelSearch, Px1, Py1, 317, 1055, 338, 1062, 0x477324, 35, Fast
-					if (ErrorLevel = 0)
+					if (IsProgenesisAutoBottle1 = 0)
 					{
-						Send {1}
+						PixelSearch, , , 309, 1048, 343, 1065, %ColorUtilityBootle%, %RangeColors%, Fast
+						if (ErrorLevel = 0)
+						{
+							Send {1}
+						}
+					}
+					else if (IsProgenesisAutoBottle1 = 1)
+					{
+						PixelSearch, , , 309, 1048, 343, 1065, %ColorProgenesis%, 10, Fast
+						if (ErrorLevel = 0)
+						{
+							Send {1}
+						}
 					}
 				}
 			}
 			
 			if (Bottle2 = 1)
 			{
-				PixelSearch, Px2, Py2, 355, 1065, 395, 1075, 0x99D7F9, 0, Fast
+				PixelSearch, , , 355, 1065, 395, 1075, 0x99D7F9, 0, Fast
 				if (ErrorLevel != 0)
 				{
 					ifWinNotActive ahk_group POE
 					{
-						SetTimer, Blessing, off
 						Return
 					}
 					if (IsManaAutoBottle2 = 0)
 					{
-						ColorBottle2 := 0x477324
+						PixelSearch, , , 357, 1048, 388, 1065, %ColorUtilityBootle%, %RangeColors%, Fast
+						if (ErrorLevel = 0)
+						{
+							Send {2}
+						}
 					}
 					else if (IsManaAutoBottle2 = 1)
 					{
-						ColorBottle2 := 0x732B12
-					}
-					PixelSearch, Px1, Py1, 363, 1055, 385, 1058, %ColorBottle2%, 30, Fast
-					if (ErrorLevel = 0)
-					{
-						Send {2}
+						PixelSearch, , , 357, 1048, 388, 1065, %ColorManaBottle%, 30, Fast
+						if (ErrorLevel = 0)
+						{
+							Send {2}
+						}
 					}
 				}
 			}
@@ -252,10 +319,9 @@ Start:
 				{
 					ifWinNotActive ahk_group POE
 					{
-						SetTimer, Blessing, off
 						Return
 					}
-					PixelSearch, , , 409, 1055, 430, 1062, 0x477324, 35, Fast
+					PixelSearch, , , 404, 1048, 435, 1065, %ColorUtilityBootle%, %RangeColors%, Fast
 					if (ErrorLevel = 0)
 					{
 						Send {3}
@@ -270,12 +336,11 @@ Start:
 				{
 					ifWinNotActive ahk_group POE
 					{
-						SetTimer, Blessing, off
 						Return
 					}
 					if (IsTinctureAutoBottle4 = 0)
 						{
-							PixelSearch, , , 455, 1055, 476, 1062, 0x477324, 35, Fast
+							PixelSearch, , , 448, 1048, 482, 1064, %ColorUtilityBootle%, %RangeColors%, Fast
 							if (ErrorLevel = 0)
 							{
 								Send {4}
@@ -283,7 +348,7 @@ Start:
 						}
 					else if (IsTinctureAutoBottle4 = 1)
 					{
-						PixelSearch, test22, test33, 444, 981, 483, 995, 0x384CB9, 5, Fast
+						PixelSearch, , , 444, 981, 483, 995, %ColorTincture%, 5, Fast
 						if (ErrorLevel != 0)
 						{
 							Send {4}
@@ -299,10 +364,9 @@ Start:
 				{
 					ifWinNotActive ahk_group POE
 					{
-						SetTimer, Blessing, off
 						Return
 					}
-					PixelSearch, Px1, Py1, 501, 1055, 521, 1062, 0x477324, 35, Fast
+					PixelSearch, , , 493, 1048, 527, 1064, %ColorUtilityBootle%, %RangeColors%, Fast
 					if (ErrorLevel = 0)
 					{
 						Send {5}
@@ -318,23 +382,4 @@ Start:
 		return
 	}
 	SetTimer, Loop, 1
-return
-
-;F6::
- MouseGetPos, MouseX, MouseY
- PixelGetColor, color, %MouseX%,%MouseY%
- Clipboard := color
- ;msgbox color , %MouseX%,%MouseY%
-return
-
-;F7::
- MouseGetPos, MouseX, MouseY
- PixelGetColor, color, %MouseX%,%MouseY%
- Clipboard = %MouseX%, %MouseY%
- ;msgbox color , %MouseX%,%MouseY%
-return
-
-;F8::
-PixelGetColor, test, 478, 991
-Clipboard := test
 return

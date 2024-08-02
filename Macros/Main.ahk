@@ -182,44 +182,6 @@ ChaosRecipes()
 	}
 }
 
-;F6::
- MouseGetPos, MouseX, MouseY
- PixelGetColor, color, %MouseX%,%MouseY%
- Clipboard := color
- ;msgbox color , %MouseX%,%MouseY%
-return
-
-;F7::
- MouseGetPos, MouseX, MouseY
- PixelGetColor, color, %MouseX%,%MouseY%
- Clipboard = %MouseX%, %MouseY%
- ;msgbox color , %MouseX%,%MouseY%
-return
-
-;F8::
-PixelGetColor, test, 325, 1056
-Clipboard := test
-return
-
-;F9::
-{
-	PixelSearch, Px2, Py2, 355, 1065, 395, 1075, 0x99D7F9, 0, Fast
-	if (ErrorLevel != 0)
-	{
-		ifWinNotActive ahk_group POE
-		{
-			;SetTimer, Blessing, off
-			Return
-		}
-		PixelSearch, Px1, Py1, 316, 1055, 340, 1058, 0x0D195A, 5, Fast
-		if (ErrorLevel = 0)
-		{
-			send {1}
-		}
-	}
-}
-return
-
 SellingChaosRecipe() 
 {
 	mousemove, 1293, 607, 0
