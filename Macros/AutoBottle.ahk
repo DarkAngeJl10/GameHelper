@@ -240,6 +240,7 @@ Start:
 		IniRead, IsManaAutoBottle2, %config%, SelectAutoBootle, ManaBottle2
 		IniRead, Bottle3, %config%, SelectAutoBootle, Bottle3
 		IniRead, Bottle4, %config%, SelectAutoBootle, Bottle4
+		IniRead, IsTinctureAutoBottle3, %config%, SelectAutoBootle, TinctureBottle3
 		IniRead, IsTinctureAutoBottle4, %config%, SelectAutoBootle, TinctureBottle4
 		IniRead, Bottle5, %config%, SelectAutoBootle, Bottle5
 		CDBlessingMS := Round(CDBlessing * 1000)
@@ -321,10 +322,21 @@ Start:
 					{
 						Return
 					}
-					PixelSearch, , , 404, 1048, 435, 1065, %ColorUtilityBootle%, %RangeColors%, Fast
-					if (ErrorLevel = 0)
+					if (IsTinctureAutoBottle3 = 0)
+						{
+							PixelSearch, , , 404, 1048, 435, 1065, %ColorUtilityBootle%, %RangeColors%, Fast
+							if (ErrorLevel = 0)
+							{
+								Send {3}
+							}
+						}
+					else if (IsTinctureAutoBottle3 = 1)
 					{
-						Send {3}
+						PixelSearch, , , 403, 981, 437, 995, %ColorTincture%, 5, Fast
+						if (ErrorLevel != 0)
+						{
+							Send {3}
+						}
 					}
 				}
 			}

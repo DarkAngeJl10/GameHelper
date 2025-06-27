@@ -19,6 +19,7 @@ IniRead, AutoBottle2, %config%, SelectAutoBootle, Bottle2
 IniRead, IsManaAutoBottle2, %config%, SelectAutoBootle, ManaBottle2
 IniRead, AutoBottle3, %config%, SelectAutoBootle, Bottle3
 IniRead, AutoBottle4, %config%, SelectAutoBootle, Bottle4
+IniRead, IsTinctureAutoBottle3, %config%, SelectAutoBootle, TinctureBottle3
 IniRead, IsTinctureAutoBottle4, %config%, SelectAutoBootle, TinctureBottle4
 IniRead, AutoBottle5, %config%, SelectAutoBootle, Bottle5
 IniRead, Bottle15, %config%, SelectBootle, Bottle1-5
@@ -86,6 +87,10 @@ if (IsManaAutoBottle2 == "ERROR" or IsManaAutoBottle2 == "")
 if (IsTinctureAutoBottle4 == "ERROR" or IsTinctureAutoBottle4 == "")
 {
 	IniWrite, 0, %config%, SelectAutoBootle, TinctureBottle4
+}
+if (IsTinctureAutoBottle3 == "ERROR" or IsTinctureAutoBottle3 == "")
+{
+	IniWrite, 0, %config%, SelectAutoBootle, TinctureBottle3
 }
 
 
@@ -428,6 +433,7 @@ SettingsAutoBottle:
 	IniRead, IsManaAutoBottle2, %config%, SelectAutoBootle, ManaBottle2
 	IniRead, AutoBottle3, %config%, SelectAutoBootle, Bottle3
 	IniRead, AutoBottle4, %config%, SelectAutoBootle, Bottle4
+	IniRead, IsTinctureAutoBottle3, %config%, SelectAutoBootle, TinctureBottle3
 	IniRead, IsTinctureAutoBottle4, %config%, SelectAutoBootle, TinctureBottle4
 	IniRead, AutoBottle5, %config%, SelectAutoBootle, Bottle5
 	IniRead, AutoBottleKey, %config%, AutoBottle, Key
@@ -440,6 +446,7 @@ SettingsAutoBottle:
 	Gui, 3:Add, Checkbox,		x10 y70 	gAutoBottle2 Checked%AutoBottle2%, 	2 Бутылка
 	Gui, 3:Add, Checkbox,		x90 y70 	gIsManaAutoBottle2 Checked%IsManaAutoBottle2%, 	Мана Бутылка?
 	Gui, 3:Add, Checkbox,		x10 y100 	gAutoBottle3 Checked%AutoBottle3%, 	3 Бутылка
+	Gui, 3:Add, Checkbox,		x90 y100 	gIsTinctureAutoBottle3 Checked%IsTinctureAutoBottle3%, 	Tincture?
 	Gui, 3:Add, Checkbox,		x10 y130 	gAutoBottle4 Checked%AutoBottle4%, 	4 Бутылка
 	Gui, 3:Add, Checkbox,		x90 y130 	gIsTinctureAutoBottle4 Checked%IsTinctureAutoBottle4%, 	Tincture?
 	Gui, 3:Add, Checkbox,		x10 y160 	gAutoBottle5 Checked%AutoBottle5%, 	5 Бутылка
@@ -1197,8 +1204,20 @@ else
 }
 return
 
+IsTinctureAutoBottle3:
+ControlGet, IsTinctureAutoBottle3, Checked , , Button6,
+if (IsTinctureAutoBottle3 != 0)
+{
+	IniWrite, 1, %config%, SelectAutoBootle, TinctureBottle3
+}
+else
+{
+	IniWrite, 0, %config%, SelectAutoBootle, TinctureBottle3
+}
+return
+
 AutoBottle4:
-ControlGet, AutoBottle4, Checked , , Button6,
+ControlGet, AutoBottle4, Checked , , Button7,
 if (AutoBottle4 != 0)
 {
 	IniWrite, 1, %config%, SelectAutoBootle, Bottle4
@@ -1210,7 +1229,7 @@ else
 return
 
 IsTinctureAutoBottle4:
-ControlGet, IsTinctureAutoBottle4, Checked , , Button7,
+ControlGet, IsTinctureAutoBottle4, Checked , , Button8,
 if (IsTinctureAutoBottle4 != 0)
 {
 	IniWrite, 1, %config%, SelectAutoBootle, TinctureBottle4
@@ -1222,7 +1241,7 @@ else
 return
 
 AutoBottle5:
-ControlGet, AutoBottle5, Checked , , Button8,
+ControlGet, AutoBottle5, Checked , , Button9,
 if (AutoBottle5 != 0)
 {
 	IniWrite, 1, %config%, SelectAutoBootle, Bottle5
