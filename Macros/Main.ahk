@@ -2,6 +2,9 @@
 #Include lib\WebIniParse.ahk
 config = %A_WorkingDir%\Data\Settings.ini
 
+BeastDeleteLoopToggle := false
+BeastDeleteRunning := false
+
 IniRead, SmokeMine, %config%, Main, SmokeMine
 IniRead, DefaultMine, %config%, Main, DefaultMine
 IniRead, The_VersionName, %config%, Main, Version
@@ -305,6 +308,86 @@ AnyMine:
 	Send, {d}
 	sleep, 50
 return
+
+F10::
+    BeastDeleteLoopToggle := !BeastDeleteLoopToggle
+    if (BeastDeleteLoopToggle)
+    {
+        if (!BeastDeleteRunning)
+        {
+            SetTimer, BeastDeleteLoop, 50  ; 50 мс — достаточно частый и стабильный
+        }
+    }
+    else
+    {
+        SetTimer, BeastDeleteLoop, Off
+    }
+return
+
+BeastDeleteLoop:
+{
+    if (BeastDeleteRunning)
+        return  ; не запускаем новый цикл, если предыдущий ещё идёт
+
+    BeastDeleteRunning := true
+
+    startX := 395
+    startY := 590
+    offsetX := 155
+    offsetY := 175
+
+    PixelSearch, foundX, foundY, 84, 238, 556, 782, 0xFFFFFF, 5, Fast RGB
+    if (ErrorLevel != 0)
+    {
+        BeastDeleteLoopToggle := false
+        SetTimer, BeastDeleteLoop, Off
+        BeastDeleteRunning := false
+        return
+    }
+
+    Loop, 3
+    {
+        row := A_Index - 1
+        y := startY - (row * offsetY)
+
+        Loop, 3
+        {
+            if (!BeastDeleteLoopToggle)
+            {
+                BeastDeleteRunning := false
+                return
+            }
+			
+			ifWinNotActive ahk_group POE
+			{
+				BeastDeleteLoopToggle := false
+                SetTimer, BeastDeleteLoop, Off
+                BeastDeleteRunning := false
+				return
+			}	
+
+            PixelSearch, foundX, foundY, 84, 238, 556, 782, 0xFFFFFF, 5, Fast RGB
+            if (ErrorLevel != 0)
+            {
+                BeastDeleteLoopToggle := false
+                SetTimer, BeastDeleteLoop, Off
+                BeastDeleteRunning := false
+                return
+            }
+
+            col := A_Index - 1
+            x := startX - (col * offsetX)
+
+            MouseMove, x, y, 0
+            SendEvent, {Ctrl Down}{Click}{Ctrl Up}
+            Sleep, 25
+        }
+    }
+
+    BeastDeleteRunning := false
+}
+return
+
 	
 ;F1::
 SellingChaosRecipe()		
